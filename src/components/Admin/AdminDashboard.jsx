@@ -128,23 +128,19 @@ const AdminDashboard = () => {
     canvas.height = height;
     const ctx = canvas.getContext("2d");
 
-    // 1. Sleek Modern Dark Gradient
+    // 1. Sleek Modern Pink Gradient
     const gradient = ctx.createLinearGradient(0, 0, 0, height);
-    gradient.addColorStop(0, "#09090b");
-    gradient.addColorStop(0.4, "#18181b");
-    gradient.addColorStop(1, "#000000");
+    gradient.addColorStop(0, settings.primaryColor || "#db2777");
+    gradient.addColorStop(0.5, "#be185d");
+    gradient.addColorStop(1, "#831843");
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, width, height);
 
-    // 2. High-Tech Dot Matrix Grid Background
-    ctx.fillStyle = "rgba(255, 255, 255, 0.05)";
-    for (let x = 40; x < width; x += 50) {
-      for (let y = 40; y < height; y += 50) {
-        ctx.beginPath();
-        ctx.arc(x, y, 1.5, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
+    // 2. High-Tech Decorative Floating Ambient Circles
+    ctx.fillStyle = "rgba(255, 255, 255, 0.08)";
+    ctx.beginPath(); ctx.arc(0, 0, 600, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(width, height, 800, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(width, 200, 400, 0, Math.PI * 2); ctx.fill();
 
     // 3. Header Brand
     ctx.fillStyle = "#FFFFFF";
@@ -152,9 +148,9 @@ const AdminDashboard = () => {
     ctx.font = "bold 85px 'Outfit', system-ui, sans-serif";
     ctx.fillText(settings.restaurantName || "Smaakii", width / 2, 210);
     
-    ctx.fillStyle = "rgba(255, 255, 255, 0.65)";
+    ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
     ctx.font = "bold 32px 'Inter', system-ui, sans-serif";
-    ctx.fillText("DIGITAL E-COMMERCE MENU • SCAN TO ORDER", width / 2, 290);
+    ctx.fillText(settings.tagline ? settings.tagline.toUpperCase() : "DIGITAL STOREFRONT & MENU • SCAN TO ORDER", width / 2, 290);
 
     // 4. White Card Container for QR Code
     const boxSize = 820;
@@ -162,8 +158,8 @@ const AdminDashboard = () => {
     const boxY = 380;
     const radius = 60;
 
-    // Card Glow / Drop Shadow
-    ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+    // Card Glow / Drop Shadow with soft pink tint
+    ctx.shadowColor = "rgba(131, 24, 67, 0.4)";
     ctx.shadowBlur = 50;
     ctx.shadowOffsetY = 25;
 
@@ -196,12 +192,12 @@ const AdminDashboard = () => {
     ctx.font = "900 75px 'Outfit', system-ui, sans-serif";
     ctx.fillText("SCAN TO BROWSE & ORDER", width / 2, boxY + boxSize + 170);
     
-    ctx.fillStyle = "rgba(255, 255, 255, 0.65)";
+    ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
     ctx.font = "500 36px 'Inter', system-ui, sans-serif";
     ctx.fillText("Point your smartphone camera to open live catalog", width / 2, boxY + boxSize + 245);
 
     // 7. Footer Direct Link
-    ctx.fillStyle = "#38bdf8";
+    ctx.fillStyle = "#fbcfe8";
     ctx.font = "bold 32px 'Inter', system-ui, sans-serif";
     const displayDomain = resolvedQrUrl.replace(/^https?:\/\//, '');
     ctx.fillText(displayDomain, width / 2, height - 90);
@@ -461,15 +457,15 @@ const AdminDashboard = () => {
               </div>
 
               {/* QR Code Presentation Box */}
-              <div className="flex flex-col items-center justify-center p-6 bg-gradient-to-b from-gray-50 to-white rounded-3xl border border-gray-200/80">
-                <div className="p-4 bg-white rounded-2xl border border-gray-200/60 shadow-lg">
+              <div className="flex flex-col items-center justify-center p-6 bg-gradient-to-b from-pink-50/70 via-rose-50/40 to-white rounded-3xl border border-pink-200/80 shadow-inner">
+                <div className="p-4 bg-white rounded-3xl border-2 border-pink-100 shadow-xl shadow-pink-200/50">
                   <QRCodeCanvas 
                     id="qr-code-canvas"
                     value={resolvedQrUrl}
                     size={220}
                     level={"H"}
                     includeMargin={true}
-                    fgColor={"#09090b"}
+                    fgColor={settings.primaryColor || "#db2777"}
                     imageSettings={settings.logo ? {
                       src: settings.logo,
                       x: undefined,
@@ -481,9 +477,9 @@ const AdminDashboard = () => {
                   />
                 </div>
 
-                <div className="mt-4 flex items-center gap-2 text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-200/50">
-                  <Check size={14} />
-                  <span>Configured for New E-Commerce Page View</span>
+                <div className="mt-4 flex items-center gap-2 text-xs font-bold text-pink-700 bg-pink-100/90 px-3.5 py-1.5 rounded-full border border-pink-200/80">
+                  <Check size={14} className="stroke-[2.5]" />
+                  <span>Signature Pink QR • Scans to Home Page</span>
                 </div>
               </div>
 
@@ -492,7 +488,7 @@ const AdminDashboard = () => {
                 <button
                   type="button"
                   onClick={downloadQR}
-                  className="flex items-center justify-center gap-2 px-5 py-3.5 bg-slate-950 text-white rounded-2xl font-bold text-xs uppercase tracking-wider hover:bg-black transition-all shadow-md active:scale-98"
+                  className="flex items-center justify-center gap-2 px-5 py-3.5 bg-gradient-to-r from-pink-600 via-rose-500 to-pink-600 hover:from-pink-700 hover:to-rose-600 text-white rounded-2xl font-bold text-xs uppercase tracking-wider transition-all shadow-lg shadow-pink-200 active:scale-98"
                 >
                   <Printer size={16} />
                   <span>Download Print Flyer</span>
@@ -501,10 +497,10 @@ const AdminDashboard = () => {
                 <button
                   type="button"
                   onClick={downloadQRPngOnly}
-                  className="flex items-center justify-center gap-2 px-5 py-3.5 bg-white text-gray-800 border border-gray-200 rounded-2xl font-bold text-xs uppercase tracking-wider hover:bg-gray-50 transition-all shadow-xs active:scale-98"
+                  className="flex items-center justify-center gap-2 px-5 py-3.5 bg-white text-pink-700 border border-pink-200 rounded-2xl font-bold text-xs uppercase tracking-wider hover:bg-pink-50 transition-all shadow-xs active:scale-98"
                 >
                   <Download size={16} />
-                  <span>Export QR Only (PNG)</span>
+                  <span>Export Pink QR (PNG)</span>
                 </button>
               </div>
 
