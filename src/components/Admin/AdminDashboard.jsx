@@ -63,7 +63,7 @@ const AdminDashboard = () => {
   const [isQrModalOpen, setIsQrModalOpen] = useState(false);
   
   // Developer QR Management States
-  const [qrTargetMode, setQrTargetMode] = useState('menu'); // 'menu' | 'home' | 'custom'
+  const [qrTargetMode, setQrTargetMode] = useState('home'); // 'home' (default storefront) | 'menu' | 'custom'
   const [customQrUrl, setCustomQrUrl] = useState('');
   const [copiedUrl, setCopiedUrl] = useState(false);
 
@@ -87,16 +87,16 @@ const AdminDashboard = () => {
     
     const cleanBase = (base || origin).replace(/\/+$/, '');
 
-    if (qrTargetMode === 'menu') {
-      return `${cleanBase}/menu`;
-    }
     if (qrTargetMode === 'home') {
       return `${cleanBase}/`;
     }
-    if (qrTargetMode === 'custom') {
-      return customQrUrl.trim() || `${cleanBase}/menu`;
+    if (qrTargetMode === 'menu') {
+      return `${cleanBase}/menu`;
     }
-    return `${cleanBase}/menu`;
+    if (qrTargetMode === 'custom') {
+      return customQrUrl.trim() || `${cleanBase}/`;
+    }
+    return `${cleanBase}/`;
   }, [qrTargetMode, customQrUrl, settings.customDomain, settings.domain]);
 
   const copyQrUrl = () => {
@@ -370,24 +370,6 @@ const AdminDashboard = () => {
                 <div className="grid grid-cols-3 gap-2">
                   <button
                     type="button"
-                    onClick={() => setQrTargetMode('menu')}
-                    className={`px-3 py-2.5 rounded-xl text-xs font-bold border transition-all text-left flex flex-col gap-0.5 ${
-                      qrTargetMode === 'menu'
-                        ? 'bg-slate-950 text-white border-slate-950 shadow-xs'
-                        : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'
-                    }`}
-                  >
-                    <span className="flex items-center justify-between">
-                      <span>E-Commerce Menu</span>
-                      <span className={`text-[9px] px-1.5 py-0.5 rounded font-black ${
-                        qrTargetMode === 'menu' ? 'bg-emerald-400 text-slate-950' : 'bg-emerald-100 text-emerald-700'
-                      }`}>NEW</span>
-                    </span>
-                    <span className="text-[10px] opacity-70">Direct to /menu</span>
-                  </button>
-
-                  <button
-                    type="button"
                     onClick={() => setQrTargetMode('home')}
                     className={`px-3 py-2.5 rounded-xl text-xs font-bold border transition-all text-left flex flex-col gap-0.5 ${
                       qrTargetMode === 'home'
@@ -395,8 +377,26 @@ const AdminDashboard = () => {
                         : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'
                     }`}
                   >
-                    <span>Storefront</span>
-                    <span className="text-[10px] opacity-70">Root page /</span>
+                    <span className="flex items-center justify-between">
+                      <span>Home Page</span>
+                      <span className={`text-[9px] px-1.5 py-0.5 rounded font-black ${
+                        qrTargetMode === 'home' ? 'bg-emerald-400 text-slate-950' : 'bg-emerald-100 text-emerald-700'
+                      }`}>DEFAULT</span>
+                    </span>
+                    <span className="text-[10px] opacity-70">Welcome & Storefront (/)</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setQrTargetMode('menu')}
+                    className={`px-3 py-2.5 rounded-xl text-xs font-bold border transition-all text-left flex flex-col gap-0.5 ${
+                      qrTargetMode === 'menu'
+                        ? 'bg-slate-950 text-white border-slate-950 shadow-xs'
+                        : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'
+                    }`}
+                  >
+                    <span>Direct Menu</span>
+                    <span className="text-[10px] opacity-70">Direct catalog (/menu)</span>
                   </button>
 
                   <button
