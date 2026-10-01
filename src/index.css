@@ -1,0 +1,120 @@
+@import "tailwindcss";
+
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+@theme {
+  --font-sans: var(--font-sans);
+  --font-display: var(--font-display);
+
+  --color-brand: var(--primary-color, #0f172a);
+  --color-brand-light: #f8fafc;
+  --color-brand-dark: #020617;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    overscroll-behavior-y: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: #fbfbfd;
+    color: #1d1d1f;
+    min-height: 100dvh;
+    overscroll-behavior-y: none;
+  }
+}
+
+/* Page transition: refined micro-fade without containing-block traps */
+@keyframes page-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.page-enter {
+  animation: page-enter 0.15s ease-out both;
+}
+
+@layer components {
+  /* Apple-inspired ultra-clear frosted glass header */
+  .apple-header {
+    background-color: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  /* Micro subtle card elevation */
+  .executive-card {
+    background-color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03), 0 4px 12px rgba(0, 0, 0, 0.02);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .executive-card:hover {
+    border-color: rgba(0, 0, 0, 0.14);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.04);
+    transform: translateY(-2px);
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Custom Scrollbar for sidebar and modals */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 9999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #cbd5e1;
+}
+
+/* Blossom sway animations preserved for home/offers pages */
+@keyframes blossom-sway {
+  0%   { transform: translateY(0px) rotate(0deg) scale(1); }
+  25%  { transform: translateY(-14px) rotate(6deg) scale(1.04); }
+  50%  { transform: translateY(-8px) rotate(-4deg) scale(1.02); }
+  75%  { transform: translateY(-18px) rotate(3deg) scale(1.05); }
+  100% { transform: translateY(0px) rotate(0deg) scale(1); }
+}
+
+@keyframes petal-fall {
+  0%   { transform: translateY(-40px) rotate(0deg) translateX(0px); opacity: 0; }
+  10%  { opacity: 0.9; }
+  50%  { transform: translateY(50vh) rotate(180deg) translateX(30px); opacity: 0.7; }
+  100% { transform: translateY(105vh) rotate(360deg) translateX(-20px); opacity: 0; }
+}
+
+.blossom-float {
+  animation: blossom-sway ease-in-out infinite;
+}
+
+.falling-petal {
+  animation: petal-fall ease-in-out infinite;
+}

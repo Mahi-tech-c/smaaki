@@ -1,0 +1,142 @@
+export const DEFAULT_SETTINGS = {
+  restaurantName: 'Smaakenzzoo',
+  tagline: 'Flourishing Hearts, Blooming Dreams',
+  logo: '',
+  favicon: '',
+  primaryColor: '#db2777',
+  homepageBanner: '',
+  whatsapp: '',
+  address: '',
+  mapsUrl: '',
+  instagram: '',
+  facebook: '',
+  twitter: '',
+  isOpen: true,
+  openingHours: '11:00 AM - 11:00 PM',
+  currencySymbol: '₹',
+  upiId: '9032578532@ybl',
+  taxNote: 'Exclusive of all taxes',
+  menuDisclaimer: 'Images are for reference only; actual items may look slightly different.',
+  waitNote: 'Minimum wait time is 15 minutes (we prepare your food fresh so it tastes its best).',
+  availabilityNote: 'Items are available based on stock and availability.',
+  metaTitle: 'Smaakenzzoo - Flourishing Hearts, Blooming Dreams',
+  metaDescription: "Warangal Tri-city's ultimate hangout for Irresistible Churros, Creamy Ice Creams, Rich Coffees with Delicious Pizzas and Burgers & Vibrant music",
+  siteVerification: '',
+  copyrightText: '© 2024 Smaakenzoo Warangal. All Rights Reserved.',
+  menuBanner: '',
+  menuTitle: 'Our Menu',
+  menuTagline: 'Fresh flavors, crafted with passion',
+  heroTitle: 'Welcome to',
+  heroDescription: "Warangal Tri-city's ultimate hangout for Irresistible Churros, Creamy Ice Creams, Rich Coffees with Delicious Pizzas and Burgers & Vibrant music",
+  offersTitle: 'Special Offers',
+  offersSubtitle: 'Exclusive Deals',
+  offersDescription: 'Explore our latest promotions and seasonal specials crafted just for you.',
+  offersHeader: 'Savor More for Less',
+  closedStatusText: 'Currently Closed',
+  viewMenuBtnText: 'View Menu',
+  browsingOnlyBtnText: 'Browsing Only',
+  specialOffersBtnText: 'Special Offers',
+  noteHeadingText: 'Note:',
+  navHomeLabel: 'Home',
+  navMenuLabel: 'Menu',
+  navOffersLabel: 'Offers',
+  navAdminLabel: 'Admin Panel',
+  heroTitleColor: '#1e293b',
+  heroTitleSize: '72',
+  heroDescriptionColor: '#475569',
+  heroDescriptionSize: '18',
+  splashLogoSize: '120',
+  splashBgColor: '#db2777',
+
+  // Visual text styles
+  closedStatusTextColor: '#ffffff',
+  closedStatusTextSize: '14',
+  viewMenuBtnTextColor: '#ffffff',
+  viewMenuBtnTextSize: '14',
+  specialOffersBtnTextColor: '#db2777',
+  specialOffersBtnTextSize: '14',
+  browsingOnlyBtnTextColor: '#ffffff',
+  browsingOnlyBtnTextSize: '14',
+  
+  noteHeadingTextColor: '#db2777',
+  noteHeadingTextSize: '16',
+  taxNoteColor: '#1e293b',
+  taxNoteSize: '14',
+  waitNoteColor: '#1e293b',
+  waitNoteSize: '14',
+  availabilityNoteColor: '#1e293b',
+  availabilityNoteSize: '14',
+  menuDisclaimerColor: '#1e293b',
+  menuDisclaimerSize: '14',
+
+  menuTitleColor: '#db2777',
+  menuTitleSize: '48',
+  menuTaglineColor: '#475569',
+  menuTaglineSize: '18',
+
+  offersTitleColor: '#db2777',
+  offersTitleSize: '14',
+  offersSubtitleColor: '#db2777',
+  offersSubtitleSize: '12',
+  offersHeaderColor: '#1e293b',
+  offersHeaderSize: '36',
+  offersDescriptionColor: '#475569',
+  offersDescriptionSize: '18',
+
+  navHomeLabelColor: '#475569',
+  navHomeLabelSize: '12',
+  navMenuLabelColor: '#475569',
+  navMenuLabelSize: '12',
+  navOffersLabelColor: '#475569',
+  navOffersLabelSize: '12',
+  navAdminLabelColor: '#475569',
+  navAdminLabelSize: '12',
+
+  taglineColor: '#1e293b',
+  taglineSize: '14',
+
+  restaurantNameColor: '#1e293b',
+  restaurantNameSize: '24',
+
+  openingHoursColor: '#475569',
+  openingHoursSize: '14',
+
+  addressColor: '#475569',
+  addressSize: '14',
+
+  currencySymbolColor: '#db2777',
+  currencySymbolSize: '24',
+
+  whatsappColor: '#1e293b',
+  whatsappSize: '14',
+
+  mapsUrlColor: '#1e293b',
+  mapsUrlSize: '14',
+
+  instagramColor: '#1e293b',
+  instagramSize: '14',
+
+  facebookColor: '#1e293b',
+  facebookSize: '14',
+
+  twitterColor: '#1e293b',
+  twitterSize: '14',
+
+  metaTitleColor: '#1e293b',
+  metaTitleSize: '14',
+
+  metaDescriptionColor: '#475569',
+  metaDescriptionSize: '14',
+
+  copyrightTextColor: '#be185d',
+  copyrightTextSize: '10',
+
+  vercelToken: '',
+  vercelProjectId: '',
+  customDomain: '',
+  domain: ''
+};
+
+export const FONT_SIZES = [8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 28, 32, 36, 40, 48, 56, 64, 72, 80, 96, 120, 144];
+
+export const FALLBACK_FOOD_IMAGE = 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=500&q=80';

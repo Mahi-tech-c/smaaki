@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap"
+    rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Smaakenzzoo - Premium Cafe Experience</title>
+  <style>
+    :root {
+      --splash-size: 120px;
+      --splash-bg: #db2777;
+    }
+
+    html, body {
+      overscroll-behavior-y: none;
+      touch-action: manipulation;
+    }
+
+    #splash-screen {
+      position: fixed;
+      inset: 0;
+      background: var(--splash-bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease-out, visibility 0.5s;
+    }
+
+    .splash-logo {
+      width: var(--splash-size);
+      height: var(--splash-size);
+      background: white;
+      border-radius: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 25px 50px rgba(219, 39, 119, 0.25);
+      margin-bottom: 24px;
+      animation: splash-pulse 2s infinite ease-in-out;
+    }
+
+    .splash-text {
+      color: white;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 900;
+      font-size: 32px;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+    }
+
+    @keyframes splash-pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+      }
+    }
+
+    .splash-hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="splash-screen">
+    <div class="splash-logo">
+      <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#db2777" stroke-width="2.5"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+        <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+        <line x1="6" y1="1" x2="6" y2="4"></line>
+        <line x1="10" y1="1" x2="10" y2="4"></line>
+        <line x1="14" y1="1" x2="14" y2="4"></line>
+      </svg>
+    </div>
+    <div class="splash-text">Smaakenzzoo</div>
+  </div>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+  <script>
+    // Track when the page was first loaded
+    window.__pageLoadTime = Date.now();
+
+    // Handle iOS Safari BFCache: only reload if the page is genuinely stale (>30 min)
+    // This prevents the jarring flash/glitch on every back/forward navigation
+    window.addEventListener('pageshow', function (event) {
+      if (event.persisted) {
+        var ageMs = Date.now() - (window.__pageLoadTime || 0);
+        var thirtyMinutes = 30 * 60 * 1000;
+        if (ageMs > thirtyMinutes) {
+          window.location.reload();
+        }
+      }
+    });
+
+    // Global function to hide splash screen, called by React when data is fresh
+    window.hideSplashScreen = function () {
+      const splash = document.getElementById('splash-screen');
+      if (splash) {
+        splash.classList.add('splash-hidden');
+        // Remove from DOM after transition
+        setTimeout(() => {
+          splash.style.display = 'none';
+        }, 500);
+      }
+    };
+
+    // Fallback: Hide after 5 seconds if React fails to load
+    setTimeout(() => {
+      if (window.hideSplashScreen) window.hideSplashScreen();
+    }, 5000);
+  </script>
+</body>
+
+</html>
