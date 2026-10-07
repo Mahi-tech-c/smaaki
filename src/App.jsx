@@ -19,6 +19,7 @@ import OffersSection from './components/OffersSection';
 import FeaturedSection from './components/FeaturedSection';
 import BlossomBackground from './components/BlossomBackground';
 import CartDrawer from './components/Customer/CartDrawer';
+import StickyCartBar from './components/Customer/StickyCartBar';
 
 const AdminAuth = React.lazy(() => import('./components/Admin/AdminAuth'));
 const AdminLogin = React.lazy(() => import('./components/Admin/AdminLogin'));
@@ -138,6 +139,9 @@ const AppContent = () => {
           </Routes>
         </div>
       </main>
+
+      {/* Sticky Bottom Cart Bar (Swiggy/Zomato style) */}
+      {!isAdminPath && <StickyCartBar />}
 
       {/* Interactive Cart Drawer for Customers */}
       {!isAdminPath && <CartDrawer />}

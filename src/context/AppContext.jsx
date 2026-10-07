@@ -67,25 +67,50 @@ export const AppProvider = ({ children }) => {
     }
   }, [cart]);
 
-  const addToCart = useCallback((item, selectedOption = null) => {
-    const cartItemId = selectedOption ? `${item.id}-${selectedOption.title}` : String(item.id);
-    const price = selectedOption ? Number(selectedOption.price) : Number(item.price);
-    const title = selectedOption ? `${item.name} (${selectedOption.title})` : item.name;
+  const addToCart = useCallback((item, selectedOption = null, quantity = 1, extraPrice = 0) => {
+    const variant = item.selectedVariant || (selectedOption && typeof selectedOption === 'object' ? selectedOption : null);
+    const variantTitle = variant?.title || variant?.name || (typeof selectedOption === 'string' ? selectedOption : null);
+    const addOns = Array.isArray(item.selectedAddOns) ? item.selectedAddOns : [];
+    const spice = item.spiceLevel || null;
+    const instructions = (item.specialInstructions || '').trim();
+    const qtyToAdd = Math.max(1, parseInt(quantity, 10) || 1);
+
+    // Compute unique cart identifier for this configuration
+    let cartItemId = String(item.id);
+    if (variantTitle) cartItemId += `-${variantTitle}`;
+    if (addOns.length > 0) {
+      const addonKey = addOns.map(a => a.id || a.name).sort().join('_');
+      cartItemId += `-${addonKey}`;
+    }
+    if (spice) cartItemId += `-${spice}`;
+    if (instructions) cartItemId += `-${instructions.slice(0, 10)}`;
+
+    const basePrice = variant?.price !== undefined ? Number(variant.price) : Number(item.price) || 0;
+    const addOnsSum = addOns.reduce((sum, a) => sum + (Number(a.price) || 0), 0) + (Number(extraPrice) || 0);
+    const unitPrice = basePrice + addOnsSum;
+    const title = variantTitle ? `${item.name} (${variantTitle})` : item.name;
 
     setCart(prev => {
       const existing = prev.find(i => i.cartId === cartItemId);
       if (existing) {
-        return prev.map(i => i.cartId === cartItemId ? { ...i, quantity: i.quantity + 1 } : i);
+        return prev.map(i => i.cartId === cartItemId ? { ...i, quantity: i.quantity + qtyToAdd } : i);
       }
       return [...prev, {
         cartId: cartItemId,
         id: item.id,
         name: title,
         baseName: item.name,
-        price,
+        price: unitPrice,
+        basePrice,
         image: item.image,
-        quantity: 1,
-        option: selectedOption ? selectedOption.title : null
+        quantity: qtyToAdd,
+        option: variantTitle,
+        selectedVariant: variant,
+        selectedAddOns: addOns,
+        spiceLevel: spice,
+        specialInstructions: instructions,
+        category: item.category,
+        veg: item.veg
       }];
     });
     setIsCartOpen(true);
