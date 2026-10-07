@@ -1,199 +1,307 @@
-import React, { useState } from 'react';
-import { Plus, Minus, Check, ChevronDown, Eye } from 'lucide-react';
+import React from 'react';
+import { Plus, Minus, Bell, Eye, Flame, Star, Sparkles, Award } from 'lucide-react';
 import { formatCurrency, sanitizeDescription } from '../../utils/helpers';
 import { FALLBACK_FOOD_IMAGE } from '../../constants/settings';
 import { DietaryMarker, Stepper } from '../ui';
+import { getItemDietaryType, getItemBadges } from '../../utils/menuDataHelper';
+import { useToast } from '../ui/Toast';
 
-const ProductCard = ({ 
+/**
+ * Highlights matching search terms safely
+ */
+const HighlightMatch = ({ text = '', query = '' }) => {
+  if (!query || !query.trim()) return <span>{text}</span>;
+  const parts = text.split(new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi'));
+  return (
+    <span>
+      {parts.map((part, i) =>
+        part.toLowerCase() === query.toLowerCase() ? (
+          <mark key={i} className="bg-pink-500/30 text-pink-300 font-bold px-0.5 rounded">
+            {part}
+          </mark>
+        ) : (
+          part
+        )
+      )}
+    </span>
+  );
+};
+
+export const ProductCard = ({ 
   item, 
   settings, 
-  cart, 
+  cart = [], 
   onAddToCart, 
   onUpdateCartQuantity,
-  onOpenQuickView 
+  onOpenQuickView,
+  viewMode = 'list', // 'list' (default) | 'grid'
+  searchQuery = ''
 }) => {
-  const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
-  const [isVariantDropdownOpen, setIsVariantDropdownOpen] = useState(false);
+  const { showToast } = useToast();
+  if (!item) return null;
 
-  const hasVariants = item.options && item.options.length > 0;
-  const currentVariant = hasVariants ? item.options[selectedVariantIndex] : null;
-  const activePrice = currentVariant ? currentVariant.price : item.price;
-  const activeCartId = currentVariant ? `${item.id}-${currentVariant.title}` : String(item.id);
+  const hasVariants = Boolean(item.options && item.options.length > 0);
+  const basePrice = item.price;
+  const activeCartId = String(item.id);
 
-  // Cart status
-  const cartEntry = (cart || []).find(c => c.cartId === activeCartId);
+  // Cart quantity check
+  const cartEntry = cart.find(c => String(c.id) === String(item.id) || c.cartId === activeCartId);
   const inCartQty = cartEntry ? cartEntry.quantity : 0;
 
-  // Food classification
-  const isNonVeg = /chicken|egg|fish|meat|wings|keivs|kievs|bacon|bbq/i.test(
-    `${item.name} ${item.category} ${item.description || ''}`
-  );
-
+  // Metadata
+  const dietaryType = getItemDietaryType(item);
+  const badges = getItemBadges(item);
+  const isAvailable = item.inStock !== false && item.isAvailable !== false;
   const cleanDescription = sanitizeDescription(item.description);
 
-  return (
-    <div className="bg-white rounded-2xl border border-gray-200/70 hover:border-gray-300 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between overflow-hidden group relative">
-      
-      {/* Product Image Stage */}
+  const handleAddClick = (e) => {
+    e.stopPropagation();
+    if (!isAvailable) return;
+
+    if (hasVariants) {
+      // If it has variants, open sheet so user can choose size/variant
+      onOpenQuickView?.(item);
+    } else {
+      onAddToCart?.(item);
+      showToast?.({
+        message: `Added ${item.name} to bag`,
+        type: 'success',
+        action: {
+          label: 'Undo',
+          onClick: () => onUpdateCartQuantity?.(activeCartId, -1)
+        }
+      });
+    }
+  };
+
+  const handleNotifyMe = (e) => {
+    e.stopPropagation();
+    showToast?.({
+      message: `We'll notify you when ${item.name} is back!`,
+      type: 'info'
+    });
+  };
+
+  // ─────────────────────────────────────────────────────────────
+  // 1. MOBILE LIST LAYOUT (Default mobile-first Swiggy/Zomato card)
+  // ─────────────────────────────────────────────────────────────
+  if (viewMode === 'list') {
+    return (
       <div 
-        className="relative aspect-[4/3] w-full bg-neutral-100 overflow-hidden cursor-pointer select-none"
-        onClick={() => onOpenQuickView && onOpenQuickView(item)}
+        onClick={() => onOpenQuickView?.(item)}
+        className={`
+          flex items-start justify-between gap-3 sm:gap-4 p-4 rounded-2xl
+          bg-slate-900/95 border border-slate-800/80 hover:border-slate-700
+          transition-all duration-200 select-none group relative cursor-pointer
+          ${!isAvailable ? 'opacity-65' : ''}
+        `}
       >
+        {/* Left: Food Info & Details */}
+        <div className="flex-1 min-w-0 pr-1">
+          {/* Header row: Dietary symbol & Badges */}
+          <div className="flex items-center flex-wrap gap-1.5 mb-1.5">
+            <DietaryMarker type={dietaryType} size={18} />
+            {badges.map((badge, idx) => (
+              <span
+                key={idx}
+                className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-pink-500/15 text-pink-400 border border-pink-500/25"
+              >
+                {badge === 'Bestseller' && <Star className="w-2.5 h-2.5 fill-current" />}
+                {badge === 'Spicy' && <Flame className="w-2.5 h-2.5 fill-current" />}
+                {badge === 'New' && <Sparkles className="w-2.5 h-2.5" />}
+                {badge === 'Must Try' && <Award className="w-2.5 h-2.5" />}
+                <span>{badge}</span>
+              </span>
+            ))}
+          </div>
+
+          {/* Name */}
+          <h3 className="font-bold text-sm sm:text-base text-white group-hover:text-pink-400 transition-colors leading-tight mb-1">
+            <HighlightMatch text={item.name} query={searchQuery} />
+          </h3>
+
+          {/* Price (Strictly ₹259, never ₹259.00) */}
+          <div className="flex items-baseline gap-2 mb-1.5">
+            <span className="text-sm sm:text-base font-extrabold text-white">
+              {formatCurrency(basePrice, settings?.currencySymbol || '₹')}
+            </span>
+            {hasVariants && (
+              <span className="text-[10px] text-slate-400 font-medium">
+                ({item.options.length} options)
+              </span>
+            )}
+          </div>
+
+          {/* Appetizing 2-Line Truncated Description */}
+          {cleanDescription && (
+            <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed font-normal">
+              <HighlightMatch text={cleanDescription} query={searchQuery} />
+            </p>
+          )}
+        </div>
+
+        {/* Right: 96px Image with Overlapping Add Button */}
+        <div className="relative shrink-0 flex flex-col items-center">
+          <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden bg-slate-800 shadow-sm relative">
+            <img 
+              src={item.image || FALLBACK_FOOD_IMAGE}
+              alt={item.name}
+              loading="lazy"
+              decoding="async"
+              width="112"
+              height="112"
+              onError={(e) => {
+                e.currentTarget.src = FALLBACK_FOOD_IMAGE;
+              }}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+            {/* Reference image watermark indicator */}
+            <span className="absolute bottom-1 right-1 text-[8px] bg-black/60 text-slate-300 px-1 rounded backdrop-blur-xs pointer-events-none">
+              Ref image
+            </span>
+          </div>
+
+          {/* Overlapping Add Button / Stepper (Bottom Center) */}
+          <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 z-10 w-[84px] flex justify-center">
+            {!isAvailable ? (
+              <button
+                type="button"
+                onClick={handleNotifyMe}
+                className="w-full py-1 rounded-xl bg-slate-800 border border-slate-700 text-slate-400 hover:text-white text-[11px] font-bold uppercase tracking-wider flex items-center justify-center gap-1 shadow-md transition-all active:scale-95"
+              >
+                <Bell className="w-3 h-3" /> Notify
+              </button>
+            ) : inCartQty > 0 ? (
+              <div onClick={(e) => e.stopPropagation()} className="shadow-lg">
+                <Stepper 
+                  value={inCartQty} 
+                  size="sm"
+                  onChange={(newQty) => onUpdateCartQuantity?.(activeCartId, newQty - inCartQty)}
+                  showTrashAtOne={true}
+                />
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={handleAddClick}
+                className="w-full py-1.5 rounded-xl bg-pink-600 hover:bg-pink-700 active:scale-95 text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-1 shadow-md shadow-pink-600/30 transition-all border border-pink-500/40"
+              >
+                <Plus className="w-3.5 h-3.5 stroke-[3]" /> ADD
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // 2. GRID LAYOUT (Desktop & Grid View toggle)
+  // ─────────────────────────────────────────────────────────────
+  return (
+    <div 
+      onClick={() => onOpenQuickView?.(item)}
+      className={`
+        flex flex-col justify-between rounded-2xl bg-slate-900/95
+        border border-slate-800/80 hover:border-slate-700 shadow-sm hover:shadow-xl
+        transition-all duration-300 overflow-hidden group relative cursor-pointer select-none
+        ${!isAvailable ? 'opacity-65' : ''}
+      `}
+    >
+      {/* Top Image Area */}
+      <div className="relative aspect-[4/3] w-full bg-slate-800 overflow-hidden">
         <img 
-          src={item.image || FALLBACK_FOOD_IMAGE} 
+          src={item.image || FALLBACK_FOOD_IMAGE}
           alt={item.name}
           loading="lazy"
-          draggable={false}
-          onContextMenu={(e) => e.preventDefault()}
+          decoding="async"
           onError={(e) => {
             e.currentTarget.src = FALLBACK_FOOD_IMAGE;
           }}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out select-none" 
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         />
 
-        {/* Soft vignette and Quick Look Badge (visible on hover or focus) */}
-        <div className="absolute inset-0 bg-black/15 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center pointer-events-none">
-          <span className="bg-white/95 text-gray-900 px-3 py-1.5 rounded-full text-xs font-bold shadow-md flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-            <Eye size={13} /> Quick Look
+        {/* Dietary Symbol (Top Left) */}
+        <div className="absolute top-3 left-3 p-1 rounded-md bg-slate-900/90 backdrop-blur-sm border border-slate-800 shadow-sm">
+          <DietaryMarker type={dietaryType} size={18} />
+        </div>
+
+        {/* Reference Image Tag */}
+        <span className="absolute bottom-2 left-2 text-[9px] bg-black/60 text-slate-300 px-1.5 py-0.5 rounded backdrop-blur-xs pointer-events-none">
+          Image for reference
+        </span>
+
+        {/* Quick View Hover Cue */}
+        <div className="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+          <span className="bg-white/95 text-slate-900 px-3 py-1.5 rounded-full text-xs font-bold shadow-md flex items-center gap-1.5 transform translate-y-2 group-hover:translate-y-0 transition-all">
+            <Eye className="w-3.5 h-3.5" /> Customize
           </span>
         </div>
-
-        {/* Dietary Certification Symbol */}
-        <div className="absolute top-3 left-3 bg-white/95 dark:bg-slate-900/90 backdrop-blur-md p-1 rounded-md shadow-xs border border-gray-200/60 dark:border-slate-800">
-          <DietaryMarker type={isNonVeg ? 'nonveg' : 'veg'} size={18} />
-        </div>
-
-        {/* Availability / Tag Badge */}
-        {item.isAvailable === false ? (
-          <div className="absolute top-3 right-3 bg-neutral-900/90 backdrop-blur-xs text-neutral-300 px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase">
-            Sold Out
-          </div>
-        ) : hasVariants ? (
-          <div className="absolute bottom-2.5 left-3 bg-white/90 backdrop-blur-md text-gray-800 border border-gray-200/60 px-2 py-0.5 rounded-md text-[10px] font-bold">
-            {item.options.length} Sizes
-          </div>
-        ) : null}
       </div>
 
       {/* Content Area */}
       <div className="p-4 flex flex-col flex-1 justify-between gap-3">
         <div>
-          {/* Header Row: Category */}
-          <div className="flex items-center justify-between gap-2 mb-1.5">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
-              {item.category}
-            </span>
+          {/* Badges */}
+          <div className="flex items-center flex-wrap gap-1.5 mb-1.5">
+            {badges.map((badge, idx) => (
+              <span
+                key={idx}
+                className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-pink-500/15 text-pink-400 border border-pink-500/25"
+              >
+                {badge}
+              </span>
+            ))}
           </div>
 
-          {/* Product Title */}
-          <h3 
-            className="font-bold text-sm sm:text-base text-gray-950 line-clamp-1 group-hover:text-black transition-colors cursor-pointer"
-            onClick={() => onOpenQuickView && onOpenQuickView(item)}
-            title={item.name}
-          >
-            {item.name}
+          {/* Title */}
+          <h3 className="font-bold text-sm sm:text-base text-white group-hover:text-pink-400 transition-colors line-clamp-1 mb-1">
+            <HighlightMatch text={item.name} query={searchQuery} />
           </h3>
 
-          {/* Clean Description */}
+          {/* Description */}
           {cleanDescription && (
-            <p className="text-xs text-gray-500 line-clamp-2 mt-1 leading-relaxed font-normal">
-              {cleanDescription}
+            <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed font-normal">
+              <HighlightMatch text={cleanDescription} query={searchQuery} />
             </p>
           )}
         </div>
 
-        {/* Variant Dropdown Selector */}
-        {hasVariants && (
-          <div className="relative">
-            <button
-              type="button"
-              onClick={() => setIsVariantDropdownOpen(!isVariantDropdownOpen)}
-              className="w-full flex items-center justify-between px-3 py-2 bg-gray-50 hover:bg-gray-100 border border-gray-200/80 rounded-xl text-xs font-semibold text-gray-800 transition-colors"
-            >
-              <span className="truncate">{currentVariant.title}</span>
-              <div className="flex items-center gap-1.5 shrink-0 font-bold ml-1.5 text-gray-950">
-                <span>{formatCurrency(currentVariant.price, settings.currencySymbol || '₹')}</span>
-                <ChevronDown size={13} className={`text-gray-400 transition-transform ${isVariantDropdownOpen ? 'rotate-180' : ''}`} />
-              </div>
-            </button>
+        {/* Bottom Bar: Price & Action */}
+        <div className="flex items-center justify-between pt-3 border-t border-slate-800/80 mt-auto">
+          <div>
+            <span className="text-[10px] uppercase font-semibold text-slate-400 tracking-wider block">Price</span>
+            <span className="text-base font-extrabold text-white">
+              {formatCurrency(basePrice, settings?.currencySymbol || '₹')}
+            </span>
+          </div>
 
-            {/* Dropdown Options */}
-            {isVariantDropdownOpen && (
-              <>
-                <div className="fixed inset-0 z-30" onClick={() => setIsVariantDropdownOpen(false)}></div>
-                <div className="absolute bottom-full left-0 right-0 mb-1.5 bg-white border border-gray-200 shadow-2xl rounded-xl z-40 overflow-hidden divide-y divide-gray-100 animate-in fade-in duration-100">
-                  {item.options.map((opt, idx) => (
-                    <button
-                      key={idx}
-                      type="button"
-                      onClick={() => {
-                        setSelectedVariantIndex(idx);
-                        setIsVariantDropdownOpen(false);
-                      }}
-                      className={`w-full flex items-center justify-between px-3 py-2.5 text-xs transition-colors ${
-                        idx === selectedVariantIndex 
-                          ? 'bg-neutral-900 text-white font-bold' 
-                          : 'text-gray-800 hover:bg-gray-50'
-                      }`}
-                    >
-                      <span className="flex items-center gap-2 truncate">
-                        {idx === selectedVariantIndex && <Check size={12} className="text-emerald-400 shrink-0" />}
-                        {opt.title}
-                      </span>
-                      <span className="font-extrabold shrink-0 ml-2">
-                        {formatCurrency(opt.price, settings.currencySymbol || '₹')}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              </>
+          <div onClick={(e) => e.stopPropagation()}>
+            {!isAvailable ? (
+              <button
+                type="button"
+                onClick={handleNotifyMe}
+                className="px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-400 hover:text-white text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-sm active:scale-95"
+              >
+                <Bell className="w-3.5 h-3.5" /> Sold Out
+              </button>
+            ) : inCartQty > 0 ? (
+              <Stepper 
+                value={inCartQty} 
+                size="sm"
+                onChange={(newQty) => onUpdateCartQuantity?.(activeCartId, newQty - inCartQty)}
+                showTrashAtOne={true}
+              />
+            ) : (
+              <button
+                type="button"
+                onClick={handleAddClick}
+                className="px-4 py-2 rounded-xl bg-pink-600 hover:bg-pink-700 active:scale-95 text-white font-black text-xs uppercase tracking-wider flex items-center gap-1.5 shadow-md shadow-pink-600/30 transition-all cursor-pointer"
+              >
+                <Plus className="w-3.5 h-3.5 stroke-[3]" /> ADD
+              </button>
             )}
           </div>
-        )}
-
-        {/* Pricing & Executive Action */}
-        <div className="flex items-center justify-between pt-3 border-t border-gray-100 mt-auto">
-          <div>
-            <span className="text-[10px] text-gray-400 uppercase font-semibold tracking-wider block">Price</span>
-            <span className="text-base sm:text-lg font-black text-gray-950 tracking-tight">
-              {formatCurrency(activePrice, settings.currencySymbol || '₹')}
-            </span>
-          </div>
-
-          {/* Minimalist Action Controls */}
-          {item.isAvailable === false ? (
-            <span className="px-3 py-1.5 bg-gray-100 text-gray-400 font-semibold text-xs rounded-xl uppercase tracking-wider">
-              Unavailable
-            </span>
-          ) : inCartQty > 0 ? (
-            <div className="flex items-center bg-gray-950 text-white rounded-xl shadow-xs overflow-hidden h-9">
-              <button
-                onClick={() => onUpdateCartQuantity(activeCartId, -1)}
-                className="px-3 h-full hover:bg-black active:scale-95 transition-all text-white font-bold flex items-center justify-center"
-                aria-label="Decrease quantity"
-              >
-                <Minus size={13} />
-              </button>
-              <span className="px-2 text-xs font-bold select-none min-w-[24px] text-center">
-                {inCartQty}
-              </span>
-              <button
-                onClick={() => onUpdateCartQuantity(activeCartId, 1)}
-                className="px-3 h-full hover:bg-black active:scale-95 transition-all text-white font-bold flex items-center justify-center"
-                aria-label="Increase quantity"
-              >
-                <Plus size={13} />
-              </button>
-            </div>
-          ) : (
-            <button
-              onClick={() => onAddToCart(item, currentVariant)}
-              className="px-4 py-2 bg-gray-950 hover:bg-black text-white rounded-xl font-bold text-xs uppercase tracking-wider transition-all duration-200 shadow-xs hover:shadow-md active:scale-95 flex items-center gap-1.5 group/btn"
-            >
-              <Plus size={14} className="text-gray-400 group-hover/btn:text-white transition-colors" />
-              <span>Add</span>
-            </button>
-          )}
         </div>
       </div>
     </div>

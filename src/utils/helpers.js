@@ -55,8 +55,11 @@ export const compressImageFile = (file, maxDimension = 400, quality = 0.6) => {
  */
 export const formatCurrency = (amount, symbol = '₹') => {
   const num = Number(amount);
-  if (isNaN(num)) return `${symbol}0.00`;
-  return `${symbol}${num.toFixed(2)}`;
+  if (isNaN(num)) return `${symbol}0`;
+  if (num % 1 === 0) {
+    return `${symbol}${num}`;
+  }
+  return `${symbol}${num.toFixed(2).replace(/\.00$/, '')}`;
 };
 
 /**
