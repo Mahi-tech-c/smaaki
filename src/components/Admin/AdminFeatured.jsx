@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef, useEffect } from 'react';
+import React, { useContext, useState, useRef } from 'react';
 import { AppContext } from '../../context/AppContext';
 import { Plus, Search, Edit2, Trash2, Sparkles, X, GripVertical, Image as ImageIcon, UploadCloud, Loader, Save, Star } from 'lucide-react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
@@ -12,37 +12,35 @@ const AdminFeatured = () => {
 
   // Form State
   const fileInputRef = useRef(null);
-  const [formData, setFormData] = useState({
-    title: '',
-    subtitle: '',
-    image: '',
-    itemId: '',
-    badge: 'CHEF\'S SPECIAL',
-    isActive: true
-  });
+  const [prevEditingItem, setPrevEditingItem] = useState(editingItem);
+  const [formData, setFormData] = useState(() => ({
+    title: editingItem?.title || '',
+    subtitle: editingItem?.subtitle || '',
+    image: editingItem?.image || '',
+    itemId: editingItem?.itemId || '',
+    badge: editingItem?.badge || 'CHEF\'S SPECIAL',
+    isActive: editingItem?.isActive !== undefined ? editingItem.isActive : true
+  }));
   const [isUploading, setIsUploading] = useState(false);
 
-  useEffect(() => {
-    if (editingItem) {
-      setFormData({
-        title: editingItem.title || '',
-        subtitle: editingItem.subtitle || '',
-        image: editingItem.image || '',
-        itemId: editingItem.itemId || '',
-        badge: editingItem.badge || 'CHEF\'S SPECIAL',
-        isActive: editingItem.isActive !== undefined ? editingItem.isActive : true
-      });
-    } else {
-      setFormData({
-        title: '',
-        subtitle: '',
-        image: '',
-        itemId: '',
-        badge: 'CHEF\'S SPECIAL',
-        isActive: true
-      });
-    }
-  }, [editingItem, isFormOpen]);
+  if (editingItem !== prevEditingItem) {
+    setPrevEditingItem(editingItem);
+    setFormData(editingItem ? {
+      title: editingItem.title || '',
+      subtitle: editingItem.subtitle || '',
+      image: editingItem.image || '',
+      itemId: editingItem.itemId || '',
+      badge: editingItem.badge || 'CHEF\'S SPECIAL',
+      isActive: editingItem.isActive !== undefined ? editingItem.isActive : true
+    } : {
+      title: '',
+      subtitle: '',
+      image: '',
+      itemId: '',
+      badge: 'CHEF\'S SPECIAL',
+      isActive: true
+    });
+  }
 
   const filteredFeatured = featured.filter(item => 
     item.title.toLowerCase().includes(searchTerm.toLowerCase()) || 

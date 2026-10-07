@@ -18,6 +18,7 @@ import { useMenuFilter } from '../hooks/useMenuFilter';
 import ProductCard from './Customer/ProductCard';
 import QuickViewModal from './Customer/QuickViewModal';
 import { formatCurrency } from '../utils/helpers';
+import { getCategoryEmoji } from '../constants/categories';
 
 const MenuSection = () => {
   const { 
@@ -247,7 +248,14 @@ const MenuSection = () => {
                         : 'text-gray-600 hover:bg-gray-100/70 hover:text-gray-950'
                     }`}
                   >
-                    <span className="truncate mr-2">{cat}</span>
+                    <span className="truncate mr-2 flex items-center gap-1.5">
+                      {cat !== 'All' && (
+                        <span aria-hidden="true" className="shrink-0 text-sm">
+                          {getCategoryEmoji(cat)}
+                        </span>
+                      )}
+                      <span>{cat}</span>
+                    </span>
                     <span className={`text-[10px] px-2 py-0.5 rounded-md font-bold ${
                       isActive ? 'bg-white/20 text-white' : 'bg-gray-100 text-gray-500'
                     }`}>

@@ -3,8 +3,9 @@ import { createPortal } from 'react-dom';
 import { X, Plus, Minus, ShoppingBag, Check, ChevronDown } from 'lucide-react';
 import { formatCurrency, sanitizeDescription } from '../../utils/helpers';
 import { FALLBACK_FOOD_IMAGE } from '../../constants/settings';
+import { DietaryMarker } from '../ui';
 
-const QuickViewModal = ({ 
+const QuickViewModalContent = ({ 
   item, 
   onClose, 
   settings = {}, 
@@ -15,23 +16,14 @@ const QuickViewModal = ({
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
   const [isNutritionOpen, setIsNutritionOpen] = useState(false);
 
-  useEffect(() => {
-    setSelectedVariantIndex(0);
-    setIsNutritionOpen(false);
-  }, [item?.id]);
-
   // Lock body scroll when modal is open
   useEffect(() => {
-    if (item) {
-      const originalOverflow = document.body.style.overflow;
-      document.body.style.overflow = 'hidden';
-      return () => {
-        document.body.style.overflow = originalOverflow;
-      };
-    }
-  }, [item]);
-
-  if (!item) return null;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
 
   const hasVariants = Boolean(item.options && item.options.length > 0);
   const currentVariant = hasVariants ? item.options[selectedVariantIndex] : null;
@@ -97,13 +89,7 @@ const QuickViewModal = ({
         <div className="p-5 sm:p-6 overflow-y-auto space-y-4 flex-1">
           {/* Veg / Non-Veg Indicator */}
           <div className="flex items-center gap-2 border-b border-gray-100 pb-3">
-            <span 
-              className={`w-4 h-4 border-2 flex items-center justify-center rounded-sm ${
-                isNonVeg ? 'border-amber-700' : 'border-emerald-700'
-              }`}
-            >
-              <span className={`w-2 h-2 rounded-full ${isNonVeg ? 'bg-amber-700' : 'bg-emerald-700'}`}></span>
-            </span>
+            <DietaryMarker type={isNonVeg ? 'nonveg' : 'veg'} size={18} />
             <span className="text-xs font-bold text-gray-600">
               {isNonVeg ? 'Non-Vegetarian' : 'Vegetarian'}
             </span>
@@ -249,6 +235,11 @@ const QuickViewModal = ({
 
   if (typeof document === 'undefined') return null;
   return createPortal(modalContent, document.body);
+};
+
+const QuickViewModal = (props) => {
+  if (!props.item) return null;
+  return <QuickViewModalContent key={props.item.id} {...props} />;
 };
 
 export default QuickViewModal;

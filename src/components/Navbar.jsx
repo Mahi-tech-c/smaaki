@@ -1,10 +1,12 @@
 import React, { useContext } from 'react';
-import { Coffee, ShieldCheck, ShoppingBag, ArrowUpRight } from 'lucide-react';
+import { Coffee, ShieldCheck, ShoppingBag, Sun, Moon } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { AppContext } from '../context/AppContext';
+import { useTheme } from '../context/ThemeContext';
 
 const Navbar = () => {
   const { settings, cartItemCount, setIsCartOpen } = useContext(AppContext);
+  const { toggleTheme, isDark } = useTheme();
   const location = useLocation();
 
   const navLinks = [
@@ -78,6 +80,21 @@ const Navbar = () => {
                 Offers
               </Link>
             </div>
+
+            {/* Theme Toggle (Dark / Light) */}
+            <button
+              type="button"
+              onClick={toggleTheme}
+              aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
+              title={`Switch to ${isDark ? 'light' : 'dark'} mode`}
+              className="p-2 rounded-xl text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+            >
+              {isDark ? (
+                <Sun size={17} className="text-amber-400 hover:rotate-45 transition-transform" />
+              ) : (
+                <Moon size={17} className="text-slate-700 hover:-rotate-12 transition-transform" />
+              )}
+            </button>
 
             {/* Cart Trigger Button */}
             <button

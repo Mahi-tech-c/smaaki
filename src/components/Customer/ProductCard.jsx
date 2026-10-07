@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Plus, Minus, Check, ChevronDown, Eye } from 'lucide-react';
 import { formatCurrency, sanitizeDescription } from '../../utils/helpers';
 import { FALLBACK_FOOD_IMAGE } from '../../constants/settings';
+import { DietaryMarker, Stepper } from '../ui';
 
 const ProductCard = ({ 
   item, 
@@ -58,15 +59,8 @@ const ProductCard = ({
         </div>
 
         {/* Dietary Certification Symbol */}
-        <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-md p-1 rounded-md shadow-xs border border-gray-200/60">
-          <span 
-            className={`w-3.5 h-3.5 border-1.5 flex items-center justify-center rounded-xs ${
-              isNonVeg ? 'border-amber-700' : 'border-emerald-700'
-            }`}
-            title={isNonVeg ? 'Non-Vegetarian' : 'Vegetarian'}
-          >
-            <span className={`w-1.5 h-1.5 rounded-full ${isNonVeg ? 'bg-amber-700' : 'bg-emerald-700'}`}></span>
-          </span>
+        <div className="absolute top-3 left-3 bg-white/95 dark:bg-slate-900/90 backdrop-blur-md p-1 rounded-md shadow-xs border border-gray-200/60 dark:border-slate-800">
+          <DietaryMarker type={isNonVeg ? 'nonveg' : 'veg'} size={18} />
         </div>
 
         {/* Availability / Tag Badge */}

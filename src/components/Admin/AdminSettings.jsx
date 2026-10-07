@@ -15,10 +15,14 @@ const FONT_SIZES = [8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 28, 32, 36, 40, 48
 /* ─── Admin Notes Panel ───────────────────────────────────── */
 const NotesPanel = () => {
   const { settings, updateSettings } = useContext(AppContext);
+  const [prevNotes, setPrevNotes] = useState(settings.adminNotes);
   const [note, setNote] = useState(settings.adminNotes || '');
   const [saved, setSaved] = useState(false);
 
-  useEffect(() => { setNote(settings.adminNotes || ''); }, [settings.adminNotes]);
+  if (settings.adminNotes !== prevNotes) {
+    setPrevNotes(settings.adminNotes);
+    setNote(settings.adminNotes || '');
+  }
 
   const handleSave = async () => {
     await updateSettings({ ...settings, adminNotes: note });

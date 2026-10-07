@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { AppContext } from '../context/AppContext';
 
 const Hero = () => {
-  const { settings, isLoaded } = useContext(AppContext);
+  const { settings } = useContext(AppContext);
 
   return (
     <div className="relative min-h-[100dvh] flex items-center justify-center pt-20 overflow-hidden bg-transparent">

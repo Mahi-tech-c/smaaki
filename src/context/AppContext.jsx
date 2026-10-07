@@ -25,12 +25,16 @@ import {
   syncMenuDataToNewFirebase
 } from '../services/menuService';
 import { menuItems as defaultMenuItems } from '../data/menu';
+import { getCategoryEmoji, CANONICAL_CATEGORIES } from '../constants/categories';
 
-const defaultCategories = Array.from(new Set(defaultMenuItems.map(i => i.category))).map((catName, idx) => ({
-  id: idx + 1,
-  name: catName,
-  orderIndex: idx + 1
-}));
+const defaultCategories = CANONICAL_CATEGORIES.length > 0
+  ? CANONICAL_CATEGORIES
+  : Array.from(new Set(defaultMenuItems.map(i => i.category))).map((catName, idx) => ({
+      id: idx + 1,
+      name: catName,
+      emoji: getCategoryEmoji(catName),
+      orderIndex: idx + 1
+    }));
 
 export { DEFAULT_SETTINGS };
 export const AppContext = createContext();

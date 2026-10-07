@@ -64,7 +64,7 @@ const AdminLogin = () => {
       await sendPasswordResetEmail(auth, email);
       setResetSent(true);
       setError('');
-    } catch (err) {
+    } catch {
       setError('Failed to send reset email. Verify your address.');
     } finally {
       setLoading(false);

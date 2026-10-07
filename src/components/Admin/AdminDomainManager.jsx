@@ -1,13 +1,12 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import { AppContext } from '../../context/AppContext';
-import { Globe, Shield, CheckCircle, AlertCircle, Loader2, Copy, ExternalLink, RefreshCw } from 'lucide-react';
+import { Globe, Shield, CheckCircle, AlertCircle, Loader2, Copy } from 'lucide-react';
 
 const AdminDomainManager = () => {
   const { settings, updateSettings } = useContext(AppContext);
   const [domain, setDomain] = useState(settings.customDomain || '');
   const [status, setStatus] = useState('idle'); // idle, checking, success, error
   const [error, setError] = useState(null);
-  const [dnsRecords, setDnsRecords] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
 
   const hasConfig = settings.vercelToken && settings.vercelProjectId;
@@ -37,12 +36,6 @@ const AdminDomainManager = () => {
 
       // 2. Save domain to our settings
       await updateSettings({ ...settings, customDomain: domain });
-
-      // 3. Get DNS Instructions
-      setDnsRecords(data.verification || [
-        { type: 'A', name: '@', value: '76.76.21.21' },
-        { type: 'CNAME', name: 'www', value: 'cname.vercel-dns.com' }
-      ]);
       
       setStatus('success');
     } catch (err) {

@@ -1,6 +1,8 @@
 import React, { useContext, useEffect } from 'react';
 import { Routes, Route, useLocation, Link } from 'react-router-dom';
 import { AppProvider, AppContext } from './context/AppContext';
+import { ThemeProvider } from './context/ThemeContext';
+import { ToastProvider } from './components/ui/Toast';
 import { Camera, MessageCircle, Share2, Clock, MapPin } from 'lucide-react';
 
 import Navbar from './components/Navbar';
@@ -249,9 +251,13 @@ const AppContent = () => {
 
 function App() {
   return (
-    <AppProvider>
-      <AppContent />
-    </AppProvider>
+    <ThemeProvider>
+      <ToastProvider>
+        <AppProvider>
+          <AppContent />
+        </AppProvider>
+      </ToastProvider>
+    </ThemeProvider>
   );
 }
 

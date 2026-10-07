@@ -1,10 +1,9 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { AppContext } from '../context/AppContext';
 
 // Single blossom flower SVG
 const BlossomFlower = React.memo(({ size = 60, primaryColor }) => {
   const color = primaryColor || '#f472b6';
-  // Create a subtle palette based on the primary color
   const petalColors = [
     color,
     `color-mix(in srgb, ${color}, white 20%)`,
@@ -52,6 +51,8 @@ const BlossomFlower = React.memo(({ size = 60, primaryColor }) => {
   );
 });
 
+BlossomFlower.displayName = 'BlossomFlower';
+
 // Falling petal shape
 const FallingPetal = React.memo(({ style, color }) => (
   <div style={style} className="falling-petal">
@@ -60,6 +61,8 @@ const FallingPetal = React.memo(({ style, color }) => (
     </svg>
   </div>
 ));
+
+FallingPetal.displayName = 'FallingPetal';
 
 // Flower positions scattered around the screen
 const FLOWER_POSITIONS = [
@@ -83,7 +86,24 @@ const FALLING_PETALS = [
 
 const BlossomBackground = () => {
   const { settings } = useContext(AppContext);
-  const primaryColor = settings.primaryColor;
+  const primaryColor = settings?.primaryColor;
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(() => {
+    return typeof window !== 'undefined' && window.matchMedia
+      ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      : false;
+  });
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const listener = (event) => setPrefersReducedMotion(event.matches);
+    mediaQuery.addEventListener('change', listener);
+    return () => mediaQuery.removeEventListener('change', listener);
+  }, []);
+
+  // Completely disable floating flower and falling petals when reduced motion is preferred
+  if (prefersReducedMotion) {
+    return null;
+  }
 
   return (
     <div

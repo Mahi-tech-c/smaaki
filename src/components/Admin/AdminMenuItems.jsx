@@ -4,8 +4,8 @@ import { Plus, Search, Edit2, Trash2, LayoutGrid, QrCode, GripVertical, List, Ch
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import AdminCategories from './AdminCategories';
 
-const AdminMenuItems = ({ onAdd, onEdit, onDelete, onGetQr }) => {
-  const { menuItems, categories: dbCategories, reorderItem, reorderCategory, updateItem } = useContext(AppContext);
+const AdminMenuItems = ({ onAdd, onEdit, onDelete }) => {
+  const { menuItems, categories: dbCategories, reorderCategory, updateItem } = useContext(AppContext);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeCategory, setActiveCategory] = useState('All');
   const [isCatModalOpen, setIsCatModalOpen] = useState(false);

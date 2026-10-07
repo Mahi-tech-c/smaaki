@@ -17,7 +17,19 @@ const AdminOffers = () => {
 
   // Form State
   const fileInputRef = useRef(null);
-  const [formData, setFormData] = useState({
+  const [prevEditingOffer, setPrevEditingOffer] = useState(editingOffer);
+  const [formData, setFormData] = useState(() => (editingOffer ? {
+    title: editingOffer.title || '',
+    description: editingOffer.description || '',
+    image: editingOffer.image || '',
+    tag: editingOffer.tag || '',
+    categories: editingOffer.categories || (editingOffer.category ? [editingOffer.category] : []),
+    discountPercentage: editingOffer.discountPercentage || '',
+    startDate: editingOffer.startDate || '',
+    endDate: editingOffer.endDate || '',
+    itemPrices: editingOffer.itemPrices || {},
+    isActive: editingOffer.isActive !== undefined ? editingOffer.isActive : true
+  } : {
     title: '',
     description: '',
     image: '',
@@ -26,40 +38,37 @@ const AdminOffers = () => {
     discountPercentage: '',
     startDate: '',
     endDate: '',
-    itemPrices: {}, // itemId -> offerPrice
+    itemPrices: {},
     isActive: true
-  });
+  }));
   const [isUploading, setIsUploading] = useState(false);
 
-  useEffect(() => {
-    if (editingOffer) {
-      setFormData({
-        title: editingOffer.title || '',
-        description: editingOffer.description || '',
-        image: editingOffer.image || '',
-        tag: editingOffer.tag || '',
-        categories: editingOffer.categories || (editingOffer.category ? [editingOffer.category] : []),
-        discountPercentage: editingOffer.discountPercentage || '',
-        startDate: editingOffer.startDate || '',
-        endDate: editingOffer.endDate || '',
-        itemPrices: editingOffer.itemPrices || {},
-        isActive: editingOffer.isActive !== undefined ? editingOffer.isActive : true
-      });
-    } else {
-      setFormData({
-        title: '',
-        description: '',
-        image: '',
-        tag: '',
-        categories: [],
-        discountPercentage: '',
-        startDate: '',
-        endDate: '',
-        itemPrices: {},
-        isActive: true
-      });
-    }
-  }, [editingOffer, isFormOpen]);
+  if (editingOffer !== prevEditingOffer) {
+    setPrevEditingOffer(editingOffer);
+    setFormData(editingOffer ? {
+      title: editingOffer.title || '',
+      description: editingOffer.description || '',
+      image: editingOffer.image || '',
+      tag: editingOffer.tag || '',
+      categories: editingOffer.categories || (editingOffer.category ? [editingOffer.category] : []),
+      discountPercentage: editingOffer.discountPercentage || '',
+      startDate: editingOffer.startDate || '',
+      endDate: editingOffer.endDate || '',
+      itemPrices: editingOffer.itemPrices || {},
+      isActive: editingOffer.isActive !== undefined ? editingOffer.isActive : true
+    } : {
+      title: '',
+      description: '',
+      image: '',
+      tag: '',
+      categories: [],
+      discountPercentage: '',
+      startDate: '',
+      endDate: '',
+      itemPrices: {},
+      isActive: true
+    });
+  }
 
   // Auto-calculate prices when categories or discount change
   useEffect(() => {
