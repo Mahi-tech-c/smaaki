@@ -84,26 +84,11 @@ const ProductCard = ({
       {/* Content Area */}
       <div className="p-4 flex flex-col flex-1 justify-between gap-3">
         <div>
-          {/* Header Row: Category & Clean Macro Highlight */}
+          {/* Header Row: Category */}
           <div className="flex items-center justify-between gap-2 mb-1.5">
             <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
               {item.category}
             </span>
-            {(item.protein || item.calories) && (
-              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-gray-100 text-gray-600">
-                {item.protein && (
-                  <span className="font-bold text-emerald-700">
-                    {item.protein} Protein
-                  </span>
-                )}
-                {item.protein && item.calories && (
-                  <span className="text-gray-300">•</span>
-                )}
-                {item.calories && (
-                  <span>{item.calories}</span>
-                )}
-              </span>
-            )}
           </div>
 
           {/* Product Title */}

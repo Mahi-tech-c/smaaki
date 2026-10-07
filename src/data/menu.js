@@ -1,1598 +1,970 @@
+// Smaakenzzoo Menu Dataset
+// Artisanal Cafe, Warangal, Telangana
+// Flourishing Hearts, Blooming Dreams
+
+export const addOnOptionGroups = {
+  "churros": {
+    "id": "churros_dips",
+    "name": "Dips & Sauces",
+    "min": 0,
+    "max": 3,
+    "options": [
+      {
+        "id": "opt_caramel_dip",
+        "name": "Caramel Dip",
+        "price": "20.00",
+        "inStock": true
+      },
+      {
+        "id": "opt_chocolate_dip",
+        "name": "Chocolate Dip",
+        "price": "20.00",
+        "inStock": true
+      },
+      {
+        "id": "opt_nutella_dip",
+        "name": "Nutella Dip",
+        "price": "25.00",
+        "inStock": true
+      }
+    ]
+  },
+  "waffles": {
+    "id": "waffle_addons",
+    "name": "Scoops & Brownie Base",
+    "min": 0,
+    "max": 2,
+    "options": [
+      {
+        "id": "opt_single_scoop",
+        "name": "Single Scoop Ice Cream",
+        "price": "60.00",
+        "inStock": true
+      },
+      {
+        "id": "opt_double_scoop",
+        "name": "Double Scoop Ice Cream",
+        "price": "110.00",
+        "inStock": true
+      },
+      {
+        "id": "opt_half_brownie",
+        "name": "Half Brownie Base",
+        "price": "30.00",
+        "inStock": true
+      },
+      {
+        "id": "opt_full_brownie",
+        "name": "Full Brownie Base",
+        "price": "50.00",
+        "inStock": true
+      }
+    ]
+  },
+  "pizza": {
+    "id": "pizza_toppings",
+    "name": "Extra Toppings & Dips",
+    "min": 0,
+    "max": 5,
+    "options": [
+      {
+        "id": "opt_extra_onion",
+        "name": "Extra Onion",
+        "price": "15.00",
+        "inStock": true
+      },
+      {
+        "id": "opt_extra_veggies",
+        "name": "Extra Veggies",
+        "price": "30.00",
+        "inStock": true
+      },
+      {
+        "id": "opt_extra_cheese",
+        "name": "Extra Cheese",
+        "price": "40.00",
+        "inStock": true
+      },
+      {
+        "id": "opt_extra_chicken",
+        "name": "Extra Chicken",
+        "price": "60.00",
+        "inStock": true
+      },
+      {
+        "id": "opt_pizza_dip",
+        "name": "Extra Dip",
+        "price": "15.00",
+        "inStock": true
+      }
+    ]
+  },
+  "snacks": {
+    "id": "snack_dips",
+    "name": "Add-on Dips",
+    "min": 0,
+    "max": 3,
+    "options": [
+      {
+        "id": "opt_dip_garlic_mayo",
+        "name": "Garlic Mayo Dip",
+        "price": "15.00",
+        "inStock": true
+      },
+      {
+        "id": "opt_dip_peri_peri",
+        "name": "Peri Peri Dip",
+        "price": "15.00",
+        "inStock": true
+      },
+      {
+        "id": "opt_dip_cheese",
+        "name": "Cheese Dip",
+        "price": "15.00",
+        "inStock": true
+      }
+    ]
+  }
+};
+
 export const menuItems = [
-  // ========================
-  // CHURROS (CARB REFUEL & ENERGY)
-  // ========================
-  { 
-    id: 1, 
-    category: "Churros", 
-    name: "Classic Spanish Churros", 
-    price: "229.00", 
-    protein: "5g",
-    calories: "320 kcal",
-    carbs: "42g",
-    fats: "14g",
-    fitnessTag: "Post-Workout Carbs",
-    description: "Golden crisp Spanish dough tossed in cinnamon-sugar. Ideal fast-digesting carbs for rapid muscle glycogen reload after high-intensity training.", 
-    image: "/classic-spanish-churros.jpg" 
-  },
-  { 
-    id: 2, 
-    category: "Churros", 
-    name: "Nutty Butty Churros", 
-    price: "289.00", 
-    protein: "9g",
-    calories: "410 kcal",
-    carbs: "45g",
-    fats: "21g",
-    fitnessTag: "Healthy Fats & Energy",
-    description: "Coated in crushed California almonds & walnuts offering heart-healthy monounsaturated fats and sustained endurance fuel.", 
-    image: "/nutty-butty-churros.jpg" 
-  },
-  { 
-    id: 3, 
-    category: "Churros", 
-    name: "Churros Shots", 
-    price: "259.00", 
-    protein: "4g",
-    calories: "290 kcal",
-    carbs: "38g",
-    fats: "13g",
-    fitnessTag: "Portion-Controlled",
-    description: "Bite-sized churros layered in a cup for micro-dosed carb cravings without throwing off your daily macro budget.", 
-    image: "/churros-shots.jpg" 
-  },
-  { 
-    id: 4, 
-    category: "Churros", 
-    name: "Churros Pop", 
-    price: "249.00", 
-    protein: "4g",
-    calories: "280 kcal",
-    carbs: "39g",
-    fats: "12g",
-    fitnessTag: "Quick Energy Pop",
-    description: "Portable skewers with dark chocolate drizzle. Easy-to-digest simple carbs for instant workout energy.", 
-    image: "/churros-pop.jpg" 
-  },
-  { 
-    id: 5, 
-    category: "Churros", 
-    name: "Three Layered Churros", 
-    price: "299.00", 
-    protein: "8g",
-    calories: "520 kcal",
-    carbs: "68g",
-    fats: "24g",
-    fitnessTag: "Bulking Refeed",
-    description: "Three stacked layers delivering dense carbohydrates for hardgainers and high-volume training refeed days.", 
-    image: "/three-layered-churros.jpg" 
-  },
-  { 
-    id: 6, 
-    category: "Churros", 
-    name: "Add-on Caramel Dip", 
-    price: "20.00", 
-    protein: "1g",
-    calories: "75 kcal",
-    carbs: "16g",
-    fats: "1.5g",
-    fitnessTag: "Carb Boost",
-    description: "Quick glucose boost for intense energy requirements.", 
-    image: "/add-on-caramel-dip.jpg" 
-  },
-  { 
-    id: 7, 
-    category: "Churros", 
-    name: "Add-on Chocolate Dip", 
-    price: "20.00", 
-    protein: "2g",
-    calories: "85 kcal",
-    carbs: "14g",
-    fats: "3g",
-    fitnessTag: "Flavonoid Cocoa",
-    description: "Contains polyphenol-rich cocoa supporting healthy blood circulation.", 
-    image: "/add-on-chocolate-dip.jpg" 
-  },
-  { 
-    id: 8, 
-    category: "Churros", 
-    name: "Add-on Nutella Dip", 
-    price: "25.00", 
-    protein: "2g",
-    calories: "100 kcal",
-    carbs: "12g",
-    fats: "6g",
-    fitnessTag: "Hazelnut Density",
-    description: "Dense calories for positive energy balance during mass gain phases.", 
-    image: "/add-on-nutella-dip.jpg" 
-  },
-
-  // ========================
-  // BELGIAN WAFFLES
-  // ========================
-  { 
-    id: 9, 
-    category: "Belgian Waffles", 
-    name: "Choco Drizzle Bliss Waffle", 
-    price: "139.00", 
-    protein: "7g",
-    calories: "360 kcal",
-    carbs: "48g",
-    fats: "16g",
-    fitnessTag: "Balanced Cheat",
-    description: "Golden crisp waffle base providing quick starches and cocoa flavonoids to assist post-exercise insulin replenishment.", 
-    image: "/waffle-choco-drizzle-bliss.dim_400x300.jpg" 
-  },
-  { 
-    id: 10, 
-    category: "Belgian Waffles", 
-    name: "Kitkat Crackle Waffle", 
-    price: "169.00", 
-    protein: "8g",
-    calories: "420 kcal",
-    carbs: "54g",
-    fats: "19g",
-    fitnessTag: "Intense Refeed",
-    description: "High-density training reward loaded with crisp wafer carbs to replenish exhausted muscle glycogen stores.", 
-    image: "/waffle-kitkat-crackle.dim_400x300.jpg" 
-  },
-  { 
-    id: 11, 
-    category: "Belgian Waffles", 
-    name: "Royal Rocher Waffle", 
-    price: "199.00", 
-    protein: "10g",
-    calories: "460 kcal",
-    carbs: "52g",
-    fats: "23g",
-    fitnessTag: "Healthy Plant Fats",
-    description: "Roasted hazelnuts delivering Vitamin E, iron, and healthy monounsaturated fatty acids.", 
-    image: "/waffle-royal-rocher.dim_400x300.jpg" 
-  },
-  { 
-    id: 115, 
-    category: "Belgian Waffles", 
-    name: "Berry Nutella Crush Waffle", 
-    price: "189.00", 
-    protein: "7g",
-    calories: "340 kcal",
-    carbs: "46g",
-    fats: "14g",
-    fitnessTag: "Antioxidant Rich",
-    description: "Fresh berries supply Vitamin C and anthocyanins to fight exercise-induced oxidative stress and muscle inflammation.", 
-    image: "/waffle-berry-nutella-crush.dim_400x300.jpg" 
-  },
-  { 
-    id: 116, 
-    category: "Belgian Waffles", 
-    name: "Royal Dry Fruit Waffle", 
-    price: "199.00", 
-    protein: "12g",
-    calories: "430 kcal",
-    carbs: "50g",
-    fats: "20g",
-    fitnessTag: "12g Protein & Zinc",
-    description: "Loaded with roasted almonds, cashews, and pure honey providing Zinc, Magnesium, and 12g natural plant protein.", 
-    image: "/waffle-royal-dry-fruit.dim_400x300.jpg" 
-  },
-  { 
-    id: 12, 
-    category: "Belgian Waffles", 
-    name: "Add-on Single Scoop", 
-    price: "60.00", 
-    protein: "4g",
-    calories: "140 kcal",
-    carbs: "18g",
-    fats: "6g",
-    fitnessTag: "Calcium Boost",
-    description: "Chilled dairy delivering bone-strengthening bioavailable calcium.", 
-    image: "/addon-single-scoop.jpg" 
-  },
-  { 
-    id: 13, 
-    category: "Belgian Waffles", 
-    name: "Add-on Double Scoop", 
-    price: "110.00", 
-    protein: "8g",
-    calories: "280 kcal",
-    carbs: "36g",
-    fats: "12g",
-    fitnessTag: "8g Dairy Protein",
-    description: "Extra protein and minerals from whole milk solids.", 
-    image: "/addon-double-scoop.jpg" 
-  },
-  { 
-    id: 14, 
-    category: "Belgian Waffles", 
-    name: "Add-on Full Browine Base", 
-    price: "50.00", 
-    protein: "5g",
-    calories: "220 kcal",
-    carbs: "32g",
-    fats: "9g",
-    fitnessTag: "Energy Dense",
-    description: "Dense chocolate cake for extra workout stamina.", 
-    image: "/addon-full-brownie-base.jpg" 
-  },
-  { 
-    id: 15, 
-    category: "Belgian Waffles", 
-    name: "Add-on Half Browine Base", 
-    price: "30.00", 
-    protein: "2.5g",
-    calories: "110 kcal",
-    carbs: "16g",
-    fats: "4.5g",
-    fitnessTag: "Controlled Energy",
-    description: "5g Protein | 16g Carbs | 4.5g Fat. Half-portion energy booster.", 
-    image: "/addon-half-brownie-base.jpg" 
-  },
-
-  // ========================
-  // BUBBLE WAFFLES
-  // ========================
-  { 
-    id: 16, 
-    category: "Bubble Waffles", 
-    name: "Dark Matter Bubble Waffle", 
-    price: "309.00", 
-    protein: "9g",
-    calories: "480 kcal",
-    carbs: "60g",
-    fats: "22g",
-    fitnessTag: "Dark Cocoa Flavanols",
-    description: "High-percentage dark chocolate packed with epicatechin to support endothelial blood flow and muscular pumps.", 
-    image: "/bubble-waffle-dark-matter.jpg" 
-  },
-  { 
-    id: 17, 
-    category: "Bubble Waffles", 
-    name: "Cookie Overload Bubble Waffle", 
-    price: "319.00", 
-    protein: "8g",
-    calories: "510 kcal",
-    carbs: "66g",
-    fats: "24g",
-    fitnessTag: "High Carb Load",
-    description: "Dense waffle packed with cookies to top off depleted liver and intramuscular glycogen reservoirs.", 
-    image: "/bubble-waffle-cookie-overload.jpg" 
-  },
-  { 
-    id: 18, 
-    category: "Bubble Waffles", 
-    name: "Royal Rocher Bubble Waffles", 
-    price: "339.00", 
-    protein: "11g",
-    calories: "520 kcal",
-    carbs: "62g",
-    fats: "26g",
-    fitnessTag: "Nutrient Dense",
-    description: "Whole roasted hazelnuts delivering magnesium, copper, and plant-derived antioxidants.", 
-    image: "/bubble-waffle-royal-rocher.jpg" 
-  },
-  { 
-    id: 19, 
-    category: "Bubble Waffles", 
-    name: "Fruit Heaven Bubble Waffle", 
-    price: "329.00", 
-    protein: "7g",
-    calories: "350 kcal",
-    carbs: "52g",
-    fats: "13g",
-    fitnessTag: "Fiber & Vitamin C",
-    description: "Generously crowned with fresh seasonal fruits rich in potassium, natural fiber, and immune-supporting Vitamin C.", 
-    image: "/bubble-waffle-fruit-heaven.jpg" 
-  },
-
-  // ========================
-  // ICE CREAM SUNDAES
-  // ========================
-  { 
-    id: 20, 
-    category: "Icecream Sundaes", 
-    name: "Kitkat Meltdown Sundae", 
-    price: "229.00", 
-    protein: "8g",
-    calories: "390 kcal",
-    carbs: "52g",
-    fats: "17g",
-    fitnessTag: "Glycogen Refuel",
-    description: "High-carb cold treat designed for rewarding intense leg days and heavy compound lifting sessions.", 
-    image: "/sundae-kitkat.dim_400x300.jpg" 
-  },
-  { 
-    id: 21, 
-    category: "Icecream Sundaes", 
-    name: "Oreo Dream Cloud Sundae", 
-    price: "219.00", 
-    protein: "7g",
-    calories: "380 kcal",
-    carbs: "50g",
-    fats: "17g",
-    fitnessTag: "Cheat Day Reward",
-    description: "Creamy dairy base combined with crushed biscuits for high palatability and clean enjoyment.", 
-    image: "/sundae-oreo.dim_400x300.jpg" 
-  },
-  { 
-    id: 22, 
-    category: "Icecream Sundaes", 
-    name: "Pink Crush Sundae", 
-    price: "209.00", 
-    protein: "6g",
-    calories: "340 kcal",
-    carbs: "48g",
-    fats: "14g",
-    fitnessTag: "Berry Flavonoids",
-    description: "Lighter fruit-forward sundae rich in natural berry polyphenols and refreshing cooling enzymes.", 
-    image: "/sundae-pink-crush.dim_400x300.jpg" 
-  },
-  { 
-    id: 23, 
-    category: "Icecream Sundaes", 
-    name: "Nutstorm Delight Sundae", 
-    price: "249.00", 
-    protein: "13g",
-    calories: "450 kcal",
-    carbs: "44g",
-    fats: "25g",
-    fitnessTag: "13g Protein & Nuts",
-    description: "Massive mountain of roasted almonds, walnuts, and cashews packing 13g natural protein and clean healthy fats.", 
-    image: "/sundae-nutstorm.dim_400x300.jpg" 
-  },
-  { 
-    id: 24, 
-    category: "Icecream Sundaes", 
-    name: "Ferrero Royale", 
-    price: "259.00", 
-    protein: "9g",
-    calories: "440 kcal",
-    carbs: "48g",
-    fats: "23g",
-    fitnessTag: "Hazelnut Minerals",
-    description: "Premium hazelnut cocoa chunks supplying magnesium to assist muscle contraction and cramp resistance.", 
-    image: "/sundae-ferrero.dim_400x300.jpg" 
-  },
-  { 
-    id: 25, 
-    category: "Icecream Sundaes", 
-    name: "Smaakenzzoo Banana Bliss", 
-    price: "289.00", 
-    protein: "8g",
-    calories: "360 kcal",
-    carbs: "56g",
-    fats: "12g",
-    fitnessTag: "Potassium Cramp-Defense",
-    description: "Loaded with fresh ripe bananas providing 450mg+ natural potassium to prevent training cramps and replenish electrolytes.", 
-    image: "/sundae-banana.dim_400x300.jpg" 
-  },
-  { 
-    id: 26, 
-    category: "Icecream Sundaes", 
-    name: "Nutella Fudge Fantasy", 
-    price: "249.00", 
-    protein: "8g",
-    calories: "430 kcal",
-    carbs: "50g",
-    fats: "22g",
-    fitnessTag: "Energy Dense",
-    description: "Smooth dark fudge and hazelnuts delivering high-density calories for clean surplus phases.", 
-    image: "/sundae-nutella-fudge.dim_400x300.jpg" 
-  },
-  { 
-    id: 27, 
-    category: "Icecream Sundaes", 
-    name: "Death By Chocolate", 
-    price: "269.00", 
-    protein: "9g",
-    calories: "470 kcal",
-    carbs: "56g",
-    fats: "24g",
-    fitnessTag: "Pure Cocoa Power",
-    description: "Multi-layered dark chocolate fudge rich in iron, copper, and natural endorphin triggers.", 
-    image: "/sundae-death-by-choc.dim_400x300.jpg" 
-  },
-
-  // ========================
-  // MINI PANCAKES
-  // ========================
-  { 
-    id: 28, 
-    category: "Mini Pancakes", 
-    name: "American Maple Pancake", 
-    price: "209.00", 
-    protein: "7g",
-    calories: "280 kcal",
-    carbs: "46g",
-    fats: "7g",
-    fitnessTag: "Clean Carb Fuel",
-    description: "Fluffy low-fat mini pancakes drizzled with maple syrup. Fast-digesting starches that won't sit heavy during runs or lifts.", 
-    image: "/pancake-maple.dim_400x300.jpg" 
-  },
-  { 
-    id: 29, 
-    category: "Mini Pancakes", 
-    name: "Nutella Oreo Pancake", 
-    price: "229.00", 
-    protein: "8g",
-    calories: "380 kcal",
-    carbs: "52g",
-    fats: "15g",
-    fitnessTag: "Post-Lift Refuel",
-    description: "High-carb bite-sized pancakes coated with hazelnut cream for high-intensity recovery.", 
-    image: "/pancake-nutella-oreo.dim_400x300.jpg" 
-  },
-  { 
-    id: 30, 
-    category: "Mini Pancakes", 
-    name: "Kitkat White Chocolate Pancake", 
-    price: "239.00", 
-    protein: "8g",
-    calories: "390 kcal",
-    carbs: "54g",
-    fats: "16g",
-    fitnessTag: "Energy Booster",
-    description: "Warm fluffy pancake bites for sweet energy replenishment after taxing workout sessions.", 
-    image: "/pancake-kitkat-white-choc.dim_400x300.jpg" 
-  },
-  { 
-    id: 31, 
-    category: "Mini Pancakes", 
-    name: "Real Fruit Blast Pancake", 
-    price: "249.00", 
-    protein: "8g",
-    calories: "290 kcal",
-    carbs: "48g",
-    fats: "8g",
-    fitnessTag: "Vitamins & Fiber",
-    description: "Fresh strawberry & kiwi toppings supplying natural digestive enzymes, Vitamin C, and clean cellular hydration.", 
-    image: "/pancake-real-fruit.dim_400x300.jpg" 
-  },
-
-  // ========================
-  // BROWNIE SIZZLERS
-  // ========================
-  { 
-    id: 32, 
-    category: "Brownie Sizzlers", 
-    name: "Caramel Crunch Sizzler", 
-    price: "239.00", 
-    protein: "8g",
-    calories: "490 kcal",
-    carbs: "64g",
-    fats: "22g",
-    fitnessTag: "Bulking Sizzler",
-    description: "Sizzling warm fudge brownie paired with cool vanilla dairy. Calorie-dense fuel for hardgainers.", 
-    image: "/sizzler-caramel-crunch.dim_400x300.jpg" 
-  },
-  { 
-    id: 33, 
-    category: "Brownie Sizzlers", 
-    name: "Nutella Lava Sizzler", 
-    price: "249.00", 
-    protein: "9g",
-    calories: "520 kcal",
-    carbs: "62g",
-    fats: "26g",
-    fitnessTag: "Energy Surplus",
-    description: "Warm molten hazelnut lava brownie supplying dense calories to easily hit surplus nutrition targets.", 
-    image: "/sizzler-nutella-lava.dim_400x300.jpg" 
-  },
-  { 
-    id: 34, 
-    category: "Brownie Sizzlers", 
-    name: "Cookies 'n' Cream Sizzler", 
-    price: "259.00", 
-    protein: "8g",
-    calories: "510 kcal",
-    carbs: "66g",
-    fats: "24g",
-    fitnessTag: "Heavy Carb Sizzler",
-    description: "Gooey chocolate brownie topped with crushed Oreo biscuits for satisfying post-competition cravings.", 
-    image: "/sizzler-cookies-cream.dim_400x300.jpg" 
-  },
-  { 
-    id: 35, 
-    category: "Brownie Sizzlers", 
-    name: "Royal Dry Fruit Sizzler", 
-    price: "279.00", 
-    protein: "14g",
-    calories: "460 kcal",
-    carbs: "48g",
-    fats: "24g",
-    fitnessTag: "14g Protein & Zinc",
-    description: "Premium scorched brownie loaded with caramelized almonds, cashews, and walnuts. Rich in Zinc, Magnesium & 14g muscle repair protein.", 
-    image: "/sizzler-dry-fruit.dim_400x300.jpg" 
-  },
-  { 
-    id: 36, 
-    category: "Brownie Sizzlers", 
-    name: "Rocher Melt Sizzler", 
-    price: "289.00", 
-    protein: "11g",
-    calories: "540 kcal",
-    carbs: "60g",
-    fats: "28g",
-    fitnessTag: "Hazelnut Density",
-    description: "Roasted Ferrero hazelnut chunks over warm molten brownie for sustained endurance energy.", 
-    image: "/sizzler-rocher-melt.dim_400x300.jpg" 
-  },
-
-  // ========================
-  // MILKSHAKES (DAIRY PROTEIN & RECOVERY)
-  // ========================
-  { 
-    id: 37, 
-    category: "Milkshakes", 
-    name: "Blush Vanilla Charm Shake", 
-    price: "169.00", 
-    protein: "11g",
-    calories: "310 kcal",
-    carbs: "42g",
-    fats: "12g",
-    fitnessTag: "11g Dairy Protein",
-    description: "Pure dairy milk base providing 11g natural complete protein with calcium for bone strength and muscle recovery.", 
-    image: "/shake-vanilla.dim_400x300.jpg" 
-  },
-  { 
-    id: 38, 
-    category: "Milkshakes", 
-    name: "Alphanso Mango Shake", 
-    price: "179.00", 
-    protein: "10g",
-    calories: "320 kcal",
-    carbs: "48g",
-    fats: "11g",
-    fitnessTag: "Vitamin A & Potassium",
-    description: "Real Alphonso mango pulp delivering potassium and Vitamin A for anti-inflammatory muscle recovery.", 
-    image: "/shake-mango.dim_400x300.jpg" 
-  },
-  { 
-    id: 39, 
-    category: "Milkshakes", 
-    name: "Choco Lava Love Shake", 
-    price: "189.00", 
-    protein: "12g",
-    calories: "380 kcal",
-    carbs: "50g",
-    fats: "15g",
-    fitnessTag: "12g Protein & Magnesium",
-    description: "High-grade cocoa supplying dietary magnesium to relieve post-workout muscle tension and promote relaxation.", 
-    image: "/shake-choco-lava.dim_400x300.jpg" 
-  },
-  { 
-    id: 40, 
-    category: "Milkshakes", 
-    name: "Pinkberry Swirl Shake", 
-    price: "199.00", 
-    protein: "10g",
-    calories: "310 kcal",
-    carbs: "45g",
-    fats: "11g",
-    fitnessTag: "Berry Polyphenols",
-    description: "Strawberry antioxidants assist in reducing muscle soreness (DOMS) after strenuous physical training.", 
-    image: "/shake-pinkberry.dim_400x300.jpg" 
-  },
-  { 
-    id: 41, 
-    category: "Milkshakes", 
-    name: "Kitkat Krunch Rush Shake", 
-    price: "209.00", 
-    protein: "12g",
-    calories: "410 kcal",
-    carbs: "56g",
-    fats: "16g",
-    fitnessTag: "12g Protein Fuel",
-    description: "Creamy thick shake with crispy wafers, ideal for hardgainers struggling to hit surplus calories.", 
-    image: "/shake-kitkat.dim_400x300.jpg" 
-  },
-  { 
-    id: 42, 
-    category: "Milkshakes", 
-    name: "Oreo Blast Supreme Shake", 
-    price: "229.00", 
-    protein: "12g",
-    calories: "430 kcal",
-    carbs: "58g",
-    fats: "18g",
-    fitnessTag: "Calorie Dense",
-    description: "High-calorie recovery drink providing natural milk proteins and carbohydrate restoration.", 
-    image: "/shake-oreo-blast.dim_400x300.jpg" 
-  },
-  { 
-    id: 43, 
-    category: "Milkshakes", 
-    name: "Nutella Cloud Shake", 
-    price: "259.00", 
-    protein: "13g",
-    calories: "460 kcal",
-    carbs: "54g",
-    fats: "22g",
-    fitnessTag: "13g Protein & Nut Fats",
-    description: "Pure hazelnut cream blended with fresh milk, delivering healthy lipids and 13g muscle repair protein.", 
-    image: "/shake-nutella-cloud.dim_400x300.jpg" 
-  },
-  { 
-    id: 44, 
-    category: "Milkshakes", 
-    name: "Lotus Biscoff Shake", 
-    price: "259.00", 
-    protein: "11g",
-    calories: "450 kcal",
-    carbs: "58g",
-    fats: "20g",
-    fitnessTag: "High Energy Power",
-    description: "Spiced speculoos caramel biscuit shake providing rapid energy uptake for athletes.", 
-    image: "/premium-shake.dim_400x300.jpg" 
-  },
-  { 
-    id: 45, 
-    category: "Milkshakes", 
-    name: "Black Current Shake", 
-    price: "259.00", 
-    protein: "10g",
-    calories: "330 kcal",
-    carbs: "49g",
-    fats: "11g",
-    fitnessTag: "Anthocyanins & Vitamin C",
-    description: "Blackcurrant anthocyanins scientifically linked to enhanced blood flow, oxygenation, and lactate clearance.", 
-    image: "/shake-black-currant.dim_400x300.jpg" 
-  },
-  { 
-    id: 46, 
-    category: "Milkshakes", 
-    name: "American Dry Fruit Shake", 
-    price: "279.00", 
-    protein: "16g",
-    calories: "480 kcal",
-    carbs: "52g",
-    fats: "24g",
-    fitnessTag: "16g Muscle Protein",
-    description: "Loaded with pulverized almonds, pistachios, and cashews delivering 16g pure protein, zinc, and natural testosterone support.", 
-    image: "/shake-dry-fruit.dim_400x300.jpg" 
-  },
-
-  // ========================
-  // COFFEES (PRE-WORKOUT FOCUS & METABOLISM)
-  // ========================
-  { 
-    id: 47, 
-    category: "Coffees", 
-    name: "Espresso", 
-    price: "89.00", 
-    protein: "0.2g",
-    calories: "5 kcal",
-    carbs: "1g",
-    fats: "0g",
-    fitnessTag: "🔥 0-Calorie Pre-Workout",
-    description: "100% clean concentrated caffeine shot to maximize lipolysis (fat burning), power output, and gym focus.", 
-    image: "/coffee-espresso..jpg" 
-  },
-  { 
-    id: 48, 
-    category: "Coffees", 
-    name: "Americano", 
-    price: "109.00", 
-    protein: "0.5g",
-    calories: "8 kcal",
-    carbs: "1g",
-    fats: "0g",
-    fitnessTag: "Zero Sugar Energy",
-    description: "Pure espresso diluted with hot water. Zero sugar, zero guilt, and ideal for intermittent fasting and keto fat loss phases.", 
-    image: "/coffee-americano.jpg" 
-  },
-  { 
-    id: 49, 
-    category: "Coffees", 
-    name: "Cafe Latte", 
-    price: "129.00", 
-    protein: "8g",
-    calories: "140 kcal",
-    carbs: "12g",
-    fats: "6g",
-    fitnessTag: "8g Protein & Caffeine",
-    description: "Steamed dairy milk offering 8g bioavailable protein paired with sustained alertness caffeine.", 
-    image: "/coffee-latte.jpg" 
-  },
-  { 
-    id: 50, 
-    category: "Coffees", 
-    name: "Cappuccino", 
-    price: "159.00", 
-    protein: "7g",
-    calories: "120 kcal",
-    carbs: "10g",
-    fats: "5g",
-    fitnessTag: "Macro-Balanced Fuel",
-    description: "Velvety milk foam with double espresso for balanced morning energy and satiety.", 
-    image: "/coffee-cappuccino.jpg" 
-  },
-  { 
-    id: 51, 
-    category: "Coffees", 
-    name: "Hot Chocolate", 
-    price: "169.00", 
-    protein: "9g",
-    calories: "240 kcal",
-    carbs: "32g",
-    fats: "8g",
-    fitnessTag: "9g Protein & Magnesium",
-    description: "Warm rich cocoa providing magnesium and tryptophan to stimulate deep restorative REM sleep.", 
-    image: "/Hot Chocolate.jpg" 
-  },
-  { 
-    id: 52, 
-    category: "Coffees", 
-    name: "Iced Americano", 
-    price: "129.00", 
-    protein: "0.5g",
-    calories: "8 kcal",
-    carbs: "1g",
-    fats: "0g",
-    fitnessTag: "Chilled Pre-Workout",
-    description: "Ice-cold double espresso shot to ignite metabolism, lower perceived exertion, and elevate training heart rate.", 
-    image: "/coffee-iced-americano.jpg" 
-  },
-  { 
-    id: 53, 
-    category: "Coffees", 
-    name: "Iced Mocha", 
-    price: "149.00", 
-    protein: "9g",
-    calories: "210 kcal",
-    carbs: "28g",
-    fats: "7g",
-    fitnessTag: "9g Protein & Flavanols",
-    description: "Dark chocolate and espresso over ice to enhance blood flow and brain alertness.", 
-    image: "/Iced Mocha.jpg" 
-  },
-  { 
-    id: 54, 
-    category: "Coffees", 
-    name: "Iced Latte", 
-    price: "149.00", 
-    protein: "8g",
-    calories: "140 kcal",
-    carbs: "12g",
-    fats: "6g",
-    fitnessTag: "8g Chilled Protein",
-    description: "Refreshing cold milk protein and smooth espresso, easy on the stomach before morning cardio.", 
-    image: "/coffee-iced-latte.jpg" 
-  },
-  { 
-    id: 55, 
-    category: "Coffees", 
-    name: "Iced Hazelnut Coffee", 
-    price: "179.00", 
-    protein: "7g",
-    calories: "190 kcal",
-    carbs: "24g",
-    fats: "7g",
-    fitnessTag: "Cognitive Focus",
-    description: "Hazelnut-infused iced coffee providing sharp mental clarity during exhausting workout sessions.", 
-    image: "/coffee-iced-hazelnut.jpg" 
-  },
-  { 
-    id: 56, 
-    category: "Coffees", 
-    name: "Iced Caramel Coffee", 
-    price: "179.00", 
-    protein: "7g",
-    calories: "190 kcal",
-    carbs: "25g",
-    fats: "6g",
-    fitnessTag: "Pre-Lift Energy",
-    description: "Sweet caramel and espresso delivering an immediate glucose and adrenaline boost.", 
-    image: "/coffee-iced-caramel.jpg" 
-  },
-  { 
-    id: 57, 
-    category: "Coffees", 
-    name: "French Vanilla", 
-    price: "179.00", 
-    protein: "7g",
-    calories: "160 kcal",
-    carbs: "22g",
-    fats: "5g",
-    fitnessTag: "Smooth Energy",
-    description: "Fragrant vanilla coffee with dairy protein to curb afternoon snack cravings.", 
-    image: "/coffee-french-vanilla.jpg" 
-  },
-
-  // ========================
-  // MOCKTAILS (HYDRATION & ELECTROLYTES)
-  // ========================
-  { 
-    id: 58, 
-    category: "Mocktails", 
-    name: "Mint", 
-    price: "99.00", 
-    protein: "0.5g",
-    calories: "65 kcal",
-    carbs: "16g",
-    fats: "0g",
-    fitnessTag: "Electrolyte Hydration",
-    description: "Fresh garden mint and lime providing natural electrolytes and menthol to ease gastric tension and reduce dehydration.", 
-    image: "/mocktail-mint.dim_400x300.jpg" 
-  },
-  { 
-    id: 59, 
-    category: "Mocktails", 
-    name: "Ice Tea", 
-    price: "99.00", 
-    protein: "0.2g",
-    calories: "55 kcal",
-    carbs: "14g",
-    fats: "0g",
-    fitnessTag: "Tea Polyphenols",
-    description: "Light brewed tea packed with epigallocatechin gallate (EGCG) antioxidants to support fat oxidation and recovery.", 
-    image: "/mocktail-ice-tea.dim_400x300.jpg" 
-  },
-  { 
-    id: 60, 
-    category: "Mocktails", 
-    name: "Orange Cooler", 
-    price: "99.00", 
-    protein: "1g",
-    calories: "85 kcal",
-    carbs: "21g",
-    fats: "0g",
-    fitnessTag: "Vitamin C & Citrus",
-    description: "Real citrus juice providing bioflavonoids and potassium to protect immune function after prolonged training.", 
-    image: "/mocktail-orange-cooler.dim_400x300.jpg" 
-  },
-  { 
-    id: 61, 
-    category: "Mocktails", 
-    name: "Mango Cinnamon", 
-    price: "99.00", 
-    protein: "1g",
-    calories: "90 kcal",
-    carbs: "22g",
-    fats: "0g",
-    fitnessTag: "Insulin Sensitivity",
-    description: "Cinnamon aids in glucose partitioning and insulin sensitivity, directing carb fuel into muscle rather than fat cells.", 
-    image: "/mocktail-mango-cinnamon.dim_400x300.jpg" 
-  },
-  { 
-    id: 62, 
-    category: "Mocktails", 
-    name: "Cranberry Chill", 
-    price: "99.00", 
-    protein: "0.5g",
-    calories: "80 kcal",
-    carbs: "20g",
-    fats: "0g",
-    fitnessTag: "Kidney & Urinary Health",
-    description: "5g Protein | 20g Carbs | 0g Fat. Tart cranberry extract that supports kidney health, water balance, and natural detoxification.", 
-    image: "/mocktail-cranberry.dim_400x300.jpg" 
-  },
-
-  // ========================
-  // PIZZA (HIGH PROTEIN & BULKING OPTIONS)
-  // ========================
-  { 
-    id: 63, 
-    category: "Pizza", 
-    name: "Veggie Delight", 
-    price: "299.00", 
-    protein: "22g",
-    calories: "580 kcal",
-    carbs: "74g",
-    fats: "22g",
-    fitnessTag: "22g Vegetarian Protein",
-    description: "Loaded with bell peppers, crisp onions, and real mozzarella supplying 22g bone-building calcium-rich protein.", 
-    image: "/pizza-veggie-delight.dim_400x300.jpg" 
-  },
-  { 
-    id: 64, 
-    category: "Pizza", 
-    name: "Paneer Punch", 
-    price: "309.00", 
-    protein: "30g",
-    calories: "660 kcal",
-    carbs: "72g",
-    fats: "28g",
-    fitnessTag: "30g Casein Protein",
-    description: "Grilled cottage cheese cubes rich in slow-digesting casein, providing prolonged amino acid delivery for muscle repair.", 
-    image: "/pizza-paneer-punch.dim_400x300.jpg" 
-  },
-  { 
-    id: 65, 
-    category: "Pizza", 
-    name: "Flamin' Peri Chick'n Blaze", 
-    price: "359.00", 
-    protein: "42g",
-    calories: "680 kcal",
-    carbs: "70g",
-    fats: "24g",
-    fitnessTag: "🔥 42g High Protein",
-    description: "Premium lean chicken breast seasoned with thermogenic peri-peri chili, delivering 42g bioavailable animal protein.", 
-    image: "/pizza-peri-chicken.dim_400x300.jpg" 
-  },
-  { 
-    id: 66, 
-    category: "Pizza", 
-    name: "Chick Fiesta Pizza", 
-    price: "349.00", 
-    protein: "40g",
-    calories: "670 kcal",
-    carbs: "68g",
-    fats: "25g",
-    fitnessTag: "40g Muscle Builder",
-    description: "High-protein roasted chicken with calcium-packed cheese for a complete macro-balanced post-workout group meal.", 
-    image: "/pizza-chick-fiesta.dim_400x300.jpg" 
-  },
-  { 
-    id: 67, 
-    category: "Pizza", 
-    name: "Chicken Tikka Pizza", 
-    price: "379.00", 
-    protein: "44g",
-    calories: "710 kcal",
-    carbs: "72g",
-    fats: "26g",
-    fitnessTag: "💪 44g Max Protein",
-    description: "Tandoori-spiced chicken breast cubes delivering 44g complete protein rich in leucine and branched-chain amino acids.", 
-    image: "/pizza-chicken-tikka.dim_400x300.jpg" 
-  },
-  { 
-    id: 68, 
-    category: "Pizza", 
-    name: "Extra Onion", 
-    price: "15.00", 
-    protein: "0.5g",
-    calories: "15 kcal",
-    carbs: "3g",
-    fats: "0g",
-    fitnessTag: "Quercetin Antioxidant",
-    description: "5g Protein | 3g Carbs. High in dietary quercetin to protect cellular health and blood flow.", 
-    image: "/pizza-extra-onion.jpg" 
-  },
-  { 
-    id: 69, 
-    category: "Pizza", 
-    name: "Extra Veggies", 
-    price: "30.00", 
-    protein: "2g",
-    calories: "35 kcal",
-    carbs: "7g",
-    fats: "0.5g",
-    fitnessTag: "Micronutrients & Fiber",
-    description: "Crunchy mix of bell peppers, corn, and mushrooms to boost gut microbiome health.", 
-    image: "/pizza-extra-veggies.jpg" 
-  },
-  { 
-    id: 70, 
-    category: "Pizza", 
-    name: "Extra Cheese", 
-    price: "40.00", 
-    protein: "6g",
-    calories: "95 kcal",
-    carbs: "1g",
-    fats: "8g",
-    fitnessTag: "+6g Calcium Protein",
-    description: "Pure dairy mozzarella providing 6g extra protein and essential calcium.", 
-    image: "/pizza-extra-cheese.webp" 
-  },
-  { 
-    id: 71, 
-    category: "Pizza", 
-    name: "Extra Chicken", 
-    price: "60.00", 
-    protein: "14g",
-    calories: "75 kcal",
-    carbs: "0g",
-    fats: "2g",
-    fitnessTag: "⭐ +14g Pure Lean Protein",
-    description: "100% white chicken breast adding 14g pure protein for zero carb addition.", 
-    image: "/pizza-extra-chicken.jpg" 
-  },
-  { 
-    id: 72, 
-    category: "Pizza", 
-    name: "Extra Dip", 
-    price: "15.00", 
-    protein: "1g",
-    calories: "60 kcal",
-    carbs: "4g",
-    fats: "5g",
-    fitnessTag: "Savory Flavor",
-    description: "Herb dressing for crust dipping.", 
-    image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500&q=80" 
-  },
-  { 
-    id: 73, 
-    category: "Pizza", 
-    name: "Harissa Chicken Pizza", 
-    price: "379.00", 
-    protein: "43g",
-    calories: "690 kcal",
-    carbs: "69g",
-    fats: "25g",
-    fitnessTag: "🔥 43g Protein & Spices",
-    description: "North African harissa spices with 43g real chicken protein for metabolic thermogenesis.", 
-    image: "/pizza-harissa-chicken.dim_400x300.jpg" 
-  },
-
-  // ========================
-  // BURGERS (PROTEIN & POST-LIFT NUTRITION)
-  // ========================
-  { 
-    id: 74, 
-    category: "Burgers", 
-    name: "Gobbler Veg", 
-    price: "149.00", 
-    protein: "12g",
-    calories: "380 kcal",
-    carbs: "48g",
-    fats: "15g",
-    fitnessTag: "Plant Protein & Fiber",
-    description: "Seasoned garden vegetable patty with crisp lettuce and tomato on a toasted sesame bun. High fiber and clean energy.", 
-    image: "/burger-gobbler-veg.jpg" 
-  },
-  { 
-    id: 75, 
-    category: "Burgers", 
-    name: "Gobbler Chicken", 
-    price: "169.00", 
-    protein: "28g",
-    calories: "440 kcal",
-    carbs: "40g",
-    fats: "17g",
-    fitnessTag: "💪 28g Lean Protein",
-    description: "Juicy white chicken patty delivering 28g muscle-rebuilding protein with clean complex carbs.", 
-    image: "/burger-gobbler-chicken.jpg" 
-  },
-  { 
-    id: 76, 
-    category: "Burgers", 
-    name: "King Burger Veg", 
-    price: "209.00", 
-    protein: "16g",
-    calories: "480 kcal",
-    carbs: "56g",
-    fats: "20g",
-    fitnessTag: "Hearty Plant Mass",
-    description: "Substantial plant patty loaded with wholesome grains, sweetcorn, and fresh greens.", 
-    image: "/burger-king-veg.jpg" 
-  },
-  { 
-    id: 77, 
-    category: "Burgers", 
-    name: "King Burger Chicken", 
-    price: "229.00", 
-    protein: "36g",
-    calories: "560 kcal",
-    carbs: "44g",
-    fats: "24g",
-    fitnessTag: "⭐ 36g Heavy Muscle Fuel",
-    description: "Substantial double chicken patty packing 36g bioavailable protein for dedicated bodybuilders.", 
-    image: "/burger-king-chicken.jpg" 
-  },
-  { 
-    id: 78, 
-    category: "Burgers", 
-    name: "Peri Peri Burger Veg", 
-    price: "239.00", 
-    protein: "14g",
-    calories: "410 kcal",
-    carbs: "50g",
-    fats: "16g",
-    fitnessTag: "Metabolism Kick",
-    description: "Spicy peri-peri seasoning stimulates thermogenesis while providing sustained carb energy.", 
-    image: "/burger-peri-peri.jpg" 
-  },
-  { 
-    id: 79, 
-    category: "Burgers", 
-    name: "Peri Peri Burger Chicken", 
-    price: "249.00", 
-    protein: "30g",
-    calories: "460 kcal",
-    carbs: "42g",
-    fats: "18g",
-    fitnessTag: "🔥 30g Protein & Capsaicin",
-    description: "Lean chicken breast marinated in fiery peri-peri chilies. Capsaicin accelerates metabolic rate.", 
-    image: "/burger-peri-peri-chicken.jpg" 
-  },
-
-  // ========================
-  // SANDWICHES (MACRO-BALANCED GRAB & GO)
-  // ========================
-  { 
-    id: 80, 
-    category: "Sandwiches", 
-    name: "Harissa Chicken Sandwich", 
-    price: "269.00", 
-    protein: "32g",
-    calories: "420 kcal",
-    carbs: "38g",
-    fats: "15g",
-    fitnessTag: "💪 32g High Protein",
-    description: "Whole wheat toasted bread layered with seasoned lean chicken breast for high-protein lunchtime fuel.", 
-    image: "/sandwich-harissa-chicken.dim_400x300.jpg" 
-  },
-  { 
-    id: 81, 
-    category: "Sandwiches", 
-    name: "Harissa Paneer Sandwich", 
-    price: "229.00", 
-    protein: "22g",
-    calories: "410 kcal",
-    carbs: "40g",
-    fats: "18g",
-    fitnessTag: "22g Casein Protein",
-    description: "Fresh grilled cottage cheese with aromatic spices, delivering sustained-release amino acids.", 
-    image: "/sandwich-harissa-paneer.dim_400x300.jpg" 
-  },
-  { 
-    id: 82, 
-    category: "Sandwiches", 
-    name: "Chicken Tikka Sandwich", 
-    price: "279.00", 
-    protein: "34g",
-    calories: "430 kcal",
-    carbs: "36g",
-    fats: "16g",
-    fitnessTag: "⭐ 34g Lean Fuel",
-    description: "Tender tandoori-marinated chicken breast delivering 34g pure complete protein with minimal simple sugars.", 
-    image: "/sandwich-chicken-tikka.dim_400x300.jpg" 
-  },
-  { 
-    id: 83, 
-    category: "Sandwiches", 
-    name: "Paneer Tikka Sandwich", 
-    price: "239.00", 
-    protein: "24g",
-    calories: "430 kcal",
-    carbs: "38g",
-    fats: "20g",
-    fitnessTag: "24g Vegetarian Protein",
-    description: "Marinated paneer grilled with bell peppers, providing calcium, phosphorus, and 24g protein.", 
-    image: "/sandwich-paneer-tikka.dim_400x300.jpg" 
-  },
-  { 
-    id: 84, 
-    category: "Sandwiches", 
-    name: "Chicken Club Sandwich", 
-    price: "329.00", 
-    protein: "42g",
-    calories: "540 kcal",
-    carbs: "44g",
-    fats: "22g",
-    fitnessTag: "👑 42g Monster Club",
-    description: "Massive multi-layer sandwich loaded with shredded chicken breast, boiled egg, and crisp vegetables.", 
-    image: "/sandwich-club-chicken.dim_400x300.jpg" 
-  },
-  { 
-    id: 85, 
-    category: "Sandwiches", 
-    name: "Veg Club Sandwich", 
-    price: "299.00", 
-    protein: "18g",
-    calories: "450 kcal",
-    carbs: "50g",
-    fats: "19g",
-    fitnessTag: "18g Plant & Cheese",
-    description: "Stacked whole wheat bread with fresh cucumbers, tomatoes, cheese, and crunchy vegetable patties.", 
-    image: "/sandwich-veg-club.dim_400x300.jpg" 
-  },
-  { 
-    id: 86, 
-    category: "Sandwiches", 
-    name: "Cold Egg Sandwich", 
-    price: "139.00", 
-    protein: "20g",
-    calories: "320 kcal",
-    carbs: "28g",
-    fats: "14g",
-    fitnessTag: "🥚 100% Biological Protein",
-    description: "Real farm-fresh eggs providing complete biological value protein, choline for brain focus, and lutein.", 
-    image: "/sandwich.dim_400x300.jpg" 
-  },
-  { 
-    id: 87, 
-    category: "Sandwiches", 
-    name: "Chicken Cold Sandwich", 
-    price: "189.00", 
-    protein: "28g",
-    calories: "340 kcal",
-    carbs: "30g",
-    fats: "11g",
-    fitnessTag: "💪 28g Clean Lean Protein",
-    description: "Tender chilled chicken breast with light seasoning. Ultra-clean macro profile perfect for cutting phases.", 
-    image: "/chicken-cold-sandwich.webp" 
-  },
-  { 
-    id: 88, 
-    category: "Sandwiches", 
-    name: "Veg Cold Sandwich", 
-    price: "159.00", 
-    protein: "10g",
-    calories: "260 kcal",
-    carbs: "34g",
-    fats: "9g",
-    fitnessTag: "Light & Easy Digest",
-    description: "Crisp fresh farm veggies between soft bread slices. High satiety index with very low calorie density.", 
-    image: "/veg-cold-sandwich.jpg" 
-  },
-
-  // ========================
-  // CHICKEN APPETISERS (PURE HIGH-PROTEIN)
-  // ========================
-  { 
-    id: 89, 
-    category: "Chicken Appetiser", 
-    name: "Honey Glazed Chicken Wings", 
-    price: "249.00", 
-    protein: "32g",
-    calories: "380 kcal",
-    carbs: "12g",
-    fats: "18g",
-    fitnessTag: "🍗 32g Bioavailable Protein",
-    description: "Roasted chicken wings offering 32g bioavailable amino acids and natural collagen to support joint mobility.", 
-    image: "/Honey-Glazed-Chicken-Wings.jpg" 
-  },
-  { 
-    id: 90, 
-    category: "Chicken Appetiser", 
-    name: "Peri Peri Chicken Wings", 
-    price: "229.00", 
-    protein: "35g",
-    calories: "340 kcal",
-    carbs: "4g",
-    fats: "16g",
-    fitnessTag: "🔥 35g Protein • Low Carb",
-    description: "Ultra low-carb, high-protein chicken wings dusted in spicy peri-peri. Accelerates metabolism while sparing muscle.", 
-    image: "/Peri-Peri-Chicken-Wings.jpg" 
-  },
-  { 
-    id: 91, 
-    category: "Chicken Appetiser", 
-    name: "Bbq Chicken Wings", 
-    price: "279.00", 
-    protein: "32g",
-    calories: "390 kcal",
-    carbs: "16g",
-    fats: "17g",
-    fitnessTag: "🍗 32g Anabolic Protein",
-    description: "High-protein chicken wings glazed in smoky barbecue sauce for delicious post-workout recovery.", 
-    image: "/bbq-chicken-wings.jpg" 
-  },
-  { 
-    id: 92, 
-    category: "Chicken Appetiser", 
-    name: "Chilli Garlic Wings", 
-    price: "249.00", 
-    protein: "34g",
-    calories: "350 kcal",
-    carbs: "6g",
-    fats: "16g",
-    fitnessTag: "🧄 34g Protein & Allicin",
-    description: "Fresh garlic provides allicin to support immune recovery and cardiovascular health alongside 34g protein.", 
-    image: "/Chilli-Garlic-Wings.jpg" 
-  },
-
-  // ========================
-  // NON-VEG SNACKS
-  // ========================
-  { 
-    id: 114, 
-    category: "Non Veg Snacks", 
-    name: "Chicken Nuggets", 
-    price: "239.00", 
-    protein: "24g",
-    calories: "310 kcal",
-    carbs: "16g",
-    fats: "15g",
-    fitnessTag: "🍗 24g Protein Bites",
-    description: "Golden crispy white chicken breast bites delivering 24g muscle-replenishing protein.", 
-    image: "/snack-chicken-nuggets.dim_400x300.jpg" 
-  },
-  { 
-    id: 93, 
-    category: "Non Veg Snacks", 
-    name: "Chicken Garlic Fingers", 
-    price: "249.00", 
-    protein: "28g",
-    calories: "320 kcal",
-    carbs: "14g",
-    fats: "15g",
-    fitnessTag: "💪 28g Muscle Strips",
-    description: "Seasoned lean chicken strips infused with herbs. High protein-to-carb ratio for clean fitness diets.", 
-    image: "/snack-chicken-garlic-fingers.dim_400x300.jpg" 
-  },
-  { 
-    id: 94, 
-    category: "Non Veg Snacks", 
-    name: "Chicken Breast Strips 5pcs", 
-    price: "209.00", 
-    protein: "36g",
-    calories: "280 kcal",
-    carbs: "8g",
-    fats: "9g",
-    fitnessTag: "⭐ 36g Pure Lean Muscle",
-    description: "100% whole chicken breast fillets. Highest protein density with ultra-low fat. The ultimate fitness meal.", 
-    image: "/snack-chicken-breast-strips.dim_400x300.jpg" 
-  },
-  { 
-    id: 95, 
-    category: "Non Veg Snacks", 
-    name: "Spicy Chicken Keivs", 
-    price: "209.00", 
-    protein: "25g",
-    calories: "340 kcal",
-    carbs: "14g",
-    fats: "18g",
-    fitnessTag: "🍗 25g Protein Bites",
-    description: "Succulent minced chicken breast stuffed with herb butter, offering 25g muscle-rebuilding protein.", 
-    image: "/snack-chicken-kievs.dim_400x300.jpg" 
-  },
-  { 
-    id: 96, 
-    category: "Non Veg Snacks", 
-    name: "Add-on Dip", 
-    price: "15.00", 
-    protein: "1g",
-    calories: "50 kcal",
-    carbs: "3g",
-    fats: "4g",
-    fitnessTag: "Light Flavor",
-    description: "", 
-    image: "/Non-veg-Snacks-Add-on-dip.webp" 
-  },
-
-  // ========================
-  // VEG SNACKS
-  // ========================
-  { 
-    id: 97, 
-    category: "Veg Snacks", 
-    name: "Veg Fingers", 
-    price: "219.00", 
-    protein: "7g",
-    calories: "240 kcal",
-    carbs: "30g",
-    fats: "11g",
-    fitnessTag: "Plant Fiber & Crunch",
-    description: "Seasoned garden vegetable blend providing dietary fiber to aid satiety and gut regularity.", 
-    image: "/snack-veg-fingers.dim_400x300.jpg" 
-  },
-  { 
-    id: 117, 
-    category: "Veg Snacks", 
-    name: "Veggie Nuggets", 
-    price: "219.00", 
-    protein: "8g",
-    calories: "230 kcal",
-    carbs: "28g",
-    fats: "10g",
-    fitnessTag: "Clean Plant Energy",
-    description: "Wholesome vegetable nuggets providing sustained slow-burning plant carbohydrates.", 
-    image: "/snack-veg-nuggets.dim_400x300.jpg" 
-  },
-  { 
-    id: 98, 
-    category: "Veg Snacks", 
-    name: "Veggie Kievs", 
-    price: "209.00", 
-    protein: "9g",
-    calories: "260 kcal",
-    carbs: "29g",
-    fats: "12g",
-    fitnessTag: "Herb Infused Plant",
-    description: "Golden crispy bites stuffed with seasoned garden vegetables and herbs.", 
-    image: "/snack-veg-kievs.dim_400x300.jpg" 
-  },
-  { 
-    id: 99, 
-    category: "Veg Snacks", 
-    name: "Add-on Dip", 
-    price: "15.00", 
-    protein: "0.5g",
-    calories: "45 kcal",
-    carbs: "3g",
-    fats: "3.5g",
-    fitnessTag: "Light Sauce",
-    description: "5g Protein | 3g Carbs | 3.5g Fat.", 
-    image: "/Veg-snacks-add-on-dip.webp" 
-  },
-
-  // ========================
-  // FRENCH FRIES
-  // ========================
-  { 
-    id: 100, 
-    category: "French Fries", 
-    name: "Classic Salted", 
-    price: "179.00", 
-    protein: "4g",
-    calories: "280 kcal",
-    carbs: "38g",
-    fats: "13g",
-    fitnessTag: "Electrolytes & Carbs",
-    description: "Golden potatoes seasoned with sea salt to rapidly replenish intracellular potassium and sodium after heavy sweating.", 
-    image: "/fries-classic.jpg" 
-  },
-  { 
-    id: 101, 
-    category: "French Fries", 
-    name: "Og Peri Peri", 
-    price: "189.00", 
-    protein: "4g",
-    calories: "295 kcal",
-    carbs: "39g",
-    fats: "14g",
-    fitnessTag: "Thermogenic Spice",
-    description: "Peri-peri chili dust stimulates thermogenic fat burn while replenishing muscular glycogen.", 
-    image: "/fries-peri-peri.jpg" 
-  },
-  { 
-    id: 102, 
-    category: "French Fries", 
-    name: "The Hot Cheese", 
-    price: "199.00", 
-    protein: "8g",
-    calories: "360 kcal",
-    carbs: "40g",
-    fats: "18g",
-    fitnessTag: "8g Protein & Calcium",
-    description: "Smothered in warm melted cheese providing 8g extra protein and dietary calcium.", 
-    image: "/fries-hot-cheese.jpg" 
-  },
-  { 
-    id: 103, 
-    category: "French Fries", 
-    name: "Chicken'n Stack", 
-    price: "229.00", 
-    protein: "24g",
-    calories: "440 kcal",
-    carbs: "42g",
-    fats: "20g",
-    fitnessTag: "💪 24g High Protein Fries",
-    description: "Golden crispy fries loaded with seasoned chicken breast, offering 24g complete muscle repair protein.", 
-    image: "/fries-chicken-stack.jpg" 
-  },
-  { 
-    id: 104, 
-    category: "French Fries", 
-    name: "Addon Dip", 
-    price: "15.00", 
-    protein: "0.5g",
-    calories: "50 kcal",
-    carbs: "3g",
-    fats: "4g",
-    fitnessTag: "Dip",
-    description: "5g Protein | 3g Carbs | 4g Fat.", 
-    image: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=500&q=80" 
-  },
-
-  // ========================
-  // ICE CREAMS & DAIRY
-  // ========================
-  { 
-    id: 105, 
-    category: "Icecreams", 
-    name: "Single Scoop", 
-    price: "60.00", 
-    protein: "4g",
-    calories: "140 kcal",
-    carbs: "18g",
-    fats: "6g",
-    fitnessTag: "Dairy Calcium",
-    description: "Chilled milk cream providing bioavailable calcium and bone mineral density support.", 
-    image: "/icecream-single-scoop.jpg" 
-  },
-  { 
-    id: 106, 
-    category: "Icecreams", 
-    name: "Double Scoop", 
-    price: "110.00", 
-    protein: "8g",
-    calories: "280 kcal",
-    carbs: "36g",
-    fats: "12g",
-    fitnessTag: "8g Milk Protein",
-    description: "Double portion dairy delivering complete milk proteins and high energy.", 
-    image: "/icecream-double-scoop.jpg" 
-  },
-  { 
-    id: 107, 
-    category: "Icecreams", 
-    name: "Tub - 5 Scoops", 
-    price: "280.00", 
-    protein: "20g",
-    calories: "700 kcal",
-    carbs: "90g",
-    fats: "30g",
-    fitnessTag: "20g Protein Party Tub",
-    description: "Family-sized dairy tub supplying 20g total protein and quick calorie replenishment.", 
-    image: "/icecream-tub-5-scoops.jpg" 
-  },
-  { 
-    id: 108, 
-    category: "Icecreams", 
-    name: "Cone", 
-    price: "20.00", 
-    protein: "1g",
-    calories: "45 kcal",
-    carbs: "9g",
-    fats: "0.5g",
-    fitnessTag: "Crispy Wafer",
-    description: "5g Fat.", 
-    image: "/icecream-cone..jpg" 
-  },
-
-  // ========================
-  // PREMIUM ICE CREAM
-  // ========================
-  { 
-    id: 109, 
-    category: "Premium Ice Cream", 
-    name: "Tub 5 Scoop", 
-    price: "360.00", 
-    protein: "22g",
-    calories: "750 kcal",
-    carbs: "92g",
-    fats: "34g",
-    fitnessTag: "22g Premium Protein",
-    description: "Crafted with rich whole cream solids offering 22g total bioavailable milk protein.", 
-    image: "/premium-icecream-tub.dim_400x300.jpg" 
-  },
-  { 
-    id: 110, 
-    category: "Premium Ice Cream", 
-    name: "Single Scoop", 
-    price: "85.00", 
-    protein: "4.5g",
-    calories: "160 kcal",
-    carbs: "19g",
-    fats: "7.5g",
-    fitnessTag: "Creamy Indulgence",
-    description: "5g Protein | 19g Carbs | 7.5g Fat. High-density milk lipids for satisfying sweet cravings.", 
-    image: "/premium-icecream-single.dim_400x300.jpg" 
-  },
-  { 
-    id: 111, 
-    category: "Premium Ice Cream", 
-    name: "Double Scoop", 
-    price: "160.00", 
-    protein: "9g",
-    calories: "320 kcal",
-    carbs: "38g",
-    fats: "15g",
-    fitnessTag: "9g Milk Protein",
-    description: "High in calcium and natural dairy amino acids.", 
-    image: "/premium-icecream-double.dim_400x300.jpg" 
-  },
-
-  // ========================
-  // BEVERAGES & HYDRATION
-  // ========================
-  { 
-    id: 112, 
-    category: "Beverages", 
-    name: "Water Bottle", 
-    price: "10.00", 
-    protein: "0g",
-    calories: "0 kcal",
-    carbs: "0g",
-    fats: "0g",
-    fitnessTag: "💧 0-Calorie Cellular Hydration",
-    description: "Pure purified mineral water. Essential for muscle cell volumization, metabolic ATP transport, joint lubrication, and peak physical endurance.", 
-    image: "/beverage-water-bottle.jpg" 
-  },
-  { 
-    id: 113, 
-    category: "Beverages", 
-    name: "Coke", 
-    price: "25.00", 
-    protein: "0g",
-    calories: "140 kcal",
-    carbs: "35g",
-    fats: "0g",
-    fitnessTag: "⚡ Rapid Intra-Workout Glucose",
-    description: "Fast-acting simple carbohydrates for immediate intra-workout hypoglycemic recovery and emergency glycogen surge during extreme exertion.", 
-    image: "/beverage-coke.jpg" 
+  {
+    "id": 1,
+    "category": "Churros",
+    "name": "Classic Spanish Churros",
+    "price": "229.00",
+    "description": "Golden, crisp churros rolled in cinnamon sugar with warm chocolate dip.",
+    "image": "/classic-spanish-churros.jpg"
+  },
+  {
+    "id": 2,
+    "category": "Churros",
+    "name": "Nutty Butty Churros",
+    "price": "289.00",
+    "description": "Crispy churros coated with crushed roasted almonds, walnuts, and chocolate.",
+    "image": "/nutty-butty-churros.jpg"
+  },
+  {
+    "id": 3,
+    "category": "Churros",
+    "name": "Churros Shots",
+    "price": "259.00",
+    "description": "Warm bite-sized churros served in a cup with rich chocolate and caramel.",
+    "image": "/churros-shots.jpg"
+  },
+  {
+    "id": 4,
+    "category": "Churros",
+    "name": "Churros Pop",
+    "price": "249.00",
+    "description": "Skewered crisp churros drizzled generously with melted Belgian chocolate.",
+    "image": "/churros-pop.jpg"
+  },
+  {
+    "id": 5,
+    "category": "Churros",
+    "name": "Three Layered Churros",
+    "price": "299.00",
+    "description": "Three layers of crisp churros stacked with decadent chocolate and toppings.",
+    "image": "/three-layered-churros.jpg"
+  },
+  {
+    "id": 9,
+    "category": "Belgian Waffles",
+    "name": "Choco Drizzle Bliss Waffle",
+    "price": "139.00",
+    "description": "Warm, fluffy Belgian waffle laced with rich milk and dark chocolate drizzle.",
+    "image": "/waffle-choco-drizzle-bliss.dim_400x300.jpg"
+  },
+  {
+    "id": 10,
+    "category": "Belgian Waffles",
+    "name": "Kitkat Crackle Waffle",
+    "price": "169.00",
+    "description": "Crisp golden waffle loaded with crushed KitKat wafers and chocolate sauce.",
+    "image": "/waffle-kitkat-crackle.dim_400x300.jpg"
+  },
+  {
+    "id": 11,
+    "category": "Belgian Waffles",
+    "name": "Royal Rocher Waffle",
+    "price": "199.00",
+    "description": "Indulgent waffle crowned with crushed Ferrero Rocher and hazelnut chocolate.",
+    "image": "/waffle-royal-rocher.dim_400x300.jpg"
+  },
+  {
+    "id": 115,
+    "category": "Belgian Waffles",
+    "name": "Berry Nutella Crush Waffle",
+    "price": "189.00",
+    "description": "Warm waffle topped with luscious berry compote and velvety Nutella spread.",
+    "image": "/waffle-berry-nutella-crush.dim_400x300.jpg"
+  },
+  {
+    "id": 116,
+    "category": "Belgian Waffles",
+    "name": "Royal Dry Fruit Waffle",
+    "price": "199.00",
+    "description": "Golden waffle loaded with roasted cashews, almonds, and warm maple glaze.",
+    "image": "/waffle-royal-dry-fruit.dim_400x300.jpg"
+  },
+  {
+    "id": 16,
+    "category": "Bubble Waffles",
+    "name": "Dark Matter Bubble Waffle",
+    "price": "309.00",
+    "description": "Fluffy egg bubble waffle wrapped around rich dark chocolate and whipped cream.",
+    "image": "https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=500&q=80"
+  },
+  {
+    "id": 17,
+    "category": "Bubble Waffles",
+    "name": "Cookie Overload Bubble Waffle",
+    "price": "319.00",
+    "description": "Warm bubble waffle packed with crushed Oreos, chocolate drizzle, and cream.",
+    "image": "https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=500&q=80"
+  },
+  {
+    "id": 18,
+    "category": "Bubble Waffles",
+    "name": "Royal Rocher Bubble Waffles",
+    "price": "339.00",
+    "description": "Crisp bubble waffle filled with hazelnut cream, Ferrero Rocher, and fudge.",
+    "image": "https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=500&q=80"
+  },
+  {
+    "id": 19,
+    "category": "Bubble Waffles",
+    "name": "Fruit Heaven Bubble Waffle",
+    "price": "329.00",
+    "description": "Freshly baked bubble waffle layered with seasonal fruit slices and honey.",
+    "image": "https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=500&q=80"
+  },
+  {
+    "id": 20,
+    "category": "Icecream Sundaes",
+    "name": "Kitkat Meltdown Sundae",
+    "price": "229.00",
+    "description": "Creamy vanilla ice cream layered with crunchy KitKat chunks and fudge sauce.",
+    "image": "/sundae-kitkat.dim_400x300.jpg"
+  },
+  {
+    "id": 21,
+    "category": "Icecream Sundaes",
+    "name": "Oreo Dream Cloud Sundae",
+    "price": "219.00",
+    "description": "Silky ice cream topped with Oreo crumble, chocolate chips, and warm fudge.",
+    "image": "/sundae-oreo.dim_400x300.jpg"
+  },
+  {
+    "id": 22,
+    "category": "Icecream Sundaes",
+    "name": "Pink Crush Sundae",
+    "price": "209.00",
+    "description": "Delightful strawberry ice cream topped with berry coulis and sprinkles.",
+    "image": "/sundae-pink-crush.dim_400x300.jpg"
+  },
+  {
+    "id": 23,
+    "category": "Icecream Sundaes",
+    "name": "Nutstorm Delight Sundae",
+    "price": "249.00",
+    "description": "Scoops of rich vanilla loaded with toasted nuts and golden caramel syrup.",
+    "image": "/sundae-nutstorm.dim_400x300.jpg"
+  },
+  {
+    "id": 24,
+    "category": "Icecream Sundaes",
+    "name": "Ferrero Royale",
+    "price": "259.00",
+    "description": "Velvety chocolate gelato crowned with whole Ferrero Rocher and hazelnut fudge.",
+    "image": "/sundae-ferrero.dim_400x300.jpg"
+  },
+  {
+    "id": 25,
+    "category": "Icecream Sundaes",
+    "name": "Smaakenzzoo Banana Bliss",
+    "price": "289.00",
+    "description": "Fresh sliced bananas over creamy ice cream with warm caramel and nuts.",
+    "image": "/sundae-banana.dim_400x300.jpg"
+  },
+  {
+    "id": 26,
+    "category": "Icecream Sundaes",
+    "name": "Nutella Fudge Fantasy",
+    "price": "249.00",
+    "description": "Decadent scoops of chocolate ice cream swirled with thick Nutella and fudge.",
+    "image": "/sundae-nutella-fudge.dim_400x300.jpg"
+  },
+  {
+    "id": 27,
+    "category": "Icecream Sundaes",
+    "name": "Death By Chocolate",
+    "price": "269.00",
+    "description": "Layers of dense chocolate cake, dark fudge, chocolate ice cream, and nuts.",
+    "image": "/sundae-death-by-choc.dim_400x300.jpg"
+  },
+  {
+    "id": 28,
+    "category": "Mini Pancakes",
+    "name": "American Maple Pancake",
+    "price": "209.00",
+    "description": "Warm fluffy mini pancakes drizzled with pure golden maple syrup and butter.",
+    "image": "/pancake-maple.dim_400x300.jpg"
+  },
+  {
+    "id": 29,
+    "category": "Mini Pancakes",
+    "name": "Nutella Oreo Pancake",
+    "price": "229.00",
+    "description": "Bite-sized pancakes smothered in rich Nutella spread and crunchy Oreo dust.",
+    "image": "/pancake-nutella-oreo.dim_400x300.jpg"
+  },
+  {
+    "id": 30,
+    "category": "Mini Pancakes",
+    "name": "Kitkat White Chocolate Pancake",
+    "price": "239.00",
+    "description": "Fluffy mini pancakes drizzled with silky white chocolate and crushed KitKat.",
+    "image": "/pancake-kitkat-white-choc.dim_400x300.jpg"
+  },
+  {
+    "id": 31,
+    "category": "Mini Pancakes",
+    "name": "Real Fruit Blast Pancake",
+    "price": "249.00",
+    "description": "Warm mini pancakes topped with fresh seasonal berries, fruit, and honey.",
+    "image": "/pancake-real-fruit.dim_400x300.jpg"
+  },
+  {
+    "id": 32,
+    "category": "Brownie Sizzlers",
+    "name": "Caramel Crunch Sizzler",
+    "price": "239.00",
+    "description": "Sizzling hot brownie with vanilla ice cream, butterscotch, and crunchy nuts.",
+    "image": "/sizzler-caramel-crunch.dim_400x300.jpg"
+  },
+  {
+    "id": 33,
+    "category": "Brownie Sizzlers",
+    "name": "Nutella Lava Sizzler",
+    "price": "249.00",
+    "description": "Gooey chocolate brownie on a sizzler plate drenched in molten Nutella sauce.",
+    "image": "/sizzler-nutella-lava.dim_400x300.jpg"
+  },
+  {
+    "id": 34,
+    "category": "Brownie Sizzlers",
+    "name": "Cookies 'n' Cream Sizzler",
+    "price": "259.00",
+    "description": "Hot sizzling brownie paired with vanilla ice cream and crushed Oreo cookies.",
+    "image": "/sizzler-cookies-cream.dim_400x300.jpg"
+  },
+  {
+    "id": 35,
+    "category": "Brownie Sizzlers",
+    "name": "Royal Dry Fruit Sizzler",
+    "price": "279.00",
+    "description": "Warm fudge brownie loaded with roasted nuts, sizzling in chocolate syrup.",
+    "image": "/sizzler-dry-fruit.dim_400x300.jpg"
+  },
+  {
+    "id": 36,
+    "category": "Brownie Sizzlers",
+    "name": "Rocher Melt Sizzler",
+    "price": "289.00",
+    "description": "Molten chocolate brownie with vanilla scoop and melted Ferrero Rocher.",
+    "image": "/sizzler-rocher-melt.dim_400x300.jpg"
+  },
+  {
+    "id": 37,
+    "category": "Milkshakes",
+    "name": "Blush Vanilla Charm Shake",
+    "price": "169.00",
+    "description": "Thick creamy shake blended with classic Madagascar vanilla bean.",
+    "image": "/shake-vanilla.dim_400x300.jpg"
+  },
+  {
+    "id": 38,
+    "category": "Milkshakes",
+    "name": "Alphonso Mango Shake",
+    "price": "179.00",
+    "description": "Rich, luscious milkshake blended with sun-ripened Alphonso mango pulp.",
+    "image": "/shake-mango.dim_400x300.jpg"
+  },
+  {
+    "id": 39,
+    "category": "Milkshakes",
+    "name": "Choco Lava Love Shake",
+    "price": "189.00",
+    "description": "Decadent chocolate shake blended with gooey chocolate fudge.",
+    "image": "/shake-choco-lava.dim_400x300.jpg"
+  },
+  {
+    "id": 40,
+    "category": "Milkshakes",
+    "name": "Pinkberry Swirl Shake",
+    "price": "199.00",
+    "description": "Refreshing thick shake infused with natural strawberry and berry swirl.",
+    "image": "/shake-pinkberry.dim_400x300.jpg"
+  },
+  {
+    "id": 41,
+    "category": "Milkshakes",
+    "name": "Kitkat Krunch Rush Shake",
+    "price": "209.00",
+    "description": "Creamy chocolate shake loaded with crunchy blended KitKat bits.",
+    "image": "/shake-kitkat.dim_400x300.jpg"
+  },
+  {
+    "id": 42,
+    "category": "Milkshakes",
+    "name": "Oreo Blast Supreme Shake",
+    "price": "229.00",
+    "description": "Thick milkshake churned with real Oreo cookies and chocolate drizzle.",
+    "image": "/shake-oreo-blast.dim_400x300.jpg"
+  },
+  {
+    "id": 43,
+    "category": "Milkshakes",
+    "name": "Nutella Cloud Shake",
+    "price": "259.00",
+    "description": "Velvety smooth shake blended with genuine hazelnut Nutella spread.",
+    "image": "/shake-nutella-cloud.dim_400x300.jpg"
+  },
+  {
+    "id": 44,
+    "category": "Milkshakes",
+    "name": "Lotus Biscoff Shake",
+    "price": "259.00",
+    "description": "Creamy indulgent shake blended with spiced caramel Lotus Biscoff cookies.",
+    "image": "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=500&q=80"
+  },
+  {
+    "id": 45,
+    "category": "Milkshakes",
+    "name": "Blackcurrant Shake",
+    "price": "259.00",
+    "description": "Vibrant milkshake blended with sweet and tangy blackcurrant berries.",
+    "image": "/shake-black-currant.dim_400x300.jpg"
+  },
+  {
+    "id": 46,
+    "category": "Milkshakes",
+    "name": "American Dry Fruit Shake",
+    "price": "279.00",
+    "description": "Rich royal milkshake loaded with blended almonds, cashews, and dates.",
+    "image": "/shake-dry-fruit.dim_400x300.jpg"
+  },
+  {
+    "id": 47,
+    "category": "Coffees",
+    "name": "Espresso",
+    "price": "89.00",
+    "description": "Bold, intense shot of pure freshly brewed artisanal coffee.",
+    "image": "/coffee-espresso..jpg"
+  },
+  {
+    "id": 48,
+    "category": "Coffees",
+    "name": "Americano",
+    "price": "109.00",
+    "description": "Rich espresso topped with hot water for a smooth, deep coffee finish.",
+    "image": "/coffee-americano.jpg"
+  },
+  {
+    "id": 49,
+    "category": "Coffees",
+    "name": "Cafe Latte",
+    "price": "129.00",
+    "description": "Smooth espresso poured over gently steamed milk with a silky microfoam.",
+    "image": "/coffee-latte.jpg"
+  },
+  {
+    "id": 50,
+    "category": "Coffees",
+    "name": "Cappuccino",
+    "price": "159.00",
+    "description": "Classic Italian brew with equal parts rich espresso, steamed milk, and froth.",
+    "image": "/coffee-cappuccino.jpg"
+  },
+  {
+    "id": 51,
+    "category": "Coffees",
+    "name": "Hot Chocolate",
+    "price": "169.00",
+    "description": "Velvety warm melted chocolate whisked with rich whole milk.",
+    "image": "https://images.unsplash.com/photo-1542990253-0d0f5be5f0ed?w=500&q=80"
+  },
+  {
+    "id": 52,
+    "category": "Coffees",
+    "name": "Iced Americano",
+    "price": "129.00",
+    "description": "Double espresso shot poured over ice and cold water for a crisp pick-me-up.",
+    "image": "/coffee-iced-americano.jpg"
+  },
+  {
+    "id": 53,
+    "category": "Coffees",
+    "name": "Iced Mocha",
+    "price": "149.00",
+    "description": "Chilled espresso and rich dark chocolate blended with milk over ice.",
+    "image": "https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?w=500&q=80"
+  },
+  {
+    "id": 54,
+    "category": "Coffees",
+    "name": "Iced Latte",
+    "price": "149.00",
+    "description": "Smooth espresso poured over cold milk and ice cubes.",
+    "image": "/coffee-iced-latte.jpg"
+  },
+  {
+    "id": 55,
+    "category": "Coffees",
+    "name": "Iced Hazelnut Coffee",
+    "price": "179.00",
+    "description": "Chilled brewed coffee infused with aromatic toasted hazelnut syrup.",
+    "image": "/coffee-iced-hazelnut.jpg"
+  },
+  {
+    "id": 56,
+    "category": "Coffees",
+    "name": "Iced Caramel Coffee",
+    "price": "179.00",
+    "description": "Crisp iced coffee swirled with golden buttery caramel sauce.",
+    "image": "/coffee-iced-caramel.jpg"
+  },
+  {
+    "id": 57,
+    "category": "Coffees",
+    "name": "French Vanilla",
+    "price": "179.00",
+    "description": "Warm aromatic coffee flavored with delicate French vanilla bean essence.",
+    "image": "/coffee-french-vanilla.jpg"
+  },
+  {
+    "id": 58,
+    "category": "Mocktails",
+    "name": "Mint",
+    "price": "99.00",
+    "description": "Chilled bubbly soda muddled with fresh garden mint leaves and zesty lime.",
+    "image": "/mocktail-mint.dim_400x300.jpg"
+  },
+  {
+    "id": 59,
+    "category": "Mocktails",
+    "name": "Ice Tea",
+    "price": "99.00",
+    "description": "Refreshing brewed iced tea infused with natural lemon and fresh mint.",
+    "image": "/mocktail-ice-tea.dim_400x300.jpg"
+  },
+  {
+    "id": 60,
+    "category": "Mocktails",
+    "name": "Orange Cooler",
+    "price": "99.00",
+    "description": "Sparkling citrus cooler with sweet Valencia orange juice and ice.",
+    "image": "/mocktail-orange-cooler.dim_400x300.jpg"
+  },
+  {
+    "id": 61,
+    "category": "Mocktails",
+    "name": "Mango Cinnamon",
+    "price": "99.00",
+    "description": "Luscious mango nectar with a gentle hint of warm aromatic cinnamon.",
+    "image": "/mocktail-mango-cinnamon.dim_400x300.jpg"
+  },
+  {
+    "id": 62,
+    "category": "Mocktails",
+    "name": "Cranberry Chill",
+    "price": "99.00",
+    "description": "Tart and sweet sparkling cranberry cooler served ice-cold.",
+    "image": "/mocktail-cranberry.dim_400x300.jpg"
+  },
+  {
+    "id": 63,
+    "category": "Pizza",
+    "name": "Veggie Delight",
+    "price": "299.00",
+    "description": "Stone-baked pizza topped with mozzarella, crisp bell peppers, onions, and corn.",
+    "image": "/pizza-veggie-delight.dim_400x300.jpg"
+  },
+  {
+    "id": 64,
+    "category": "Pizza",
+    "name": "Paneer Punch",
+    "price": "309.00",
+    "description": "Crisp crust topped with spiced paneer cubes, capsicum, and melted mozzarella.",
+    "image": "/pizza-paneer-punch.dim_400x300.jpg"
+  },
+  {
+    "id": 65,
+    "category": "Pizza",
+    "name": "Flamin' Peri Chick'n Blaze",
+    "price": "359.00",
+    "description": "Spicy peri peri marinated chicken on melted cheese and herb tomato sauce.",
+    "image": "/pizza-peri-chicken.dim_400x300.jpg"
+  },
+  {
+    "id": 66,
+    "category": "Pizza",
+    "name": "Chick Fiesta Pizza",
+    "price": "349.00",
+    "description": "Loaded with grilled chicken pieces, juicy sweet corn, and golden cheese.",
+    "image": "/pizza-chick-fiesta.dim_400x300.jpg"
+  },
+  {
+    "id": 67,
+    "category": "Pizza",
+    "name": "Chicken Tikka Pizza",
+    "price": "379.00",
+    "description": "Smoky tandoori spiced chicken tikka chunks over melted cheese and herbs.",
+    "image": "/pizza-chicken-tikka.dim_400x300.jpg"
+  },
+  {
+    "id": 73,
+    "category": "Pizza",
+    "name": "Harissa Chicken Pizza",
+    "price": "379.00",
+    "description": "North African spiced harissa chicken roasted on a crisp cheesy crust.",
+    "image": "/pizza-harissa-chicken.dim_400x300.jpg"
+  },
+  {
+    "id": 74,
+    "category": "Burgers",
+    "name": "Gobbler Veg",
+    "price": "149.00",
+    "description": "Crispy spiced vegetable patty layered with fresh lettuce, mayo, and tomato.",
+    "image": "/burger-gobbler-veg.jpg"
+  },
+  {
+    "id": 75,
+    "category": "Burgers",
+    "name": "Gobbler Chicken",
+    "price": "169.00",
+    "description": "Juicy golden fried chicken patty nestled in toasted buns with herb mayo.",
+    "image": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&q=80"
+  },
+  {
+    "id": 76,
+    "category": "Burgers",
+    "name": "King Burger Veg",
+    "price": "209.00",
+    "description": "Double-stacked veggie patties topped with melted cheese slice and house sauce.",
+    "image": "/burger-king-veg.jpg"
+  },
+  {
+    "id": 77,
+    "category": "Burgers",
+    "name": "King Burger Chicken",
+    "price": "229.00",
+    "description": "Crispy chicken patty crowned with melted cheddar cheese and tangy burger relish.",
+    "image": "/burger-king-chicken.jpg"
+  },
+  {
+    "id": 78,
+    "category": "Burgers",
+    "name": "Peri Peri Burger Veg",
+    "price": "239.00",
+    "description": "Spicy crumb-fried veggie patty dusted with fiery peri peri seasoning.",
+    "image": "/burger-peri-peri.jpg"
+  },
+  {
+    "id": 79,
+    "category": "Burgers",
+    "name": "Peri Peri Burger Chicken",
+    "price": "249.00",
+    "description": "Crisp chicken breast tossed in bold peri peri spices with garlic mayo.",
+    "image": "/burger-peri-peri-chicken.jpg"
+  },
+  {
+    "id": 80,
+    "category": "Sandwiches",
+    "name": "Harissa Chicken Sandwich",
+    "price": "269.00",
+    "description": "Toasted bread filled with zesty harissa spiced chicken and crunchy greens.",
+    "image": "/sandwich-harissa-chicken.dim_400x300.jpg"
+  },
+  {
+    "id": 81,
+    "category": "Sandwiches",
+    "name": "Harissa Paneer Sandwich",
+    "price": "229.00",
+    "description": "Grilled cottage cheese tossed in smoky harissa sauce inside toasted bread.",
+    "image": "/sandwich-harissa-paneer.dim_400x300.jpg"
+  },
+  {
+    "id": 82,
+    "category": "Sandwiches",
+    "name": "Chicken Tikka Sandwich",
+    "price": "279.00",
+    "description": "Tender chicken tikka tossed in spiced mayo and grilled golden brown.",
+    "image": "/sandwich-chicken-tikka.dim_400x300.jpg"
+  },
+  {
+    "id": 83,
+    "category": "Sandwiches",
+    "name": "Paneer Tikka Sandwich",
+    "price": "239.00",
+    "description": "Marinated paneer cubes with mint mayo pressed between buttered toast.",
+    "image": "/sandwich-paneer-tikka.dim_400x300.jpg"
+  },
+  {
+    "id": 84,
+    "category": "Sandwiches",
+    "name": "Chicken Club Sandwich",
+    "price": "329.00",
+    "options": [
+      {
+        "title": "Standard Portion",
+        "price": "329.00"
+      },
+      {
+        "title": "Double Loaded",
+        "price": "379.00"
+      }
+    ],
+    "description": "Triple-layer toasted sandwich stuffed with seasoned chicken, egg, and cheese.",
+    "image": "/sandwich-club-chicken.dim_400x300.jpg"
+  },
+  {
+    "id": 85,
+    "category": "Sandwiches",
+    "name": "Veg Club Sandwich",
+    "price": "299.00",
+    "options": [
+      {
+        "title": "Standard Portion",
+        "price": "299.00"
+      },
+      {
+        "title": "Extra Cheese & Paneer",
+        "price": "349.00"
+      }
+    ],
+    "description": "Three-tier toasted bread loaded with cheese, cucumbers, tomatoes, and mayo.",
+    "image": "/sandwich-veg-club.dim_400x300.jpg"
+  },
+  {
+    "id": 86,
+    "category": "Sandwiches",
+    "name": "Cold Egg Sandwich",
+    "price": "139.00",
+    "description": "Soft sandwich bread filled with creamy seasoned egg and herb mayo spread.",
+    "image": "/cold-egg-sandwich.jpg"
+  },
+  {
+    "id": 87,
+    "category": "Sandwiches",
+    "name": "Chicken Cold Sandwich",
+    "price": "189.00",
+    "description": "Chilled shredded chicken tossed in creamy mayonnaise between soft slices.",
+    "image": "/chicken-cold-sandwich.jpg"
+  },
+  {
+    "id": 88,
+    "category": "Sandwiches",
+    "name": "Veg Cold Sandwich",
+    "price": "159.00",
+    "description": "Soft bread stuffed with crisp seasoned vegetables and chilled green chutney.",
+    "image": "/veg-cold-sandwich.jpg"
+  },
+  {
+    "id": 89,
+    "category": "Chicken Appetiser",
+    "name": "Honey Glazed Chicken Wings",
+    "price": "249.00",
+    "description": "Crisp fried chicken wings tossed in sweet and sticky honey garlic glaze.",
+    "image": "https://images.unsplash.com/photo-1527477378377-f38b251ce7c7?w=500&q=80"
+  },
+  {
+    "id": 90,
+    "category": "Chicken Appetiser",
+    "name": "Peri Peri Chicken Wings",
+    "price": "229.00",
+    "description": "Tender chicken wings dusted with fiery African peri peri dry spice rub.",
+    "image": "https://images.unsplash.com/photo-1527477378377-f38b251ce7c7?w=500&q=80"
+  },
+  {
+    "id": 91,
+    "category": "Chicken Appetiser",
+    "name": "BBQ Chicken Wings",
+    "price": "279.00",
+    "description": "Juicy chicken wings coated in smoky, tangy American barbecue sauce.",
+    "image": "https://images.unsplash.com/photo-1527477378377-f38b251ce7c7?w=500&q=80"
+  },
+  {
+    "id": 92,
+    "category": "Chicken Appetiser",
+    "name": "Chilli Garlic Wings",
+    "price": "249.00",
+    "description": "Crispy wings wok-tossed with spicy red chilli sauce and minced garlic.",
+    "image": "https://images.unsplash.com/photo-1527477378377-f38b251ce7c7?w=500&q=80"
+  },
+  {
+    "id": 114,
+    "category": "Non Veg Snacks",
+    "name": "Chicken Nuggets",
+    "price": "239.00",
+    "description": "Bite-sized golden crumbed chicken nuggets, tender inside and crisp outside.",
+    "image": "/snack-chicken-nuggets.dim_400x300.jpg"
+  },
+  {
+    "id": 93,
+    "category": "Non Veg Snacks",
+    "name": "Chicken Garlic Fingers",
+    "price": "249.00",
+    "description": "Crispy chicken tenders infused with fragrant roasted garlic and herbs.",
+    "image": "/snack-chicken-garlic-fingers.dim_400x300.jpg"
+  },
+  {
+    "id": 94,
+    "category": "Non Veg Snacks",
+    "name": "Chicken Breast Strips 5pcs",
+    "price": "209.00",
+    "description": "Succulent chicken breast strips in a crunchy seasoned crumb coating.",
+    "image": "/snack-chicken-breast-strips.dim_400x300.jpg"
+  },
+  {
+    "id": 95,
+    "category": "Non Veg Snacks",
+    "name": "Spicy Chicken Kievs",
+    "price": "209.00",
+    "description": "Golden fried chicken bites filled with seasoned herb butter and molten cheese.",
+    "image": "/snack-chicken-kievs.dim_400x300.jpg"
+  },
+  {
+    "id": 97,
+    "category": "Veg Snacks",
+    "name": "Veg Fingers",
+    "price": "219.00",
+    "description": "Crisp golden fingers filled with spiced mashed potatoes and garden vegetables.",
+    "image": "/snack-veg-fingers.dim_400x300.jpg"
+  },
+  {
+    "id": 117,
+    "category": "Veg Snacks",
+    "name": "Veggie Nuggets",
+    "price": "219.00",
+    "description": "Crunchy bite-sized nuggets packed with corn, potatoes, and mild spices.",
+    "image": "/snack-veg-nuggets.dim_400x300.jpg"
+  },
+  {
+    "id": 98,
+    "category": "Veg Snacks",
+    "name": "Veggie Kievs",
+    "price": "209.00",
+    "description": "Crispy crumbed veggie rolls filled with molten cheese and savory herbs.",
+    "image": "/snack-veg-kievs.dim_400x300.jpg"
+  },
+  {
+    "id": 100,
+    "category": "French Fries",
+    "name": "Classic Salted",
+    "price": "179.00",
+    "description": "Golden, crisp French fries lightly tossed with sea salt. Served hot.",
+    "image": "/fries-classic.jpg"
+  },
+  {
+    "id": 101,
+    "category": "French Fries",
+    "name": "Og Peri Peri",
+    "price": "189.00",
+    "description": "Hot crispy fries generously dusted with spicy, tangy peri peri seasoning.",
+    "image": "/fries-peri-peri.jpg"
+  },
+  {
+    "id": 102,
+    "category": "French Fries",
+    "name": "The Hot Cheese",
+    "price": "199.00",
+    "description": "Crisp French fries drenched in rich, molten cheddar cheese sauce.",
+    "image": "/fries-hot-cheese.jpg"
+  },
+  {
+    "id": 103,
+    "category": "French Fries",
+    "name": "Chicken'n Stack",
+    "price": "229.00",
+    "description": "Golden fries piled high with spiced shredded chicken and creamy cheese sauce.",
+    "image": "/fries-chicken-stack.jpg"
+  },
+  {
+    "id": 105,
+    "category": "Ice Creams",
+    "name": "Classic Single Scoop",
+    "price": "60.00",
+    "description": "One generous scoop of rich, creamy traditional churned ice cream.",
+    "image": "/icecream-single-scoop.jpg"
+  },
+  {
+    "id": 106,
+    "category": "Ice Creams",
+    "name": "Classic Double Scoop",
+    "price": "110.00",
+    "description": "Two delightful scoops of your favorite classic ice cream flavors.",
+    "image": "/icecream-double-scoop.jpg"
+  },
+  {
+    "id": 107,
+    "category": "Ice Creams",
+    "name": "Classic Tub - 5 Scoops",
+    "price": "280.00",
+    "description": "Family sharing tub packed with five generous scoops of creamy ice cream.",
+    "image": "/icecream-tub-5-scoops.jpg"
+  },
+  {
+    "id": 108,
+    "category": "Ice Creams",
+    "name": "Waffle Cone",
+    "price": "20.00",
+    "description": "Freshly baked crunchy waffle cone to pair with your favorite scoop.",
+    "image": "/icecream-cone..jpg"
+  },
+  {
+    "id": 110,
+    "category": "Ice Creams",
+    "name": "Premium Single Scoop",
+    "price": "85.00",
+    "badge": "Premium",
+    "description": "One scoop of artisanal handcrafted ice cream made with premium ingredients.",
+    "image": "/premium-icecream-single.dim_400x300.jpg"
+  },
+  {
+    "id": 111,
+    "category": "Ice Creams",
+    "name": "Premium Double Scoop",
+    "price": "160.00",
+    "badge": "Premium",
+    "description": "Two scoops of luxurious premium ice cream with rich gourmet notes.",
+    "image": "/premium-icecream-double.dim_400x300.jpg"
+  },
+  {
+    "id": 109,
+    "category": "Ice Creams",
+    "name": "Premium Tub - 5 Scoops",
+    "price": "360.00",
+    "badge": "Premium",
+    "description": "Indulgent sharing tub packed with five scoops of gourmet artisanal ice cream.",
+    "image": "/premium-icecream-tub.dim_400x300.jpg"
+  },
+  {
+    "id": 112,
+    "category": "Beverages",
+    "name": "Water Bottle",
+    "price": "10.00",
+    "description": "Chilled packaged drinking water.",
+    "image": "https://images.unsplash.com/photo-1548839140-29a749e1bc4e?w=500&q=80"
+  },
+  {
+    "id": 113,
+    "category": "Beverages",
+    "name": "Coke",
+    "price": "25.00",
+    "description": "Chilled Coca-Cola, served with ice.",
+    "image": "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=500&q=80"
   }
 ];

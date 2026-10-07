@@ -3,15 +3,31 @@
 :root {
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --primary-color: #db2777;
 }
 
 @theme {
   --font-sans: var(--font-sans);
   --font-display: var(--font-display);
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Inter', sans-serif;
 
-  --color-brand: var(--primary-color, #0f172a);
-  --color-brand-light: #f8fafc;
-  --color-brand-dark: #020617;
+  --color-brand: var(--primary-color, #db2777);
+  --color-brand-pink: #db2777;
+  --color-brand-light: #fdf2f8;
+  --color-brand-dark: #831843;
+
+  --color-coffee-50: #fdf8f4;
+  --color-coffee-100: #f9eee5;
+  --color-coffee-200: #f1dcd0;
+  --color-coffee-300: #e5c1a8;
+  --color-coffee-400: #d79e78;
+  --color-coffee-500: #cd8050;
+  --color-coffee-600: #bf653b;
+  --color-coffee-700: #9e4e2f;
+  --color-coffee-800: #80402a;
+  --color-coffee-900: #673524;
+  --color-coffee-950: #381a10;
 }
 
 @layer base {

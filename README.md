@@ -1,37 +1,24 @@
-# Smaaki 🍽️📸
-> **Modern Cloud-Enabled Restaurant & Food E-Commerce Platform**  
-> *Seamless dining catalog, gym/health macro insights, commercial image licensing, and instant admin command center.*
+# Smaakenzzoo ☕🧇
+> **Artisanal Cafe, Warangal, Telangana**  
+> *"Flourishing Hearts, Blooming Dreams"*
 
 ---
 
-## 🌟 Key Features
+## 🌟 Overview
 
-### 🥗 Customer Experience & Catalog
-- **Interactive Menu & Category Browsing**: Real-time filtering by dietary preference (Vegetarian, Non-Vegetarian) and department shelves.
-- **Gym & Protein Conscious Details**: Structured macronutrient breakdown (**Protein, Calories, Carbs, Fats**) and fitness tags for health-conscious diners.
-- **Dynamic Cart & WhatsApp Direct Ordering**: Cart drawer with order summary, variant selection, and direct WhatsApp checkout integration.
-- **Responsive Layout**: Designed for all screen sizes (mobile, tablet, desktop) without UI disturbance.
+Smaakenzzoo is a modern cafe ordering platform crafted for an artisanal dining experience in Warangal. The platform offers a rich, mobile-first digital menu, customizable items, seamless cart ordering, and a real-time admin management portal.
 
-### 📸 Commercial Food Photo Licensing (Quick Look)
-- **Dual-Mode Modal**: Toggle seamlessly between ordering the food dish and licensing high-resolution commercial photography.
-- **Instant UPI QR Payments**: Built-in dynamic UPI payment QR and one-click app launcher configured with `9032578532@ybl`.
-- **Digital Asset Protection**: Previews protected against downloads (`draggable={false}`, context menu blocking, watermark badges) with delivery workflow for uncompressed 4K master files.
-
-### ⚡ Instant Admin Command Center
-- **Zero-Latency State Updates**: Optimistic local updates provide instant saves for menu items, categories, pricing, and settings.
-- **Role-Based Access**: Multi-tier admin roles (Master Admin / Superadmin) with session caching for instantaneous dashboard access.
-- **Dynamic Live QR Generator**: Live QR code generator for customer tables, home link, or custom target URLs with one-click print and SVG export.
-- **Global Theme & Brand Management**: Full control over color schemes, typography, splash screens, SEO metadata, and domain settings.
+All cafe contact details, operational hours, UPI payment IDs, and menu offerings are dynamically configured via Firestore settings.
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: React 19, Vite, Tailwind CSS
+- **Frontend**: React 19, Vite, Tailwind CSS v4 (`@tailwindcss/vite`)
 - **Routing**: React Router DOM (v7)
-- **Database & Auth**: Firebase Firestore (real-time listeners), Firebase Authentication
-- **Icons & QR**: Lucide React, QRCodeCanvas
-- **Interactions**: Drag & drop support, responsive portals
+- **Database & Auth**: Firebase Firestore (real-time sync + offline caching), Firebase Authentication
+- **Icons & UI**: Lucide React
+- **Hosting & Deployment**: Vercel
 
 ---
 
@@ -45,7 +32,7 @@
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/YOUR_USERNAME/smaaki.git
+   git clone https://github.com/Mahi-tech-c/smaaki.git
    cd smaaki
    ```
 
@@ -54,13 +41,19 @@
    npm install
    ```
 
-3. **Start development server:**
+3. **Configure Environment Variables:**
+   Copy `.env.example` to `.env` and fill in your Firebase project credentials:
+   ```bash
+   cp .env.example .env
+   ```
+
+4. **Start development server:**
    ```bash
    npm run dev
    ```
    Open `http://localhost:5173` in your browser.
 
-4. **Build for production:**
+5. **Build for production:**
    ```bash
    npm run build
    ```
@@ -72,23 +65,27 @@
 ```text
 ├── src/
 │   ├── components/
-│   │   ├── Admin/            # Admin dashboard, editors, auth, and QR generator
-│   │   ├── Customer/         # Product cards, quick view modal, cart drawer
-│   │   ├── Navbar.jsx        # Responsive navigation
-│   │   ├── MenuSection.jsx   # Menu catalog and category shelves
-│   │   └── Hero.jsx          # Landing banner
+│   │   ├── Admin/            # Admin dashboard, editors, auth, and QR generator (lazy-loaded)
+│   │   ├── Customer/         # Product cards, item detail sheet, cart drawer
+│   │   ├── Navbar.jsx        # Navigation bar
+│   │   ├── MenuSection.jsx   # Menu catalog and category sections
+│   │   └── Hero.jsx          # Cafe hero banner
 │   ├── context/
 │   │   └── AppContext.jsx    # Global state, optimistic updates, and Firestore listeners
+│   ├── data/
+│   │   └── menu.js           # Local fallback menu dataset
 │   ├── services/
-│   │   └── menuService.js    # Firebase database operations
+│   │   └── menuService.js    # Firestore database operations
 │   ├── utils/
-│   │   └── helpers.js        # Formatting, sanitization, image compression
-│   ├── App.jsx               # Route definitions and global theme injection
+│   │   └── helpers.js        # Formatting and helper utilities
+│   ├── App.jsx               # Route definitions and code splitting
 │   └── main.jsx              # React app entry point
+├── scripts/
+│   └── migrate-copy.js       # Menu copy migration script
 └── package.json
 ```
 
 ---
 
 ## 🔒 License & Copyright
-© 2026 Smaakenzzoo. All rights reserved. Commercial photography assets protected.
+© Smaakenzzoo. All rights reserved.

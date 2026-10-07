@@ -11,9 +11,15 @@ import FeaturedSection from './components/FeaturedSection';
 import BlossomBackground from './components/BlossomBackground';
 import CartDrawer from './components/Customer/CartDrawer';
 
-import AdminAuth from './components/Admin/AdminAuth';
-import AdminLogin from './components/Admin/AdminLogin';
-import AdminDashboard from './components/Admin/AdminDashboard';
+const AdminAuth = React.lazy(() => import('./components/Admin/AdminAuth'));
+const AdminLogin = React.lazy(() => import('./components/Admin/AdminLogin'));
+const AdminDashboard = React.lazy(() => import('./components/Admin/AdminDashboard'));
+
+const AdminFallback = () => (
+  <div className="min-h-screen flex items-center justify-center bg-pink-50/20">
+    <div className="w-10 h-10 border-4 border-pink-200 border-t-pink-600 rounded-full animate-spin"></div>
+  </div>
+);
 
 const AppContent = () => {
   const location = useLocation();
@@ -73,12 +79,39 @@ const AppContent = () => {
             <Route path="/menu" element={<MenuSection />} />
             <Route path="/offers" element={<OffersSection />} />
 
-            {/* Admin Pages */}
-            <Route path="/admin/login" element={<AdminLogin />} />
+            {/* Admin Pages (Lazy Loaded) */}
+            <Route 
+              path="/admin/login" 
+              element={
+                <React.Suspense fallback={<AdminFallback />}>
+                  <AdminLogin />
+                </React.Suspense>
+              } 
+            />
 
-            <Route element={<AdminAuth />}>
-              <Route path="/admin/dashboard" element={<AdminDashboard />} />
-              <Route path="/admin" element={<AdminDashboard />} />
+            <Route 
+              element={
+                <React.Suspense fallback={<AdminFallback />}>
+                  <AdminAuth />
+                </React.Suspense>
+              }
+            >
+              <Route 
+                path="/admin/dashboard" 
+                element={
+                  <React.Suspense fallback={<AdminFallback />}>
+                    <AdminDashboard />
+                  </React.Suspense>
+                } 
+              />
+              <Route 
+                path="/admin" 
+                element={
+                  <React.Suspense fallback={<AdminFallback />}>
+                    <AdminDashboard />
+                  </React.Suspense>
+                } 
+              />
             </Route>
 
           </Routes>

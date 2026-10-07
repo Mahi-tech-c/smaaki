@@ -117,7 +117,7 @@ const CartDrawer = () => {
               </div>
               <h3 className="text-base font-bold text-gray-900">Your bag is empty</h3>
               <p className="text-xs text-gray-500 max-w-xs">
-                Explore our handcrafted dishes and health-conscious selection to start your order!
+                Pick something delicious from our menu.
               </p>
             </div>
           ) : (
