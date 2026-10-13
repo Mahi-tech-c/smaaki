@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useContext } from 'react';
+import React, { useState, useEffect, useMemo, useContext, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { 
   CheckCircle2, 
@@ -17,10 +17,13 @@ import {
   ChevronRight,
   Receipt,
   MapPin,
-  ExternalLink
+  ExternalLink,
+  Volume2,
+  VolumeX
 } from 'lucide-react';
 import { AppContext } from '../../context/AppContext';
 import { formatCurrency } from '../../utils/helpers';
+import { soundManager } from '../../utils/sound';
 import { DietaryMarker } from '../ui';
 import { db, COLLECTIONS } from '../../firebase';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
@@ -39,7 +42,19 @@ export const OrderTrackingPage = () => {
   const { settings } = useContext(AppContext);
 
   const [searchInput, setSearchInput] = useState(orderId || '');
-  const [activeOrder, setActiveOrder] = useState(null);
+  const [activeOrder, setActiveOrder] = useState(() => {
+    if (!orderId) return null;
+    try {
+      const cleanId = orderId.trim().toUpperCase();
+      const localOrders = JSON.parse(localStorage.getItem('smaakenzzoo_recent_orders') || '[]');
+      return localOrders.find(o => 
+        String(o.orderId).toUpperCase() === cleanId || 
+        String(o.id).toUpperCase() === cleanId
+      ) || null;
+    } catch {
+      return null;
+    }
+  });
   const [loading, setLoading] = useState(() => Boolean(orderId));
   const [recentOrders] = useState(() => {
     try {
@@ -50,6 +65,8 @@ export const OrderTrackingPage = () => {
   });
   const [remainingSeconds, setRemainingSeconds] = useState(null);
   const [liveError, setLiveError] = useState(null);
+  const [isMuted, setIsMuted] = useState(() => soundManager.isMuted);
+  const lastStatusRef = useRef(null);
 
   // Sync state during render when orderId changes
   const [currentId, setCurrentId] = useState(orderId);
@@ -59,16 +76,31 @@ export const OrderTrackingPage = () => {
     setLiveError(null);
     if (!orderId) {
       setActiveOrder(null);
+    } else {
+      try {
+        const cleanId = orderId.trim().toUpperCase();
+        const localOrders = JSON.parse(localStorage.getItem('smaakenzzoo_recent_orders') || '[]');
+        const match = localOrders.find(o => 
+          String(o.orderId).toUpperCase() === cleanId || 
+          String(o.id).toUpperCase() === cleanId
+        ) || null;
+        setActiveOrder(match);
+      } catch {
+        setActiveOrder(null);
+      }
     }
   }
 
   // Real-time Firestore Listener with fallback
   useEffect(() => {
-    if (!orderId) return;
+    if (!orderId) {
+      lastStatusRef.current = null;
+      return;
+    }
 
     const cleanId = orderId.trim().toUpperCase();
 
-    // 1. Initial lookup from localStorage for instant render
+    // Attach initial status for reference
     try {
       const localOrders = JSON.parse(localStorage.getItem('smaakenzzoo_recent_orders') || '[]');
       const localMatch = localOrders.find(o => 
@@ -76,7 +108,7 @@ export const OrderTrackingPage = () => {
         String(o.id).toUpperCase() === cleanId
       );
       if (localMatch) {
-        setActiveOrder(localMatch);
+        lastStatusRef.current = localMatch.status;
       }
     } catch {
       // ignore
@@ -92,7 +124,12 @@ export const OrderTrackingPage = () => {
         setLoading(false);
         if (!snapshot.empty) {
           const docData = snapshot.docs[0].data();
-          setActiveOrder({ id: snapshot.docs[0].id, ...docData });
+          const nextOrder = { id: snapshot.docs[0].id, ...docData };
+          if (lastStatusRef.current && lastStatusRef.current !== nextOrder.status) {
+            soundManager.playOrderStatusUpdate();
+          }
+          lastStatusRef.current = nextOrder.status;
+          setActiveOrder(nextOrder);
         } else {
           // If not in firestore, keep localMatch if present
           setActiveOrder(prev => prev || null);
@@ -245,12 +282,32 @@ export const OrderTrackingPage = () => {
                   </p>
                 </div>
 
-                {activeOrder.tableNumber && (
-                  <div className="px-3.5 py-1.5 rounded-2xl bg-pink-600/20 border border-pink-500/30 text-pink-300 text-xs font-bold flex items-center gap-1.5">
-                    <Utensils className="w-3.5 h-3.5" />
-                    <span>Table {activeOrder.tableNumber}</span>
-                  </div>
-                )}
+                <div className="flex items-center gap-2">
+                  {activeOrder.tableNumber && (
+                    <div className="px-3.5 py-1.5 rounded-2xl bg-pink-600/20 border border-pink-500/30 text-pink-300 text-xs font-bold flex items-center gap-1.5">
+                      <Utensils className="w-3.5 h-3.5" />
+                      <span>Table {activeOrder.tableNumber}</span>
+                    </div>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      soundManager.unlock();
+                      const nextMute = soundManager.toggleMute();
+                      setIsMuted(nextMute);
+                    }}
+                    className={`px-3 py-1.5 rounded-2xl border text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                      !isMuted
+                        ? 'bg-emerald-500/15 border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/25'
+                        : 'bg-slate-800 border-slate-700 text-slate-400 hover:text-white'
+                    }`}
+                    title={isMuted ? "Audio muted (Click to enable audio alerts)" : "Audio alerts active (Click to mute)"}
+                  >
+                    {isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />}
+                    <span className="hidden sm:inline">{isMuted ? 'Muted' : 'Audio Alerts'}</span>
+                  </button>
+                </div>
               </div>
 
               {/* ETA Countdown Banner */}

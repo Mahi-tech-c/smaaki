@@ -5,6 +5,7 @@ import { FALLBACK_FOOD_IMAGE } from '../../constants/settings';
 import { DietaryMarker, Stepper } from '../ui';
 import { getItemDietaryType, getItemBadges } from '../../utils/menuDataHelper';
 import { useToast } from '../ui/Toast';
+import { soundManager } from '../../utils/sound';
 
 /**
  * Highlights matching search terms safely
@@ -59,16 +60,21 @@ export const ProductCard = ({
     if (!isAvailable) return;
 
     if (hasVariants) {
+      soundManager.playTapSound();
       // If it has variants, open sheet so user can choose size/variant
       onOpenQuickView?.(item);
     } else {
+      soundManager.playTapSound();
       onAddToCart?.(item);
       showToast?.({
         message: `Added ${item.name} to bag`,
         type: 'success',
         action: {
           label: 'Undo',
-          onClick: () => onUpdateCartQuantity?.(activeCartId, -1)
+          onClick: () => {
+            soundManager.playTapSound();
+            onUpdateCartQuantity?.(activeCartId, -1);
+          }
         }
       });
     }
@@ -289,7 +295,10 @@ export const ProductCard = ({
               <Stepper 
                 value={inCartQty} 
                 size="sm"
-                onChange={(newQty) => onUpdateCartQuantity?.(activeCartId, newQty - inCartQty)}
+                onChange={(newQty) => {
+                  soundManager.playTapSound();
+                  onUpdateCartQuantity?.(activeCartId, newQty - inCartQty);
+                }}
                 showTrashAtOne={true}
               />
             ) : (

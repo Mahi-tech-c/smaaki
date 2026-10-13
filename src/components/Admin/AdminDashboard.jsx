@@ -1,4 +1,4 @@
-import React, { useContext, useState, useMemo } from 'react';
+import React, { useContext, useState, useMemo, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { AppContext } from '../../context/AppContext';
 import { 
@@ -17,8 +17,11 @@ import {
   Printer,
   FileImage,
   Bell,
-  Utensils
+  Utensils,
+  Volume2,
+  VolumeX
 } from 'lucide-react';
+import { soundManager } from '../../utils/sound';
 import { QRCodeCanvas } from 'qrcode.react';
 import AdminItemForm from './AdminItemForm';
 import { useNavigate } from 'react-router-dom';
@@ -70,14 +73,54 @@ const AdminDashboard = () => {
   const [customQrUrl, setCustomQrUrl] = useState('');
   const [copiedUrl, setCopiedUrl] = useState(false);
 
+  // Audio Alert States & Engine
+  const [isAudioMuted, setIsAudioMuted] = useState(() => soundManager.isMuted);
+  const [isAudioUnlocked, setIsAudioUnlocked] = useState(() => {
+    const ctx = soundManager.audioCtx;
+    return Boolean(ctx && ctx.state === 'running');
+  });
+
+  const handleToggleSound = async () => {
+    await soundManager.unlock();
+    setIsAudioUnlocked(true);
+    const muted = soundManager.toggleMute();
+    setIsAudioMuted(muted);
+    if (!muted) {
+      soundManager.playTapSound();
+    }
+  };
+
+  const handleUnlockAudio = async () => {
+    const unlocked = await soundManager.unlock();
+    setIsAudioUnlocked(unlocked);
+    if (unlocked) {
+      soundManager.playNewOrderChime();
+    }
+  };
+
   // Live Waiter Calls Management
   const [tableCalls, setTableCalls] = useState([]);
   const [isCallsModalOpen, setIsCallsModalOpen] = useState(false);
+  const initialCallsLoadedRef = useRef(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     try {
       const q = query(collection(db, COLLECTIONS?.tableCalls || 'table_calls'));
       const unsub = onSnapshot(q, (snapshot) => {
+        // Trigger waiter bell if new call added after initial load
+        if (initialCallsLoadedRef.current) {
+          snapshot.docChanges().forEach(change => {
+            if (change.type === 'added') {
+              const data = change.doc.data();
+              if (!data.resolved) {
+                soundManager.playWaiterBell();
+              }
+            }
+          });
+        } else {
+          initialCallsLoadedRef.current = true;
+        }
+
         const list = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
         const active = list.filter(c => !c.resolved);
         active.sort((a, b) => {
@@ -92,6 +135,30 @@ const AdminDashboard = () => {
       return () => unsub();
     } catch (e) {
       console.warn("Table calls listener setup:", e);
+    }
+  }, []);
+
+  // Live Kitchen Orders Listener for Incoming Order Chime
+  const initialOrdersLoadedRef = useRef(false);
+  useEffect(() => {
+    try {
+      const ordersQ = query(collection(db, COLLECTIONS?.orders || 'orders'));
+      const unsub = onSnapshot(ordersQ, (snapshot) => {
+        if (initialOrdersLoadedRef.current) {
+          snapshot.docChanges().forEach(change => {
+            if (change.type === 'added') {
+              soundManager.playNewOrderChime();
+            }
+          });
+        } else {
+          initialOrdersLoadedRef.current = true;
+        }
+      }, (err) => {
+        console.warn("Orders sound listener err:", err);
+      });
+      return () => unsub();
+    } catch (e) {
+      console.warn("Orders sound listener setup failed:", e);
     }
   }, []);
 
@@ -387,32 +454,96 @@ const AdminDashboard = () => {
             <MenuIcon size={24} />
           </button>
           <h1 className="text-xl font-bold text-pink-900">Admin Panel</h1>
-          <button
-            onClick={() => setIsCallsModalOpen(true)}
-            className="relative p-2 text-pink-600 hover:bg-pink-50 rounded-xl transition-colors cursor-pointer"
-            title="Active Waiter Calls"
-          >
-            <Bell size={22} />
-            {tableCalls.length > 0 && (
-              <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-amber-500 text-white font-extrabold text-[10px] flex items-center justify-center animate-pulse">
-                {tableCalls.length}
-              </span>
-            )}
-          </button>
+          <div className="flex items-center gap-1.5">
+            <button
+              onClick={handleToggleSound}
+              className={`p-2 rounded-xl transition-colors cursor-pointer ${
+                !isAudioMuted 
+                  ? 'text-emerald-600 hover:bg-emerald-50' 
+                  : 'text-gray-400 hover:bg-gray-100'
+              }`}
+              title={isAudioMuted ? "Sound Muted (Click to Unmute)" : "Kitchen Chimes Active"}
+            >
+              {isAudioMuted ? <VolumeX size={20} /> : <Volume2 size={20} className="text-emerald-600 animate-pulse" />}
+            </button>
+
+            <button
+              onClick={() => setIsCallsModalOpen(true)}
+              className="relative p-2 text-pink-600 hover:bg-pink-50 rounded-xl transition-colors cursor-pointer"
+              title="Active Waiter Calls"
+            >
+              <Bell size={22} />
+              {tableCalls.length > 0 && (
+                <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-amber-500 text-white font-extrabold text-[10px] flex items-center justify-center animate-pulse">
+                  {tableCalls.length}
+                </span>
+              )}
+            </button>
+          </div>
         </header>
 
         <main className="flex-1 p-4 md:p-8 overflow-y-auto">
-          {/* Breadcrumb / Title */}
-          <div className="mb-8">
-            <h2 className="text-3xl font-extrabold text-pink-900 capitalize tracking-tight">
-              {activeTab === 'menu' ? 'Menu Management' : 
-               activeTab === 'home_editor' ? 'Home Page Content' :
-               activeTab === 'menu_editor' ? 'Menu Page Content' :
-               activeTab === 'domain' ? 'Domain Setup' :
-               activeTab === 'offers' ? 'Special Offers' : 
-               activeTab === 'featured' ? 'Featured Items' : 'Global Configuration'}
-            </h2>
-            <p className="text-pink-500 font-medium">Manage your restaurant content and appearance</p>
+          {/* Browser Audio Unlock Banner */}
+          {!isAudioUnlocked && (
+            <div 
+              onClick={handleUnlockAudio}
+              className="mb-6 p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 flex items-center justify-between gap-3 cursor-pointer hover:bg-amber-100 transition-all shadow-sm group"
+            >
+              <div className="flex items-center gap-3">
+                <span className="text-2xl animate-bounce">🔔</span>
+                <div>
+                  <p className="font-bold text-xs sm:text-sm">Browser audio is locked by default</p>
+                  <p className="text-[11px] text-amber-700">Click anywhere or tap here to enable live kitchen chimes for incoming orders and waiter calls.</p>
+                </div>
+              </div>
+              <span className="px-3 py-1.5 bg-amber-500 text-white rounded-xl font-bold text-xs shrink-0 group-hover:scale-105 transition-transform">
+                Enable Audio
+              </span>
+            </div>
+          )}
+
+          {/* Breadcrumb / Title & Quick Sound Actions */}
+          <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <h2 className="text-3xl font-extrabold text-pink-900 capitalize tracking-tight">
+                {activeTab === 'menu' ? 'Menu Management' : 
+                 activeTab === 'home_editor' ? 'Home Page Content' :
+                 activeTab === 'menu_editor' ? 'Menu Page Content' :
+                 activeTab === 'domain' ? 'Domain Setup' :
+                 activeTab === 'offers' ? 'Special Offers' : 
+                 activeTab === 'featured' ? 'Featured Items' : 'Global Configuration'}
+              </h2>
+              <p className="text-pink-500 font-medium">Manage your restaurant content and appearance</p>
+            </div>
+
+            {/* Desktop Kitchen Audio Controls */}
+            <div className="hidden sm:flex items-center gap-2">
+              <button
+                type="button"
+                onClick={handleToggleSound}
+                className={`px-4 py-2.5 rounded-2xl border text-xs font-bold flex items-center gap-2 transition-all cursor-pointer shadow-sm ${
+                  !isAudioMuted
+                    ? 'bg-emerald-50 border-emerald-200 text-emerald-800 hover:bg-emerald-100'
+                    : 'bg-white border-pink-200 text-gray-500 hover:bg-pink-50/50'
+                }`}
+                title={isAudioMuted ? "Audio muted (Click to activate kitchen chimes)" : "Kitchen sound alerts active (Click to mute)"}
+              >
+                {isAudioMuted ? <VolumeX size={16} /> : <Volume2 size={16} className="text-emerald-600 animate-pulse" />}
+                <span>{isAudioMuted ? 'Kitchen Sound: Muted' : 'Kitchen Sound: Active'}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  soundManager.unlock();
+                  soundManager.playNewOrderChime();
+                }}
+                className="px-3 py-2.5 bg-white border border-pink-200 hover:bg-pink-50 text-pink-700 rounded-2xl text-xs font-bold shadow-sm transition-all flex items-center gap-1.5 cursor-pointer"
+                title="Play sample kitchen chime"
+              >
+                <span>🔔 Test Chime</span>
+              </button>
+            </div>
           </div>
 
           {/* Module Switching */}

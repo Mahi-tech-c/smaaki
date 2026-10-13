@@ -5,13 +5,159 @@ import {
   Check, RefreshCw, Camera, MessageCircle, Share2, IndianRupee,
   FileText, Image as ImageIcon, Search, AlertCircle, Lock,
   Eye, EyeOff, StickyNote, Loader2, KeyRound, Send, Sparkles, ExternalLink,
-  X, ChevronDown
+  X, ChevronDown, Volume2, VolumeX
 } from 'lucide-react';
+import { soundManager } from '../../utils/sound';
 import { auth } from '../../firebase';
 import { DEFAULT_SETTINGS } from '../../context/AppContext';
 import { HexColorPicker } from "react-colorful";
 
 const FONT_SIZES = [8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 28, 32, 36, 40, 48, 56, 64, 72, 80, 96, 120, 144];
+
+/* ─── Sound Settings Panel ────────────────────────────────── */
+const SoundSettingsPanel = () => {
+  const [muted, setMuted] = useState(() => soundManager.isMuted);
+  const [volume, setVolume] = useState(() => Math.round(soundManager.volume * 100));
+  const [lastPlayed, setLastPlayed] = useState(null);
+
+  const handleMuteToggle = () => {
+    soundManager.unlock();
+    const newMuted = !muted;
+    soundManager.setMuted(newMuted);
+    setMuted(newMuted);
+    if (!newMuted) {
+      soundManager.playTapSound();
+    }
+  };
+
+  const handleVolumeChange = (e) => {
+    const v = parseInt(e.target.value, 10);
+    setVolume(v);
+    soundManager.setVolume(v / 100);
+  };
+
+  const handleTest = async (type) => {
+    await soundManager.unlock();
+    if (muted) {
+      soundManager.setMuted(false);
+      setMuted(false);
+    }
+    if (type === 'order') {
+      soundManager.playNewOrderChime();
+      setLastPlayed('order');
+    } else if (type === 'waiter') {
+      soundManager.playWaiterBell();
+      setLastPlayed('waiter');
+    } else if (type === 'status') {
+      soundManager.playOrderStatusUpdate();
+      setLastPlayed('status');
+    }
+    setTimeout(() => setLastPlayed(null), 1500);
+  };
+
+  return (
+    <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
+      <div className="flex items-center gap-3 mb-2">
+        <Volume2 size={22} className="text-pink-600" />
+        <h4 className="font-black text-pink-900 uppercase tracking-widest text-sm">Sound & Audio Alerts</h4>
+      </div>
+      <p className="text-xs text-pink-500 font-medium">
+        Configure live audio chimes for incoming kitchen orders and customer waiter assistance calls.
+      </p>
+
+      {/* Master Mute Card */}
+      <div className="p-6 bg-pink-50/50 rounded-3xl border border-pink-100 flex items-center justify-between gap-4">
+        <div>
+          <h5 className="font-bold text-pink-900 text-sm">Master Sound Alerts</h5>
+          <p className="text-xs text-pink-500 mt-0.5">
+            {muted ? 'Audio is currently muted across all admin tabs' : 'Audio alerts are active and will chime for new events'}
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={handleMuteToggle}
+          className={`px-5 py-3 rounded-2xl font-black text-xs uppercase tracking-wider transition-all flex items-center gap-2 cursor-pointer ${
+            !muted
+              ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20'
+              : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+          }`}
+        >
+          {muted ? <VolumeX size={16} /> : <Volume2 size={16} />}
+          <span>{muted ? 'Unmute Alerts' : 'Mute Alerts'}</span>
+        </button>
+      </div>
+
+      {/* Volume Slider Card */}
+      <div className="p-6 bg-white rounded-3xl border border-pink-100 shadow-sm space-y-3">
+        <div className="flex items-center justify-between">
+          <label className="text-xs font-black text-pink-900 uppercase tracking-wider">
+            Alert Volume ({volume}%)
+          </label>
+          <span className="text-xs font-bold text-pink-500 font-mono">{volume}%</span>
+        </div>
+        <input
+          type="range"
+          min="0"
+          max="100"
+          value={volume}
+          onChange={handleVolumeChange}
+          onMouseUp={() => soundManager.playTapSound()}
+          className="w-full accent-pink-600 cursor-pointer h-2 bg-pink-100 rounded-lg appearance-none"
+        />
+      </div>
+
+      {/* Sound Previews & Test Panel */}
+      <div className="p-6 bg-white rounded-3xl border border-pink-100 shadow-sm space-y-4">
+        <h5 className="font-bold text-pink-900 text-sm">Test Audio Alerts</h5>
+        <p className="text-xs text-pink-400">Click any sound below to test how it sounds on this station:</p>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <button
+            type="button"
+            onClick={() => handleTest('order')}
+            className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
+              lastPlayed === 'order'
+                ? 'border-pink-500 bg-pink-50 text-pink-900 scale-102 ring-2 ring-pink-400'
+                : 'border-pink-100 bg-pink-50/20 hover:bg-pink-50 text-pink-800'
+            }`}
+          >
+            <div className="text-2xl mb-2">🔔</div>
+            <p className="font-bold text-xs">Kitchen Chime</p>
+            <p className="text-[10px] text-pink-500 mt-0.5">Incoming new orders</p>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleTest('waiter')}
+            className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
+              lastPlayed === 'waiter'
+                ? 'border-amber-500 bg-amber-50 text-amber-900 scale-102 ring-2 ring-amber-400'
+                : 'border-amber-100 bg-amber-50/20 hover:bg-amber-50 text-amber-800'
+            }`}
+          >
+            <div className="text-2xl mb-2">🛎️</div>
+            <p className="font-bold text-xs">Waiter Bell</p>
+            <p className="text-[10px] text-amber-600 mt-0.5">Customer table calls</p>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleTest('status')}
+            className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
+              lastPlayed === 'status'
+                ? 'border-purple-500 bg-purple-50 text-purple-900 scale-102 ring-2 ring-purple-400'
+                : 'border-purple-100 bg-purple-50/20 hover:bg-purple-50 text-purple-800'
+            }`}
+          >
+            <div className="text-2xl mb-2">🌸</div>
+            <p className="font-bold text-xs">Customer Progression</p>
+            <p className="text-[10px] text-purple-600 mt-0.5">Order status update</p>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 /* ─── Admin Notes Panel ───────────────────────────────────── */
 const NotesPanel = () => {
   const { settings, updateSettings } = useContext(AppContext);
@@ -361,6 +507,7 @@ const AdminSettings = ({ userRole }) => {
 
   const tabs = [
     { id: 'branding',   label: 'Branding',     icon: Palette     },
+    { id: 'sound',      label: 'Sound Alerts', icon: Volume2     },
     { id: 'operation',  label: 'Operation',    icon: Clock       },
     { id: 'contact',    label: 'Connectivity', icon: Phone       },
     { id: 'menu',       label: 'Menu Tweaks',  icon: IndianRupee },
@@ -373,7 +520,7 @@ const AdminSettings = ({ userRole }) => {
     tabs.push({ id: 'advanced', label: 'Advanced', icon: Shield });
   }
 
-  const isFormTab = !['notes'].includes(activeTab);
+  const isFormTab = !['notes', 'sound', 'security'].includes(activeTab);
 
   return (
     <div className="max-w-4xl animate-in fade-in slide-in-from-bottom-4 duration-500 pb-20">
@@ -419,9 +566,10 @@ const AdminSettings = ({ userRole }) => {
             {/* Independent panels (not in the main form) */}
             {activeTab === 'notes'    && <NotesPanel />}
             {activeTab === 'security' && <SecurityPanel />}
+            {activeTab === 'sound'    && <SoundSettingsPanel />}
 
             {/* All other tabs are part of the save form */}
-            {isFormTab && !['security'].includes(activeTab) && (
+            {isFormTab && (
               <form onSubmit={handleSave} className="space-y-8">
 
                 {activeTab === 'branding' && (
