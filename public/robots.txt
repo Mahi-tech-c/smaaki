@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+
+# Block admin routes from indexing
+Disallow: /admin
+Disallow: /admin/
+Disallow: /admin/login
+Disallow: /admin/dashboard
+
+# Block internal/tracking routes
+Disallow: /track/
+Disallow: /table/
+
+# Crawl delay for polite crawlers
+Crawl-delay: 5
+
+# Sitemap location
+Sitemap: https://smaakenzzoo.com/sitemap.xml
