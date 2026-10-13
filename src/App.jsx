@@ -23,6 +23,7 @@ import StickyCartBar from './components/Customer/StickyCartBar';
 import TableBanner from './components/Customer/TableBanner';
 import TableRoute from './components/Customer/TableRoute';
 import OrderTrackingPage from './components/Customer/OrderTrackingPage';
+import PwaInstallPrompt from './components/ui/PwaInstallPrompt';
 
 const AdminAuth = React.lazy(() => import('./components/Admin/AdminAuth'));
 const AdminLogin = React.lazy(() => import('./components/Admin/AdminLogin'));
@@ -157,6 +158,9 @@ const AppContent = () => {
 
       {/* Floating Actions on Mobile (WhatsApp & Phone, stacked without overlapping cart) */}
       {!isAdminPath && <FloatingActions />}
+
+      {/* PWA App Installation Prompt (Mobile / Tablet) */}
+      {!isAdminPath && <PwaInstallPrompt />}
 
       {/* Solid Brand Footer (hidden in admin pages) */}
       {!isAdminPath && <Footer />}

@@ -1,0 +1,73 @@
+{
+  "name": "Smaakenzzoo Artisanal Cafe",
+  "short_name": "Smaakenzzoo",
+  "description": "Artisanal Cafe & Roastery in Warangal, Telangana. Flourishing Hearts, Blooming Dreams.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0f1117",
+  "theme_color": "#db2777",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": [
+    "food",
+    "shopping",
+    "lifestyle"
+  ],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "192x192 256x256 384x384 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Dine-in Order",
+      "short_name": "Dine-in",
+      "description": "Quick scan and order for Cafe Tables",
+      "url": "/table/1",
+      "icons": [
+        {
+          "src": "/favicon.svg",
+          "sizes": "192x192",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "Track Live Order",
+      "short_name": "Track",
+      "description": "Real-time kitchen status and preparation countdown",
+      "url": "/track",
+      "icons": [
+        {
+          "src": "/favicon.svg",
+          "sizes": "192x192",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "Browse Menu",
+      "short_name": "Menu",
+      "description": "Artisanal coffee, waffles, burgers, and sundaes",
+      "url": "/#menu",
+      "icons": [
+        {
+          "src": "/favicon.svg",
+          "sizes": "192x192",
+          "type": "image/svg+xml"
+        }
+      ]
+    }
+  ]
+}
