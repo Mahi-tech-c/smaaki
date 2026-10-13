@@ -76,6 +76,18 @@ export const CheckoutModal = ({
     return () => clearInterval(interval);
   }, [isOpen, paymentMethod]);
 
+  // Handle Escape key to close modal
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && !completedOrder) {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, completedOrder, onClose]);
+
   // Pure recalculation of bill
   const bill = useMemo(() => {
     return recalculateOrderTotals({
@@ -208,6 +220,7 @@ export const CheckoutModal = ({
     <div 
       role="dialog"
       aria-modal="true"
+      aria-labelledby="checkout-modal-title"
       className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200"
       onClick={(e) => {
         if (e.target === e.currentTarget && !completedOrder) onClose();
@@ -219,7 +232,7 @@ export const CheckoutModal = ({
         {/* Header */}
         <div className="flex items-center justify-between pb-3 border-b border-slate-800 shrink-0">
           <div>
-            <h3 className="text-lg font-bold">
+            <h3 id="checkout-modal-title" className="text-lg font-bold">
               {completedOrder ? 'Order Confirmed! 🌸' : 'Checkout & Payment'}
             </h3>
             <p className="text-xs text-slate-400">

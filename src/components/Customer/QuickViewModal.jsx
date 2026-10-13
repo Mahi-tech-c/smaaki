@@ -153,6 +153,9 @@ const QuickViewModalContent = ({
 
   const modalContent = (
     <div 
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="quickview-title"
       className="fixed inset-0 z-[60] flex items-end md:items-center justify-center p-0 md:p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
@@ -208,7 +211,7 @@ const QuickViewModalContent = ({
                 {dietaryType === 'veg' ? 'Vegetarian' : dietaryType === 'egg' ? 'Contains Egg' : 'Non-Vegetarian'}
               </span>
             </div>
-            <h2 className="text-xl sm:text-2xl font-black text-white font-heading">
+            <h2 id="quickview-title" className="text-xl sm:text-2xl font-black text-white font-heading">
               {item.name}
             </h2>
             {cleanDescription && (

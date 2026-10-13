@@ -56,6 +56,16 @@ export const CallWaiterModal = ({ isOpen, onClose, tableNumber }) => {
     return () => clearInterval(interval);
   }, [isOpen, tableNumber]);
 
+  // Close on Escape key
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && !isSubmitting) onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, isSubmitting, onClose]);
+
   if (!isOpen) return null;
 
   const handleCallStaff = async (e) => {

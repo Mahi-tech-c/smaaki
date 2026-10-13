@@ -12,7 +12,11 @@ const Hero = () => {
       <div className="absolute inset-0">
         <img 
           src={settings.homepageBanner || "https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=2000&auto=format&fit=crop"} 
-          alt="Cafe Interior" 
+          alt="Smaakenzzoo Artisanal Cafe Interior" 
+          loading="eager"
+          fetchpriority="high"
+          width="1920"
+          height="1080"
           className="w-full h-full object-cover opacity-30"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-brand-light via-brand-light/40 to-transparent"></div>

@@ -67,7 +67,7 @@ export const Header = () => {
             <Link to="/" className="flex items-center gap-3 shrink-0 group focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-500 rounded-xl p-1">
               <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-pink-600 to-pink-800 text-white flex items-center justify-center shadow-md shadow-pink-600/30 group-hover:scale-105 transition-transform">
                 {settings.logo ? (
-                  <img src={settings.logo} alt="Smaakenzzoo Logo" className="w-6 h-6 object-contain" />
+                  <img src={settings.logo} alt="Smaakenzzoo Logo" width="24" height="24" loading="eager" className="w-6 h-6 object-contain" />
                 ) : (
                   <Coffee className="w-5 h-5 text-white" />
                 )}

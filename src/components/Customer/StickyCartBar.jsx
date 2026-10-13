@@ -24,7 +24,7 @@ export const StickyCartBar = () => {
             <div className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center shrink-0">
               <ShoppingBag className="w-4 h-4 text-white" />
             </div>
-            <div className="text-left leading-tight">
+            <div className="text-left leading-tight" aria-live="polite">
               <span className="text-[11px] font-bold uppercase tracking-wider text-pink-200 block">
                 {cartItemCount} {cartItemCount === 1 ? 'item' : 'items'} in Bag
               </span>

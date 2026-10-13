@@ -74,6 +74,13 @@ const AppContent = () => {
 
   return (
     <div className="min-h-[100dvh] selection:bg-pink-500 selection:text-white flex flex-col relative bg-[#0f1117] text-slate-100">
+      {/* Skip to Main Content Link for Screen Readers & Keyboard Navigation */}
+      <a 
+        href="#main-content" 
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-pink-600 focus:text-white focus:rounded-xl focus:font-bold focus:shadow-2xl focus:outline-none"
+      >
+        Skip to main content
+      </a>
 
       {/* Global First-Visit Splash Screen */}
       {!isAdminPath && <SplashScreen />}
@@ -90,7 +97,7 @@ const AppContent = () => {
       {/* Persistent Dine-in Table Status Banner */}
       {!isAdminPath && <TableBanner />}
 
-      <main className={`flex-grow relative z-10 ${isAdminPath ? '' : 'pt-0'}`}>
+      <main id="main-content" className={`flex-grow relative z-10 ${isAdminPath ? '' : 'pt-0'}`}>
         <div key={location.key} className="page-enter">
           <Routes>
             {/* Main Public Pages */}

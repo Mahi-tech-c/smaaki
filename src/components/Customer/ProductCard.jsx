@@ -221,6 +221,8 @@ export const ProductCard = ({
           alt={item.name}
           loading="lazy"
           decoding="async"
+          width="400"
+          height="300"
           onError={(e) => {
             e.currentTarget.src = FALLBACK_FOOD_IMAGE;
           }}

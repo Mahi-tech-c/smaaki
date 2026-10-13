@@ -1,4 +1,4 @@
-import React, { useContext, useState, useMemo } from 'react';
+import React, { useContext, useState, useMemo, useEffect } from 'react';
 import { 
   X, 
   ShoppingBag, 
@@ -41,6 +41,18 @@ export const CartDrawer = () => {
   const [appliedCoupon, setAppliedCoupon] = useState('');
   const [couponFeedback, setCouponFeedback] = useState(null);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+
+  // Close drawer on Escape key
+  useEffect(() => {
+    if (!isCartOpen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && !isCheckoutOpen) {
+        setIsCartOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isCartOpen, isCheckoutOpen, setIsCartOpen]);
 
   // Recalculate bill using the pure recalculation engine
   const bill = useMemo(() => {
