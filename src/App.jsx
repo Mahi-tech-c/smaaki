@@ -22,6 +22,7 @@ import CartDrawer from './components/Customer/CartDrawer';
 import StickyCartBar from './components/Customer/StickyCartBar';
 import TableBanner from './components/Customer/TableBanner';
 import TableRoute from './components/Customer/TableRoute';
+import OrderTrackingPage from './components/Customer/OrderTrackingPage';
 
 const AdminAuth = React.lazy(() => import('./components/Admin/AdminAuth'));
 const AdminLogin = React.lazy(() => import('./components/Admin/AdminLogin'));
@@ -94,6 +95,8 @@ const AppContent = () => {
             {/* Main Public Pages */}
             <Route path="/" element={<><Hero /><FeaturedSection /></>} />
             <Route path="/table/:id" element={<TableRoute />} />
+            <Route path="/track/:orderId" element={<OrderTrackingPage />} />
+            <Route path="/track" element={<OrderTrackingPage />} />
             <Route path="/menu" element={<MenuSection />} />
             <Route path="/offers" element={<OffersSection />} />
 

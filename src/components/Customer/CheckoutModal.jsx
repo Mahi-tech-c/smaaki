@@ -23,6 +23,7 @@ import { useToast } from '../ui/Toast';
 import { db, COLLECTIONS } from '../../firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { AppContext } from '../../context/AppContext';
+import { useNavigate } from 'react-router-dom';
 
 export const CheckoutModal = ({
   isOpen,
@@ -36,6 +37,7 @@ export const CheckoutModal = ({
 }) => {
   const { showToast } = useToast();
   const { currentTable, activeTableOrder } = useContext(AppContext);
+  const navigate = useNavigate();
 
   // Read table from currentTable, session/local storage, or query params (?table=4)
   const initialTable = useMemo(() => {
@@ -182,7 +184,8 @@ export const CheckoutModal = ({
       if (settings.whatsapp) {
         const waNumber = settings.whatsapp.replace(/\D/g, '');
         const isAddOn = orderType === 'dine-in' && activeTableOrder;
-        const waMsg = `*New Order Placed: #${newOrder.orderId}*${isAddOn ? ` [Add-on to Order #${activeTableOrder.orderId}]` : ''}\n*Customer:* ${newOrder.customerName} (${newOrder.customerPhone})\n*Type:* ${orderType.toUpperCase()} ${orderType === 'dine-in' ? `(Table ${tableNumber})` : ''}\n*Items:* ${bill.itemCount} items\n*Total:* ₹${bill.grandTotal}\n*Payment:* ${newOrder.paymentStatus}`;
+        const trackUrl = `${window.location.origin}/track/${newOrder.orderId}`;
+        const waMsg = `*New Order Placed: #${newOrder.orderId}*${isAddOn ? ` [Add-on to Order #${activeTableOrder.orderId}]` : ''}\n*Customer:* ${newOrder.customerName} (${newOrder.customerPhone})\n*Type:* ${orderType.toUpperCase()} ${orderType === 'dine-in' ? `(Table ${tableNumber})` : ''}\n*Items:* ${bill.itemCount} items\n*Total:* ₹${bill.grandTotal}\n*Payment:* ${newOrder.paymentStatus}\n*Track Status:* ${trackUrl}`;
         const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(waMsg)}`;
         window.open(waUrl, '_blank');
       }
@@ -279,13 +282,31 @@ export const CheckoutModal = ({
                 Average wait time is 15-20 minutes. You can track this order anytime from the top bar!
               </p>
 
-              <button
-                type="button"
-                onClick={onClose}
-                className="w-full py-3 rounded-2xl bg-pink-600 hover:bg-pink-700 text-white font-bold text-xs uppercase tracking-wider transition-all"
-              >
-                Back to Cafe Menu
-              </button>
+              <div className="space-y-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClose();
+                    navigate(`/track/${completedOrder.orderId}`);
+                  }}
+                  className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 text-white font-bold text-sm tracking-wide shadow-lg shadow-pink-600/25 transition-all flex items-center justify-center gap-2 group"
+                >
+                  <span className="relative flex h-2.5 w-2.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-white"></span>
+                  </span>
+                  <span>Track Live Order Status</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="w-full py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold text-xs uppercase tracking-wider transition-all"
+                >
+                  Back to Cafe Menu
+                </button>
+              </div>
             </div>
           ) : (
             /* Checkout Form */

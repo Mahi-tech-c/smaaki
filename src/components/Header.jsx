@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   Coffee, 
   ShoppingBag, 
@@ -11,9 +11,7 @@ import {
   MapPin, 
   Phone, 
   X,
-  Compass,
-  CheckCircle2,
-  AlertCircle
+  Compass
 } from 'lucide-react';
 import { AppContext } from '../context/AppContext';
 import { useTheme } from '../context/ThemeContext';
@@ -24,13 +22,13 @@ export const Header = () => {
   const { settings, cartItemCount, setIsCartOpen, offers } = useContext(AppContext);
   const { toggleTheme, isDark } = useTheme();
   const location = useLocation();
+  const navigate = useNavigate();
   const { scrollDirection } = useScrollDirection();
 
   // Status calculation for Asia/Kolkata
   const [liveStatus, setLiveStatus] = useState(() => getKolkataStatus(settings));
   const [isTrackModalOpen, setIsTrackModalOpen] = useState(false);
   const [orderIdInput, setOrderIdInput] = useState('');
-  const [trackingResult, setTrackingResult] = useState(null);
 
   // Update status every 60 seconds
   useEffect(() => {
@@ -54,32 +52,8 @@ export const Header = () => {
     e.preventDefault();
     if (!orderIdInput.trim()) return;
     const cleanId = orderIdInput.trim().toUpperCase();
-    
-    // Check localStorage for past orders or recent orders
-    let foundOrder = null;
-    try {
-      const orders = JSON.parse(localStorage.getItem('smaakenzzoo_recent_orders') || '[]');
-      foundOrder = orders.find(o => String(o.id).toUpperCase().includes(cleanId) || String(o.orderId).toUpperCase().includes(cleanId));
-    } catch {
-      foundOrder = null;
-    }
-
-    if (foundOrder) {
-      setTrackingResult({
-        found: true,
-        id: foundOrder.orderId || foundOrder.id,
-        status: foundOrder.status || 'Received',
-        estimatedMinutes: foundOrder.estimatedMinutes || 20,
-        itemsCount: foundOrder.items?.length || 1,
-        time: foundOrder.createdAt ? new Date(foundOrder.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Recently'
-      });
-    } else {
-      setTrackingResult({
-        found: false,
-        id: cleanId,
-        message: 'No live order matching this ID yet. For live assistance, tap our WhatsApp support button.'
-      });
-    }
+    setIsTrackModalOpen(false);
+    navigate(`/track/${cleanId}`);
   };
 
   return (
@@ -146,27 +120,33 @@ export const Header = () => {
                 );
               })}
               {/* Track Order Link */}
-              <button
-                type="button"
-                onClick={() => setIsTrackModalOpen(true)}
-                className="px-4 py-1.5 rounded-full text-slate-300 hover:text-white hover:bg-slate-800 transition-all duration-150 cursor-pointer"
+              <Link
+                to="/track"
+                className={`px-4 py-1.5 rounded-full transition-all duration-150 ${
+                  location.pathname.startsWith('/track')
+                    ? 'bg-pink-600 text-white shadow-sm font-bold'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                }`}
               >
                 Track Order
-              </button>
+              </Link>
             </nav>
 
             {/* Action Tools (Right) */}
             <div className="flex items-center gap-2 sm:gap-3">
               {/* Track Order Mobile Icon */}
-              <button
-                type="button"
-                onClick={() => setIsTrackModalOpen(true)}
-                className="lg:hidden p-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl transition-colors"
+              <Link
+                to="/track"
+                className={`lg:hidden p-2 rounded-xl transition-colors ${
+                  location.pathname.startsWith('/track')
+                    ? 'text-pink-400 bg-slate-800'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                }`}
                 title="Track Order"
                 aria-label="Track Order"
               >
                 <Compass className="w-5 h-5" />
-              </button>
+              </Link>
 
               {/* Theme Toggle (Dark / Light) */}
               <button
@@ -295,32 +275,6 @@ export const Header = () => {
                 Track Live Status
               </button>
             </form>
-
-            {trackingResult && (
-              <div className="mt-5 p-4 rounded-2xl bg-slate-800/80 border border-slate-700 text-xs space-y-2 animate-in fade-in duration-150">
-                {trackingResult.found ? (
-                  <>
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-emerald-400 flex items-center gap-1.5">
-                        <CheckCircle2 className="w-4 h-4" /> Order Active
-                      </span>
-                      <span className="text-slate-400">Placed at {trackingResult.time}</span>
-                    </div>
-                    <p className="font-semibold text-slate-200">
-                      Status: <span className="text-pink-400 font-bold">{trackingResult.status}</span>
-                    </p>
-                    <p className="text-slate-400">
-                      Estimated Prep Time: ~{trackingResult.estimatedMinutes} mins
-                    </p>
-                  </>
-                ) : (
-                  <div className="flex items-start gap-2.5 text-slate-300">
-                    <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-                    <span>{trackingResult.message}</span>
-                  </div>
-                )}
-              </div>
-            )}
           </div>
         </div>
       )}

@@ -182,6 +182,8 @@ export const recalculateOrderTotals = ({
       selectedAddOns: verifiedAddOns,
       spiceLevel: cartItem.spiceLevel || null,
       specialInstructions: cartItem.specialInstructions || '',
+      prepMinutes: Number(catalogItem?.prepMinutes) || Number(cartItem?.prepMinutes) || 15,
+      image: catalogItem?.image || cartItem?.image || null,
       lineTotal
     };
   });
