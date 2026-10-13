@@ -4,5 +4,14 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss()]
+  plugins: [react(), tailwindcss()],
+  test: {
+    environment: 'node',
+    include: ['src/**/*.test.{js,jsx}'],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'html'],
+      include: ['src/utils/**']
+    }
+  }
 });
