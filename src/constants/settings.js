@@ -22,6 +22,7 @@ export const DEFAULT_SETTINGS = {
   fssaiNumber: '[FSSAI_NUMBER]',
   gstNumber: '[GST_NUMBER_IF_ANY]',
   currencySymbol: '₹',
+  maxTables: 20,
   upiId: '',
   taxNote: 'Exclusive of all taxes',
   menuDisclaimer: 'Images are for reference only; actual items may look slightly different.',

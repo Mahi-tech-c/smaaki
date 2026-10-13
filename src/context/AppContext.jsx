@@ -47,6 +47,84 @@ export const AppProvider = ({ children }) => {
   const [featured, setFeatured] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
 
+  // Table State for QR Dine-in Experience
+  const [currentTable, setCurrentTableState] = useState(() => {
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlTable = urlParams.get('table');
+      if (urlTable) return urlTable;
+      return sessionStorage.getItem('smaakenzzoo_table') || localStorage.getItem('smaakenzzoo_table') || null;
+    } catch {
+      return null;
+    }
+  });
+
+  // Helper to read active table orders in the last 2 hours
+  const getActiveTableOrderFromStorage = useCallback((table) => {
+    if (!table) return null;
+    try {
+      const twoHoursAgo = Date.now() - 2 * 60 * 60 * 1000;
+      const recentOrders = JSON.parse(localStorage.getItem('smaakenzzoo_recent_orders') || '[]');
+      const tableOrders = recentOrders.filter(o => 
+        String(o.tableNumber) === String(table) && 
+        new Date(o.createdAt).getTime() > twoHoursAgo
+      );
+
+      if (tableOrders.length > 0) {
+        const totalBill = tableOrders.reduce((sum, o) => sum + (Number(o.grandTotal) || 0), 0);
+        return {
+          ...tableOrders[0],
+          grandTotal: totalBill,
+          orderCount: tableOrders.length,
+          orders: tableOrders
+        };
+      }
+    } catch {
+      // ignore
+    }
+    return null;
+  }, []);
+
+  // Active orders for this table in the last 2 hours
+  const [activeTableOrder, setActiveTableOrder] = useState(() => {
+    return getActiveTableOrderFromStorage(currentTable);
+  });
+
+  const setCurrentTable = useCallback((table) => {
+    const clean = table ? String(table).trim() : null;
+    setCurrentTableState(clean);
+    setActiveTableOrder(getActiveTableOrderFromStorage(clean));
+    try {
+      if (clean) {
+        sessionStorage.setItem('smaakenzzoo_table', clean);
+        localStorage.setItem('smaakenzzoo_table', clean);
+      } else {
+        sessionStorage.removeItem('smaakenzzoo_table');
+        localStorage.removeItem('smaakenzzoo_table');
+      }
+    } catch {
+      // storage error fallback
+    }
+  }, [getActiveTableOrderFromStorage]);
+
+  const clearTable = useCallback(() => {
+    setCurrentTableState(null);
+    setActiveTableOrder(null);
+    try {
+      sessionStorage.removeItem('smaakenzzoo_table');
+      localStorage.removeItem('smaakenzzoo_table');
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveTableOrder(getActiveTableOrderFromStorage(currentTable));
+    }, 10000);
+    return () => clearInterval(interval);
+  }, [currentTable, getActiveTableOrderFromStorage]);
+
   // Cart State for interactive customer experience
   const [cart, setCart] = useState(() => {
     try {
@@ -427,7 +505,12 @@ export const AppProvider = ({ children }) => {
       cartTotal,
       cartItemCount,
       isCartOpen,
-      setIsCartOpen
+      setIsCartOpen,
+      // Dine-in Table State
+      currentTable,
+      setCurrentTable,
+      clearTable,
+      activeTableOrder
     }}>
       {children}
     </AppContext.Provider>

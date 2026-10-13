@@ -1,14 +1,26 @@
-import { LayoutGrid, Gift, Settings, LogOut, X, ChevronRight, QrCode, Sparkles, Shield, Home, Globe } from 'lucide-react';
+import { LayoutGrid, Gift, Settings, LogOut, X, ChevronRight, QrCode, Sparkles, Shield, Home, Globe, Bell } from 'lucide-react';
 
-const AdminSidebar = ({ activeTab, setActiveTab, isOpen, setIsOpen, onLogout, onShowQr, user, userRole }) => {
+const AdminSidebar = ({ 
+  activeTab, 
+  setActiveTab, 
+  isOpen, 
+  setIsOpen, 
+  onLogout, 
+  onShowQr, 
+  onShowCalls,
+  waiterCallsCount = 0,
+  user, 
+  userRole 
+}) => {
   const menuItems = [
     { id: 'menu', label: 'Menu Items', icon: LayoutGrid, color: 'text-pink-600', bg: 'bg-pink-50' },
+    { id: 'calls', label: 'Waiter Calls', icon: Bell, color: 'text-amber-600', bg: 'bg-amber-50', isAction: true, count: waiterCallsCount },
     { id: 'home_editor', label: 'Home Page', icon: Home, color: 'text-pink-600', bg: 'bg-pink-50' },
     { id: 'menu_editor', label: 'Menu Page', icon: Sparkles, color: 'text-pink-600', bg: 'bg-pink-50' },
     { id: 'featured', label: 'Featured Items', icon: Sparkles, color: 'text-amber-600', bg: 'bg-amber-50' },
     { id: 'offers', label: 'Special Offers', icon: Gift, color: 'text-purple-600', bg: 'bg-purple-50' },
     { id: 'domain', label: 'Domain Setup', icon: Globe, color: 'text-blue-600', bg: 'bg-blue-50' },
-    { id: 'qr', label: 'Menu QR Code', icon: QrCode, color: 'text-pink-600', bg: 'bg-pink-50', isAction: true },
+    { id: 'qr', label: 'Table & Menu QR', icon: QrCode, color: 'text-pink-600', bg: 'bg-pink-50', isAction: true },
     { id: 'settings', label: 'Settings', icon: Settings, color: 'text-gray-600', bg: 'bg-gray-50' },
   ];
 
@@ -55,8 +67,10 @@ const AdminSidebar = ({ activeTab, setActiveTab, isOpen, setIsOpen, onLogout, on
                 <button
                   key={item.id}
                   onClick={() => {
-                    if (item.isAction) {
-                      onShowQr();
+                    if (item.id === 'calls') {
+                      onShowCalls?.();
+                    } else if (item.isAction) {
+                      onShowQr?.();
                     } else {
                       setActiveTab(item.id);
                     }
@@ -72,7 +86,14 @@ const AdminSidebar = ({ activeTab, setActiveTab, isOpen, setIsOpen, onLogout, on
                     <Icon size={20} className={isActive ? item.color : 'text-gray-400 group-hover:text-gray-600'} />
                     <span className="font-bold text-sm tracking-tight">{item.label}</span>
                   </div>
-                  {!item.isAction && isActive && <ChevronRight size={16} className="opacity-50" />}
+                  <div className="flex items-center gap-1.5">
+                    {item.count > 0 && (
+                      <span className="px-2 py-0.5 rounded-full bg-amber-500 text-white font-extrabold text-[11px] animate-pulse shadow-sm">
+                        {item.count}
+                      </span>
+                    )}
+                    {!item.isAction && isActive && <ChevronRight size={16} className="opacity-50" />}
+                  </div>
                 </button>
               );
             })}

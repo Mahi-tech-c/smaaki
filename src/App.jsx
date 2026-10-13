@@ -20,6 +20,8 @@ import FeaturedSection from './components/FeaturedSection';
 import BlossomBackground from './components/BlossomBackground';
 import CartDrawer from './components/Customer/CartDrawer';
 import StickyCartBar from './components/Customer/StickyCartBar';
+import TableBanner from './components/Customer/TableBanner';
+import TableRoute from './components/Customer/TableRoute';
 
 const AdminAuth = React.lazy(() => import('./components/Admin/AdminAuth'));
 const AdminLogin = React.lazy(() => import('./components/Admin/AdminLogin'));
@@ -83,11 +85,15 @@ const AppContent = () => {
       {/* Sticky, 100% Opaque Header (hidden in admin pages) */}
       {!isAdminPath && <Header />}
 
+      {/* Persistent Dine-in Table Status Banner */}
+      {!isAdminPath && <TableBanner />}
+
       <main className={`flex-grow relative z-10 ${isAdminPath ? '' : 'pt-0'}`}>
         <div key={location.key} className="page-enter">
           <Routes>
             {/* Main Public Pages */}
             <Route path="/" element={<><Hero /><FeaturedSection /></>} />
+            <Route path="/table/:id" element={<TableRoute />} />
             <Route path="/menu" element={<MenuSection />} />
             <Route path="/offers" element={<OffersSection />} />
 

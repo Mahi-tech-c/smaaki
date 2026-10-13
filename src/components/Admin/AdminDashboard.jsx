@@ -15,7 +15,9 @@ import {
   Smartphone, 
   Sparkles,
   Printer,
-  FileImage
+  FileImage,
+  Bell,
+  Utensils
 } from 'lucide-react';
 import { QRCodeCanvas } from 'qrcode.react';
 import AdminItemForm from './AdminItemForm';
@@ -32,7 +34,7 @@ import AdminUsersPanel from './AdminUsersPanel';
 
 import { auth, db, COLLECTIONS } from '../../firebase';
 import { signOut } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, query, onSnapshot, updateDoc, serverTimestamp } from 'firebase/firestore';
 
 const AdminDashboard = () => {
   const { deleteItem, settings } = useContext(AppContext);
@@ -63,9 +65,46 @@ const AdminDashboard = () => {
   const [isQrModalOpen, setIsQrModalOpen] = useState(false);
   
   // Developer QR Management States
-  const [qrTargetMode, setQrTargetMode] = useState('home'); // 'home' (default storefront) | 'menu' | 'custom'
+  const [qrTargetMode, setQrTargetMode] = useState('table'); // 'table' | 'home' | 'menu' | 'custom'
+  const [selectedTableNumber, setSelectedTableNumber] = useState(1);
   const [customQrUrl, setCustomQrUrl] = useState('');
   const [copiedUrl, setCopiedUrl] = useState(false);
+
+  // Live Waiter Calls Management
+  const [tableCalls, setTableCalls] = useState([]);
+  const [isCallsModalOpen, setIsCallsModalOpen] = useState(false);
+
+  React.useEffect(() => {
+    try {
+      const q = query(collection(db, COLLECTIONS?.tableCalls || 'table_calls'));
+      const unsub = onSnapshot(q, (snapshot) => {
+        const list = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        const active = list.filter(c => !c.resolved);
+        active.sort((a, b) => {
+          const tA = a.timestamp?.toMillis ? a.timestamp.toMillis() : new Date(a.createdAt || 0).getTime();
+          const tB = b.timestamp?.toMillis ? b.timestamp.toMillis() : new Date(b.createdAt || 0).getTime();
+          return tB - tA;
+        });
+        setTableCalls(active);
+      }, (err) => {
+        console.warn("Table calls listener err:", err);
+      });
+      return () => unsub();
+    } catch (e) {
+      console.warn("Table calls listener setup:", e);
+    }
+  }, []);
+
+  const handleResolveCall = async (callId) => {
+    try {
+      await updateDoc(doc(db, COLLECTIONS?.tableCalls || 'table_calls', callId), {
+        resolved: true,
+        resolvedAt: serverTimestamp()
+      });
+    } catch (e) {
+      console.error("Failed to resolve call:", e);
+    }
+  };
 
   const navigate = useNavigate();
 
@@ -87,6 +126,9 @@ const AdminDashboard = () => {
     
     const cleanBase = (base || origin).replace(/\/+$/, '');
 
+    if (qrTargetMode === 'table') {
+      return `${cleanBase}/table/${selectedTableNumber}`;
+    }
     if (qrTargetMode === 'home') {
       return `${cleanBase}/`;
     }
@@ -97,7 +139,7 @@ const AdminDashboard = () => {
       return customQrUrl.trim() || `${cleanBase}/`;
     }
     return `${cleanBase}/`;
-  }, [qrTargetMode, customQrUrl, settings.customDomain, settings.domain]);
+  }, [qrTargetMode, selectedTableNumber, customQrUrl, settings.customDomain, settings.domain]);
 
   const copyQrUrl = () => {
     navigator.clipboard.writeText(resolvedQrUrl);
@@ -111,7 +153,10 @@ const AdminDashboard = () => {
     const pngUrl = originalCanvas.toDataURL("image/png");
     const downloadLink = document.createElement("a");
     downloadLink.href = pngUrl;
-    downloadLink.download = `${(settings.restaurantName || "Smaakii").replace(/\s+/g, '-')}-QR-Code.png`;
+    const fileName = qrTargetMode === 'table' 
+      ? `Smaakenzzoo-Table-${selectedTableNumber}-QR.png` 
+      : `${(settings.restaurantName || "Smaakenzzoo").replace(/\s+/g, '-')}-QR-Code.png`;
+    downloadLink.download = fileName;
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
@@ -145,17 +190,42 @@ const AdminDashboard = () => {
     // 3. Header Brand
     ctx.fillStyle = "#FFFFFF";
     ctx.textAlign = "center";
-    ctx.font = "bold 85px 'Outfit', system-ui, sans-serif";
-    ctx.fillText(settings.restaurantName || "Smaakii", width / 2, 210);
+    ctx.font = "bold 80px 'Outfit', system-ui, sans-serif";
+    ctx.fillText(settings.restaurantName || "Smaakenzzoo", width / 2, 190);
     
     ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
-    ctx.font = "bold 32px 'Inter', system-ui, sans-serif";
-    ctx.fillText(settings.tagline ? settings.tagline.toUpperCase() : "DIGITAL STOREFRONT & MENU • SCAN TO ORDER", width / 2, 290);
+    ctx.font = "bold 28px 'Inter', system-ui, sans-serif";
+    ctx.fillText(
+      qrTargetMode === 'table'
+        ? "ARTISANAL CAFE • WARANGAL, TELANGANA"
+        : (settings.tagline ? settings.tagline.toUpperCase() : "DIGITAL STOREFRONT & MENU • SCAN TO ORDER"),
+      width / 2, 
+      250
+    );
+
+    // Table Badge (if table mode)
+    if (qrTargetMode === 'table') {
+      const badgeText = `TABLE ${String(selectedTableNumber).padStart(2, '0')}`;
+      ctx.font = "900 46px 'Outfit', system-ui, sans-serif";
+      const textWidth = ctx.measureText(badgeText).width;
+      const pillW = textWidth + 80;
+      const pillH = 70;
+      const pillX = (width - pillW) / 2;
+      const pillY = 285;
+
+      ctx.fillStyle = "#FFFFFF";
+      ctx.beginPath();
+      ctx.roundRect(pillX, pillY, pillW, pillH, 35);
+      ctx.fill();
+
+      ctx.fillStyle = "#db2777";
+      ctx.fillText(badgeText, width / 2, pillY + 50);
+    }
 
     // 4. White Card Container for QR Code
     const boxSize = 820;
     const boxX = (width - boxSize) / 2;
-    const boxY = 380;
+    const boxY = qrTargetMode === 'table' ? 390 : 380;
     const radius = 60;
 
     // Card Glow / Drop Shadow with soft pink tint
@@ -189,26 +259,105 @@ const AdminDashboard = () => {
 
     // 6. Action Callouts
     ctx.fillStyle = "#FFFFFF";
-    ctx.font = "900 75px 'Outfit', system-ui, sans-serif";
-    ctx.fillText("SCAN TO BROWSE & ORDER", width / 2, boxY + boxSize + 170);
+    ctx.font = "900 70px 'Outfit', system-ui, sans-serif";
+    ctx.fillText(
+      qrTargetMode === 'table' ? "SCAN TO ORDER & PAY" : "SCAN TO BROWSE & ORDER", 
+      width / 2, 
+      boxY + boxSize + 160
+    );
     
     ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
-    ctx.font = "500 36px 'Inter', system-ui, sans-serif";
-    ctx.fillText("Point your smartphone camera to open live catalog", width / 2, boxY + boxSize + 245);
+    ctx.font = "500 32px 'Inter', system-ui, sans-serif";
+    ctx.fillText(
+      qrTargetMode === 'table'
+        ? `Food freshly prepared & brought directly to Table ${selectedTableNumber}`
+        : "Point your smartphone camera to open live catalog", 
+      width / 2, 
+      boxY + boxSize + 230
+    );
 
     // 7. Footer Direct Link
     ctx.fillStyle = "#fbcfe8";
-    ctx.font = "bold 32px 'Inter', system-ui, sans-serif";
+    ctx.font = "bold 30px 'Inter', system-ui, sans-serif";
     const displayDomain = resolvedQrUrl.replace(/^https?:\/\//, '');
     ctx.fillText(displayDomain, width / 2, height - 90);
 
     const finalJpegUrl = canvas.toDataURL("image/jpeg", 0.95);
     const downloadLink = document.createElement("a");
     downloadLink.href = finalJpegUrl;
-    downloadLink.download = `${(settings.restaurantName || "Smaakii").replace(/\s+/g, '-')}-Menu-QR-Flyer.jpg`;
+    const flyerName = qrTargetMode === 'table'
+      ? `Smaakenzzoo-Table-${selectedTableNumber}-QR-Flyer.jpg`
+      : `${(settings.restaurantName || "Smaakenzzoo").replace(/\s+/g, '-')}-Menu-QR-Flyer.jpg`;
+    downloadLink.download = flyerName;
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
+  };
+
+  const handleBatchPrintTables = () => {
+    const maxTables = Number(settings.maxTables) || 20;
+    const origin = typeof window !== 'undefined' ? window.location.origin : '';
+    const base = settings.customDomain 
+      ? (settings.customDomain.startsWith('http') ? settings.customDomain : `https://${settings.customDomain}`)
+      : (settings.domain ? (settings.domain.startsWith('http') ? settings.domain : `https://${settings.domain}`) : origin);
+    const cleanBase = (base || origin).replace(/\/+$/, '');
+
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) return;
+
+    let cardsHtml = '';
+    for (let i = 1; i <= maxTables; i++) {
+      const tableUrl = `${cleanBase}/table/${i}`;
+      const qrImgUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(tableUrl)}&color=db-27-77`;
+      cardsHtml += `
+        <div class="card">
+          <div class="header">
+            <div class="logo-title">${settings.restaurantName || 'Smaakenzzoo'}</div>
+            <div class="tagline">Artisanal Cafe • Warangal</div>
+          </div>
+          <div class="table-badge">TABLE ${String(i).padStart(2, '0')}</div>
+          <div class="qr-box">
+            <img src="${qrImgUrl}" alt="QR Table ${i}" />
+          </div>
+          <div class="cta">SCAN TO ORDER & PAY</div>
+          <div class="sub">Freshly prepared & served to your table</div>
+          <div class="footer">${tableUrl.replace(/^https?:\/\//, '')}</div>
+        </div>
+      `;
+    }
+
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Smaakenzzoo Table QRs (Tables 1 to ${maxTables})</title>
+          <style>
+            @page { size: A4; margin: 10mm; }
+            body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #fff; margin: 0; padding: 0; }
+            .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12mm; }
+            .card { page-break-inside: avoid; border: 2.5px dashed #db2777; border-radius: 18px; padding: 22px; text-align: center; background: #fff; box-shadow: 0 4px 12px rgba(219,39,119,0.08); }
+            .header { margin-bottom: 6px; }
+            .logo-title { font-size: 26px; font-weight: 900; color: #db2777; letter-spacing: -0.5px; }
+            .tagline { font-size: 11px; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+            .table-badge { display: inline-block; background: #db2777; color: #fff; font-size: 20px; font-weight: 900; padding: 6px 24px; border-radius: 30px; margin: 10px 0; }
+            .qr-box { margin: 10px auto; width: 175px; height: 175px; padding: 10px; border: 2px solid #fce7f3; border-radius: 16px; background: #fff; }
+            .qr-box img { width: 100%; height: 100%; display: block; }
+            .cta { font-size: 15px; font-weight: 900; color: #0f172a; letter-spacing: 0.5px; margin-top: 8px; }
+            .sub { font-size: 11px; color: #64748b; margin-top: 4px; }
+            .footer { font-size: 10px; color: #db2777; font-weight: 700; margin-top: 8px; font-family: monospace; }
+          </style>
+        </head>
+        <body>
+          <div class="grid">
+            ${cardsHtml}
+          </div>
+          <script>
+            window.onload = function() { window.print(); }
+          </script>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
   };
 
   return (
@@ -221,6 +370,8 @@ const AdminDashboard = () => {
         setIsOpen={setIsSidebarOpen}
         onLogout={handleLogout}
         onShowQr={() => setIsQrModalOpen(true)}
+        onShowCalls={() => setIsCallsModalOpen(true)}
+        waiterCallsCount={tableCalls.length}
         user={auth.currentUser}
         userRole={userRole}
       />
@@ -231,12 +382,23 @@ const AdminDashboard = () => {
         <header className="lg:hidden bg-white border-b border-pink-100 p-4 flex items-center justify-between sticky top-0 z-30">
           <button 
             onClick={() => setIsSidebarOpen(true)}
-            className="p-2 hover:bg-pink-50 rounded-xl text-pink-600"
+            className="p-2 hover:bg-pink-50 rounded-xl text-pink-600 cursor-pointer"
           >
             <MenuIcon size={24} />
           </button>
           <h1 className="text-xl font-bold text-pink-900">Admin Panel</h1>
-          <div className="w-10"></div> {/* Spacer */}
+          <button
+            onClick={() => setIsCallsModalOpen(true)}
+            className="relative p-2 text-pink-600 hover:bg-pink-50 rounded-xl transition-colors cursor-pointer"
+            title="Active Waiter Calls"
+          >
+            <Bell size={22} />
+            {tableCalls.length > 0 && (
+              <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-amber-500 text-white font-extrabold text-[10px] flex items-center justify-center animate-pulse">
+                {tableCalls.length}
+              </span>
+            )}
+          </button>
         </header>
 
         <main className="flex-1 p-4 md:p-8 overflow-y-auto">
@@ -363,11 +525,27 @@ const AdminDashboard = () => {
                 <label className="block text-xs font-extrabold uppercase tracking-wider text-gray-500 mb-2">
                   1. Scan Destination Route
                 </label>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setQrTargetMode('table')}
+                    className={`px-3 py-2.5 rounded-xl text-xs font-bold border transition-all text-left flex flex-col gap-0.5 cursor-pointer ${
+                      qrTargetMode === 'table'
+                        ? 'bg-slate-950 text-white border-slate-950 shadow-xs ring-2 ring-pink-500'
+                        : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'
+                    }`}
+                  >
+                    <span className="flex items-center justify-between">
+                      <span className="font-extrabold text-pink-600">Table QR</span>
+                      <span className="text-[9px] px-1.5 py-0.5 rounded font-black bg-pink-100 text-pink-700">DINE-IN</span>
+                    </span>
+                    <span className="text-[10px] opacity-70">Dedicated /table/:id</span>
+                  </button>
+
                   <button
                     type="button"
                     onClick={() => setQrTargetMode('home')}
-                    className={`px-3 py-2.5 rounded-xl text-xs font-bold border transition-all text-left flex flex-col gap-0.5 ${
+                    className={`px-3 py-2.5 rounded-xl text-xs font-bold border transition-all text-left flex flex-col gap-0.5 cursor-pointer ${
                       qrTargetMode === 'home'
                         ? 'bg-slate-950 text-white border-slate-950 shadow-xs'
                         : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'
@@ -375,39 +553,88 @@ const AdminDashboard = () => {
                   >
                     <span className="flex items-center justify-between">
                       <span>Home Page</span>
-                      <span className={`text-[9px] px-1.5 py-0.5 rounded font-black ${
-                        qrTargetMode === 'home' ? 'bg-emerald-400 text-slate-950' : 'bg-emerald-100 text-emerald-700'
-                      }`}>DEFAULT</span>
+                      <span className="text-[9px] px-1.5 py-0.5 rounded font-black bg-emerald-100 text-emerald-700">DEFAULT</span>
                     </span>
-                    <span className="text-[10px] opacity-70">Welcome & Storefront (/)</span>
+                    <span className="text-[10px] opacity-70">Storefront (/)</span>
                   </button>
 
                   <button
                     type="button"
                     onClick={() => setQrTargetMode('menu')}
-                    className={`px-3 py-2.5 rounded-xl text-xs font-bold border transition-all text-left flex flex-col gap-0.5 ${
+                    className={`px-3 py-2.5 rounded-xl text-xs font-bold border transition-all text-left flex flex-col gap-0.5 cursor-pointer ${
                       qrTargetMode === 'menu'
                         ? 'bg-slate-950 text-white border-slate-950 shadow-xs'
                         : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'
                     }`}
                   >
                     <span>Direct Menu</span>
-                    <span className="text-[10px] opacity-70">Direct catalog (/menu)</span>
+                    <span className="text-[10px] opacity-70">Catalog (/menu)</span>
                   </button>
 
                   <button
                     type="button"
                     onClick={() => setQrTargetMode('custom')}
-                    className={`px-3 py-2.5 rounded-xl text-xs font-bold border transition-all text-left flex flex-col gap-0.5 ${
+                    className={`px-3 py-2.5 rounded-xl text-xs font-bold border transition-all text-left flex flex-col gap-0.5 cursor-pointer ${
                       qrTargetMode === 'custom'
                         ? 'bg-slate-950 text-white border-slate-950 shadow-xs'
                         : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'
                     }`}
                   >
-                    <span>Custom / Wi-Fi IP</span>
-                    <span className="text-[10px] opacity-70">Manual URL override</span>
+                    <span>Custom / IP</span>
+                    <span className="text-[10px] opacity-70">Manual URL</span>
                   </button>
                 </div>
+
+                {/* Table Picker if Table Mode */}
+                {qrTargetMode === 'table' && (
+                  <div className="mt-3 p-3.5 bg-pink-50/70 rounded-2xl border border-pink-200/80 space-y-2.5 animate-in fade-in">
+                    <div className="flex items-center justify-between">
+                      <label className="text-xs font-bold text-pink-900 flex items-center gap-1.5">
+                        <Utensils size={14} className="text-pink-600" />
+                        <span>Select Dine-In Table</span>
+                      </label>
+                      <button
+                        type="button"
+                        onClick={handleBatchPrintTables}
+                        className="px-3 py-1 rounded-xl bg-pink-600 hover:bg-pink-700 text-white font-bold text-[11px] flex items-center gap-1 transition-all cursor-pointer shadow-sm"
+                      >
+                        <Printer size={13} />
+                        <span>Batch Print Tables 1–{Number(settings.maxTables) || 20}</span>
+                      </button>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <input 
+                        type="number"
+                        min={1}
+                        max={Number(settings.maxTables) || 20}
+                        value={selectedTableNumber}
+                        onChange={(e) => setSelectedTableNumber(Math.max(1, parseInt(e.target.value, 10) || 1))}
+                        className="w-24 px-3 py-1.5 text-sm font-black border border-pink-300 rounded-xl bg-white text-pink-900 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                      />
+                      <span className="text-xs text-pink-700 font-medium">
+                        of {Number(settings.maxTables) || 20} total cafe tables
+                      </span>
+                    </div>
+
+                    <div className="flex flex-wrap gap-1.5 pt-1">
+                      {Array.from({ length: Math.min(10, Number(settings.maxTables) || 20) }, (_, i) => i + 1).map((num) => (
+                        <button
+                          key={num}
+                          type="button"
+                          onClick={() => setSelectedTableNumber(num)}
+                          className={`w-7 h-7 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                            selectedTableNumber === num
+                              ? 'bg-pink-600 text-white shadow-xs'
+                              : 'bg-white text-pink-700 border border-pink-200 hover:bg-pink-100'
+                          }`}
+                        >
+                          {num}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 {qrTargetMode === 'custom' && (
                   <div className="mt-3 animate-in fade-in">
@@ -439,7 +666,7 @@ const AdminDashboard = () => {
                   <button
                     type="button"
                     onClick={copyQrUrl}
-                    className="p-2 rounded-xl bg-white border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors"
+                    className="p-2 rounded-xl bg-white border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
                     title="Copy URL"
                   >
                     {copiedUrl ? <Check size={14} className="text-emerald-600" /> : <Copy size={14} />}
@@ -479,7 +706,11 @@ const AdminDashboard = () => {
 
                 <div className="mt-4 flex items-center gap-2 text-xs font-bold text-pink-700 bg-pink-100/90 px-3.5 py-1.5 rounded-full border border-pink-200/80">
                   <Check size={14} className="stroke-[2.5]" />
-                  <span>Signature Pink QR • Scans to Home Page</span>
+                  <span>
+                    {qrTargetMode === 'table' 
+                      ? `Signature Pink QR • Scans to Table ${selectedTableNumber}` 
+                      : 'Signature Pink QR • Scans to Target URL'}
+                  </span>
                 </div>
               </div>
 
@@ -488,22 +719,95 @@ const AdminDashboard = () => {
                 <button
                   type="button"
                   onClick={downloadQR}
-                  className="flex items-center justify-center gap-2 px-5 py-3.5 bg-gradient-to-r from-pink-600 via-rose-500 to-pink-600 hover:from-pink-700 hover:to-rose-600 text-white rounded-2xl font-bold text-xs uppercase tracking-wider transition-all shadow-lg shadow-pink-200 active:scale-98"
+                  className="flex items-center justify-center gap-2 px-5 py-3.5 bg-gradient-to-r from-pink-600 via-rose-500 to-pink-600 hover:from-pink-700 hover:to-rose-600 text-white rounded-2xl font-bold text-xs uppercase tracking-wider transition-all shadow-lg shadow-pink-200 active:scale-98 cursor-pointer"
                 >
                   <Printer size={16} />
-                  <span>Download Print Flyer</span>
+                  <span>{qrTargetMode === 'table' ? `Download Table ${selectedTableNumber} Flyer` : 'Download Print Flyer'}</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={downloadQRPngOnly}
-                  className="flex items-center justify-center gap-2 px-5 py-3.5 bg-white text-pink-700 border border-pink-200 rounded-2xl font-bold text-xs uppercase tracking-wider hover:bg-pink-50 transition-all shadow-xs active:scale-98"
+                  className="flex items-center justify-center gap-2 px-5 py-3.5 bg-white text-pink-700 border border-pink-200 rounded-2xl font-bold text-xs uppercase tracking-wider hover:bg-pink-50 transition-all shadow-xs active:scale-98 cursor-pointer"
                 >
                   <Download size={16} />
                   <span>Export Pink QR (PNG)</span>
                 </button>
               </div>
 
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+
+      {/* Live Waiter Calls Management Modal */}
+      {isCallsModalOpen && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 bg-slate-950/70 backdrop-blur-md">
+          <div className="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden border border-gray-100 flex flex-col max-h-[85vh] animate-in zoom-in-95">
+            {/* Header */}
+            <div className="px-6 py-4 bg-slate-900 text-white flex items-center justify-between shrink-0">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center">
+                  <Bell size={18} className="fill-current" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-white">Active Waiter Calls</h3>
+                  <p className="text-xs text-slate-400">{tableCalls.length} pending guest requests</p>
+                </div>
+              </div>
+              <button 
+                onClick={() => setIsCallsModalOpen(false)}
+                className="p-1.5 text-slate-400 hover:text-white hover:bg-white/10 rounded-xl transition-all cursor-pointer"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Content List */}
+            <div className="p-5 overflow-y-auto space-y-3 flex-1 custom-scrollbar">
+              {tableCalls.length === 0 ? (
+                <div className="text-center py-12 space-y-2 text-gray-400">
+                  <Check size={36} className="mx-auto text-emerald-500" />
+                  <h4 className="font-bold text-gray-900 text-sm">All Tables Attended</h4>
+                  <p className="text-xs">No pending waiter calls from customers at this time.</p>
+                </div>
+              ) : (
+                tableCalls.map((call) => (
+                  <div 
+                    key={call.id}
+                    className="p-4 rounded-2xl border border-amber-200/80 bg-amber-50/50 flex items-center justify-between gap-3 shadow-xs"
+                  >
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="font-extrabold text-sm text-gray-900">
+                          Table {call.table}
+                        </span>
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-100 text-amber-800 border border-amber-200">
+                          {call.type === 'water' ? '💧 Drinking Water' :
+                           call.type === 'bill' ? '🧾 Request Bill' :
+                           call.type === 'clean' ? '🧹 Clear Table' : '🙋 Call Server'}
+                        </span>
+                      </div>
+                      {call.note && (
+                        <p className="text-xs text-gray-600 italic">
+                          "{call.note}"
+                        </p>
+                      )}
+                      <p className="text-[10px] text-gray-400">
+                        {call.createdAt ? new Date(call.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Just now'}
+                      </p>
+                    </div>
+
+                    <button
+                      onClick={() => handleResolveCall(call.id)}
+                      className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-sm shrink-0"
+                    >
+                      Resolve
+                    </button>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>,

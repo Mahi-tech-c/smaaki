@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useContext } from 'react';
 import { 
   X, 
   CheckCircle2, 
@@ -13,7 +13,8 @@ import {
   CreditCard, 
   Banknote,
   Send,
-  Loader2
+  Loader2,
+  Utensils
 } from 'lucide-react';
 import { formatCurrency } from '../../utils/helpers';
 import { recalculateOrderTotals } from '../../utils/pricing';
@@ -21,6 +22,7 @@ import { buildUpiUri, getUpiAppLinks } from '../../utils/payment';
 import { useToast } from '../ui/Toast';
 import { db, COLLECTIONS } from '../../firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { AppContext } from '../../context/AppContext';
 
 export const CheckoutModal = ({
   isOpen,
@@ -33,16 +35,18 @@ export const CheckoutModal = ({
   onOrderSuccess
 }) => {
   const { showToast } = useToast();
+  const { currentTable, activeTableOrder } = useContext(AppContext);
 
-  // Read table from query params (e.g. ?table=4 from QR scan)
+  // Read table from currentTable, session/local storage, or query params (?table=4)
   const initialTable = useMemo(() => {
+    if (currentTable) return String(currentTable);
     try {
       const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get('table') || '';
+      return urlParams.get('table') || sessionStorage.getItem('smaakenzzoo_table') || localStorage.getItem('smaakenzzoo_table') || '';
     } catch {
       return '';
     }
-  }, []);
+  }, [currentTable]);
 
   // Form State
   const [orderType, setOrderType] = useState(initialTable ? 'dine-in' : 'dine-in'); // 'dine-in' | 'takeaway' | 'delivery'
@@ -137,6 +141,7 @@ export const CheckoutModal = ({
         customerPhone: cleanPhone,
         orderType,
         tableNumber: orderType === 'dine-in' ? tableNumber.trim() : null,
+        isAddOnToOrder: (orderType === 'dine-in' && activeTableOrder) ? (activeTableOrder.orderId || null) : null,
         deliveryAddress: orderType === 'delivery' ? deliveryAddress.trim() : null,
         isScheduled,
         scheduledTime: isScheduled ? scheduledTime : null,
@@ -176,7 +181,8 @@ export const CheckoutModal = ({
       // 3. Optional WhatsApp notification
       if (settings.whatsapp) {
         const waNumber = settings.whatsapp.replace(/\D/g, '');
-        const waMsg = `*New Order Placed: #${newOrder.orderId}*\n*Customer:* ${newOrder.customerName} (${newOrder.customerPhone})\n*Type:* ${orderType.toUpperCase()} ${orderType === 'dine-in' ? `(Table ${tableNumber})` : ''}\n*Items:* ${bill.itemCount} items\n*Total:* ₹${bill.grandTotal}\n*Payment:* ${newOrder.paymentStatus}`;
+        const isAddOn = orderType === 'dine-in' && activeTableOrder;
+        const waMsg = `*New Order Placed: #${newOrder.orderId}*${isAddOn ? ` [Add-on to Order #${activeTableOrder.orderId}]` : ''}\n*Customer:* ${newOrder.customerName} (${newOrder.customerPhone})\n*Type:* ${orderType.toUpperCase()} ${orderType === 'dine-in' ? `(Table ${tableNumber})` : ''}\n*Items:* ${bill.itemCount} items\n*Total:* ₹${bill.grandTotal}\n*Payment:* ${newOrder.paymentStatus}`;
         const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(waMsg)}`;
         window.open(waUrl, '_blank');
       }
@@ -318,6 +324,24 @@ export const CheckoutModal = ({
                   ))}
                 </div>
               </div>
+
+              {/* Active Table Order Banner / Re-order indicator */}
+              {orderType === 'dine-in' && activeTableOrder && (
+                <div className="p-3.5 rounded-2xl bg-emerald-950/40 border border-emerald-800/40 text-xs space-y-1.5 animate-in fade-in">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-emerald-400 flex items-center gap-1.5">
+                      <Utensils className="w-3.5 h-3.5" />
+                      <span>Adding to Table {tableNumber || currentTable}'s Order</span>
+                    </span>
+                    <span className="text-[10px] bg-emerald-900/60 text-emerald-300 font-mono px-2 py-0.5 rounded-full font-bold">
+                      Order #{activeTableOrder.orderId}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-300 leading-relaxed">
+                    Current running bill on this table: <strong className="text-white font-bold">{formatCurrency(activeTableOrder.grandTotal, settings?.currencySymbol || '₹')}</strong>. These new items will be served right to your table.
+                  </p>
+                </div>
+              )}
 
               {/* Table Number (if Dine-in) */}
               {orderType === 'dine-in' && (

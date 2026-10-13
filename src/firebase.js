@@ -30,5 +30,7 @@ export const COLLECTIONS = {
   offers: 'offers',
   settings: 'settings',
   featured: 'featured',
-  adminRoles: 'admin_roles'
+  adminRoles: 'admin_roles',
+  orders: 'orders',
+  tableCalls: 'table_calls'
 };
