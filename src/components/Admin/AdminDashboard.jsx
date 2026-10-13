@@ -26,6 +26,7 @@ import { QRCodeCanvas } from 'qrcode.react';
 import AdminItemForm from './AdminItemForm';
 import { useNavigate } from 'react-router-dom';
 import AdminSidebar from './AdminSidebar';
+import AdminKDS from './AdminKDS';
 import AdminMenuItems from './AdminMenuItems';
 import AdminOffers from './AdminOffers';
 import AdminFeatured from './AdminFeatured';
@@ -138,12 +139,20 @@ const AdminDashboard = () => {
     }
   }, []);
 
-  // Live Kitchen Orders Listener for Incoming Order Chime
+  // Live Kitchen Orders Listener for Incoming Order Chime & Count Badge
+  const [activeOrdersCount, setActiveOrdersCount] = useState(0);
   const initialOrdersLoadedRef = useRef(false);
   useEffect(() => {
     try {
       const ordersQ = query(collection(db, COLLECTIONS?.orders || 'orders'));
       const unsub = onSnapshot(ordersQ, (snapshot) => {
+        // Calculate active unfulfilled orders
+        const count = snapshot.docs.filter(d => {
+          const st = (d.data().status || 'Received').toLowerCase();
+          return st !== 'completed' && st !== 'served' && st !== 'cancelled';
+        }).length;
+        setActiveOrdersCount(count);
+
         if (initialOrdersLoadedRef.current) {
           snapshot.docChanges().forEach(change => {
             if (change.type === 'added') {
@@ -439,6 +448,7 @@ const AdminDashboard = () => {
         onShowQr={() => setIsQrModalOpen(true)}
         onShowCalls={() => setIsCallsModalOpen(true)}
         waiterCallsCount={tableCalls.length}
+        activeOrdersCount={activeOrdersCount}
         user={auth.currentUser}
         userRole={userRole}
       />
@@ -506,7 +516,8 @@ const AdminDashboard = () => {
           <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
               <h2 className="text-3xl font-extrabold text-pink-900 capitalize tracking-tight">
-                {activeTab === 'menu' ? 'Menu Management' : 
+                {activeTab === 'kds' ? 'Kitchen Display System & Live Orders' :
+                 activeTab === 'menu' ? 'Menu Management' : 
                  activeTab === 'home_editor' ? 'Home Page Content' :
                  activeTab === 'menu_editor' ? 'Menu Page Content' :
                  activeTab === 'domain' ? 'Domain Setup' :
@@ -547,6 +558,10 @@ const AdminDashboard = () => {
           </div>
 
           {/* Module Switching */}
+          {activeTab === 'kds' && (
+            <AdminKDS />
+          )}
+
           {activeTab === 'menu' && (
             <AdminMenuItems 
               onAdd={() => { setEditingItem(null); setIsFormOpen(true); }}

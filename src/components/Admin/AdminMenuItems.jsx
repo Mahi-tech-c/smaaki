@@ -3,6 +3,7 @@ import { AppContext } from '../../context/AppContext';
 import { Plus, Search, Edit2, Trash2, LayoutGrid, QrCode, GripVertical, List, ChevronDown, ChevronRight, CheckCircle2, XCircle } from 'lucide-react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import AdminCategories from './AdminCategories';
+import { soundManager } from '../../utils/sound';
 
 const AdminMenuItems = ({ onAdd, onEdit, onDelete }) => {
   const { menuItems, categories: dbCategories, reorderCategory, updateItem } = useContext(AppContext);
@@ -197,25 +198,35 @@ const AdminMenuItems = ({ onAdd, onEdit, onDelete }) => {
 
                                         <div className="flex items-center gap-2">
                                           {/* Quick Toggle Stock status */}
-                                          <button
-                                            onClick={() => updateItem(item.id, { isAvailable: item.isAvailable === false ? true : false })}
-                                            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all border flex items-center gap-1.5 ${
-                                              item.isAvailable === false
-                                                ? 'bg-red-50 text-red-600 border-red-200 hover:bg-red-100'
-                                                : 'bg-green-50 text-green-700 border-green-200 hover:bg-green-100'
-                                            }`}
-                                            title="Click to toggle availability"
-                                          >
-                                            {item.isAvailable === false ? (
-                                              <>
-                                                <XCircle size={14} /> Sold Out
-                                              </>
-                                            ) : (
-                                              <>
-                                                <CheckCircle2 size={14} /> In Stock
-                                              </>
-                                            )}
-                                          </button>
+                                          {(() => {
+                                            const isSoldOut = item.isAvailable === false || item.inStock === false;
+                                            return (
+                                              <button
+                                                type="button"
+                                                onClick={() => {
+                                                  soundManager.playTapSound();
+                                                  const nextVal = isSoldOut;
+                                                  updateItem(item.id, { isAvailable: nextVal, inStock: nextVal });
+                                                }}
+                                                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all border flex items-center gap-1.5 cursor-pointer ${
+                                                  isSoldOut
+                                                    ? 'bg-red-50 text-red-600 border-red-200 hover:bg-red-100'
+                                                    : 'bg-green-50 text-green-700 border-green-200 hover:bg-green-100'
+                                                }`}
+                                                title="Click to toggle availability"
+                                              >
+                                                {isSoldOut ? (
+                                                  <>
+                                                    <XCircle size={14} /> Sold Out
+                                                  </>
+                                                ) : (
+                                                  <>
+                                                    <CheckCircle2 size={14} /> In Stock
+                                                  </>
+                                                )}
+                                              </button>
+                                            );
+                                          })()}
 
                                           <button 
                                             onClick={() => onEdit(item)} 

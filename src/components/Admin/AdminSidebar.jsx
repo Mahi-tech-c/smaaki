@@ -1,4 +1,4 @@
-import { LayoutGrid, Gift, Settings, LogOut, X, ChevronRight, QrCode, Sparkles, Shield, Home, Globe, Bell } from 'lucide-react';
+import { LayoutGrid, Gift, Settings, LogOut, X, ChevronRight, QrCode, Sparkles, Shield, Home, Globe, Bell, ChefHat } from 'lucide-react';
 
 const AdminSidebar = ({ 
   activeTab, 
@@ -9,10 +9,12 @@ const AdminSidebar = ({
   onShowQr, 
   onShowCalls,
   waiterCallsCount = 0,
+  activeOrdersCount = 0,
   user, 
   userRole 
 }) => {
   const menuItems = [
+    { id: 'kds', label: 'Live Orders (KDS)', icon: ChefHat, color: 'text-pink-600', bg: 'bg-pink-50', count: activeOrdersCount },
     { id: 'menu', label: 'Menu Items', icon: LayoutGrid, color: 'text-pink-600', bg: 'bg-pink-50' },
     { id: 'calls', label: 'Waiter Calls', icon: Bell, color: 'text-amber-600', bg: 'bg-amber-50', isAction: true, count: waiterCallsCount },
     { id: 'home_editor', label: 'Home Page', icon: Home, color: 'text-pink-600', bg: 'bg-pink-50' },
