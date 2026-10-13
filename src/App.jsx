@@ -24,6 +24,7 @@ import TableBanner from './components/Customer/TableBanner';
 import TableRoute from './components/Customer/TableRoute';
 import OrderTrackingPage from './components/Customer/OrderTrackingPage';
 import PwaInstallPrompt from './components/ui/PwaInstallPrompt';
+import { updateSeoMetadata, getRouteSeo } from './utils/seo';
 
 const AdminAuth = React.lazy(() => import('./components/Admin/AdminAuth'));
 const AdminLogin = React.lazy(() => import('./components/Admin/AdminLogin'));
@@ -40,17 +41,15 @@ const AppContent = () => {
   const isAdminPath = location.pathname.startsWith('/admin');
   const { settings } = useContext(AppContext);
 
-  // Apply Settings & Meta Tags
+  // Apply Dynamic SEO & Meta Tags
   useEffect(() => {
-    if (settings.metaTitle) document.title = settings.metaTitle;
-    
-    let descMeta = document.querySelector("meta[name='description']");
-    if (!descMeta) {
-      descMeta = document.createElement('meta');
-      descMeta.name = 'description';
-      document.head.appendChild(descMeta);
-    }
-    descMeta.content = settings.metaDescription || '';
+    const routeSeo = getRouteSeo(location.pathname, settings);
+    updateSeoMetadata({
+      title: routeSeo.title,
+      description: routeSeo.description,
+      type: routeSeo.type,
+      url: typeof window !== 'undefined' ? window.location.href : ''
+    });
 
     if (settings.siteVerification) {
       let verifyMeta = document.querySelector("meta[name='google-site-verification']");
@@ -70,7 +69,7 @@ const AppContent = () => {
     if (settings.primaryColor) {
       document.documentElement.style.setProperty('--primary-color', settings.primaryColor);
     }
-  }, [settings]);
+  }, [location.pathname, settings]);
 
   return (
     <div className="min-h-[100dvh] selection:bg-pink-500 selection:text-white flex flex-col relative bg-[#0f1117] text-slate-100">
