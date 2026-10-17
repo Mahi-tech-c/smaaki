@@ -59,7 +59,7 @@ export const Header = () => {
   return (
     <>
       {/* Sticky, 100% OPAQUE Header (Zero text bleed-through) */}
-      <header className="sticky top-0 z-40 w-full bg-[#0f1117] text-white border-b border-slate-800 shadow-md select-none transition-colors duration-200">
+      <header className="sticky top-0 z-40 w-full bg-surface text-surface border-b border-surface shadow-md select-none transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 sm:h-18 gap-3">
             
@@ -73,10 +73,10 @@ export const Header = () => {
                 )}
               </div>
               <div className="flex flex-col">
-                <span className="font-extrabold text-base sm:text-lg tracking-tight text-white group-hover:text-pink-400 transition-colors">
+                <span className="font-extrabold text-base sm:text-lg tracking-tight text-surface group-hover:text-pink-400 transition-colors">
                   Smaakenzzoo
                 </span>
-                <span className="text-[10px] font-semibold text-slate-400 tracking-wider uppercase leading-none">
+                <span className="text-[10px] font-semibold text-surface-muted tracking-wider uppercase leading-none">
                   Artisanal Cafe
                 </span>
               </div>
@@ -102,7 +102,7 @@ export const Header = () => {
             </div>
 
             {/* Desktop Navigation Links */}
-            <nav className="hidden lg:flex items-center gap-1 bg-slate-900/90 p-1 rounded-full border border-slate-800 text-xs font-semibold">
+            <nav className="hidden lg:flex items-center gap-1 bg-surface-raised p-1 rounded-full border border-surface text-xs font-semibold">
               {navLinks.map((link) => {
                 const isActive = location.pathname === link.to;
                 return (
@@ -112,7 +112,7 @@ export const Header = () => {
                     className={`px-4 py-1.5 rounded-full transition-all duration-150 ${
                       isActive
                         ? 'bg-pink-600 text-white shadow-sm font-bold'
-                        : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                        : 'text-surface-muted hover:text-surface hover:bg-surface-subtle'
                     }`}
                   >
                     {link.label}
@@ -125,7 +125,7 @@ export const Header = () => {
                 className={`px-4 py-1.5 rounded-full transition-all duration-150 ${
                   location.pathname.startsWith('/track')
                     ? 'bg-pink-600 text-white shadow-sm font-bold'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                    : 'text-surface-muted hover:text-surface hover:bg-surface-subtle'
                 }`}
               >
                 Track Order
@@ -139,8 +139,8 @@ export const Header = () => {
                 to="/track"
                 className={`lg:hidden p-2 rounded-xl transition-colors ${
                   location.pathname.startsWith('/track')
-                    ? 'text-pink-400 bg-slate-800'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                    ? 'text-pink-400 bg-surface-raised'
+                    : 'text-surface-muted hover:text-surface hover:bg-surface-raised'
                 }`}
                 title="Track Order"
                 aria-label="Track Order"
@@ -154,19 +154,19 @@ export const Header = () => {
                 onClick={toggleTheme}
                 aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
                 title={`Switch to ${isDark ? 'light' : 'dark'} mode`}
-                className="p-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
+                className="p-2 rounded-xl text-surface-muted hover:text-surface hover:bg-surface-raised transition-colors"
               >
                 {isDark ? (
                   <Sun className="w-4 h-4 text-amber-400" />
                 ) : (
-                  <Moon className="w-4 h-4 text-slate-300" />
+                  <Moon className="w-4 h-4 text-slate-600" />
                 )}
               </button>
 
               {/* Account / Login Icon */}
               <Link
                 to="/account"
-                className="p-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl transition-colors"
+                className="p-2 text-surface-muted hover:text-surface hover:bg-surface-raised rounded-xl transition-colors"
                 title="Customer Account"
                 aria-label="Customer Account"
               >

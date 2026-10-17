@@ -38,7 +38,7 @@ export const Footer = () => {
   const cleanWhatsapp = whatsapp.replace(/\D/g, '');
 
   return (
-    <footer className="relative z-20 bg-[#12151e] text-slate-300 border-t border-slate-800/90 pt-12 pb-24 md:pb-12 text-xs">
+    <footer className="relative z-20 bg-surface-raised text-surface-muted border-t border-surface pt-12 pb-24 md:pb-12 text-xs transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Main Grid */}
@@ -50,33 +50,33 @@ export const Footer = () => {
               <div className="w-9 h-9 rounded-2xl bg-pink-600 text-white flex items-center justify-center shadow-md shadow-pink-600/30">
                 <Coffee className="w-5 h-5 text-white" />
               </div>
-              <span className="font-extrabold text-base tracking-tight text-white group-hover:text-pink-400 transition-colors">
+              <span className="font-extrabold text-base tracking-tight text-surface group-hover:text-pink-400 transition-colors">
                 Smaakenzzoo
               </span>
             </Link>
             <p className="text-pink-400 font-semibold italic text-xs tracking-wide">
               Flourishing Hearts, Blooming Dreams
             </p>
-            <p className="text-slate-400 text-xs leading-relaxed">
+            <p className="text-surface-muted text-xs leading-relaxed">
               Warangal&apos;s artisanal cafe destination for freshly spun churros, Belgian waffles, sizzling brownies, rich coffees, and gourmet pizzas.
             </p>
             {/* Regulatory Numbers */}
-            <div className="pt-2 text-[11px] text-slate-400 space-y-1">
-              <div><strong className="text-slate-300">FSSAI Lic:</strong> {fssaiNumber}</div>
-              {gstNumber && <div><strong className="text-slate-300">GSTIN:</strong> {gstNumber}</div>}
+            <div className="pt-2 text-[11px] text-surface-muted space-y-1">
+              <div><strong className="text-surface-subtle">FSSAI Lic:</strong> {fssaiNumber}</div>
+              {gstNumber && <div><strong className="text-surface-subtle">GSTIN:</strong> {gstNumber}</div>}
             </div>
           </div>
 
           {/* Col 2: Cafe Operating Details */}
           <div className="space-y-3">
-            <h4 className="font-bold text-sm text-white uppercase tracking-wider">
+            <h4 className="font-bold text-sm text-surface uppercase tracking-wider">
               Visit & Dine
             </h4>
-            <div className="flex items-start gap-2.5 text-slate-300">
+            <div className="flex items-start gap-2.5 text-surface-muted">
               <MapPin className="w-4 h-4 text-pink-500 shrink-0 mt-0.5" />
               <span>{address}</span>
             </div>
-            <div className="flex items-center gap-2.5 text-slate-300">
+            <div className="flex items-center gap-2.5 text-surface-muted">
               <Clock className="w-4 h-4 text-pink-500 shrink-0" />
               <span>{operatingHours}</span>
             </div>
@@ -95,13 +95,13 @@ export const Footer = () => {
 
           {/* Col 3: Direct Cafe Contact */}
           <div className="space-y-3">
-            <h4 className="font-bold text-sm text-white uppercase tracking-wider">
+            <h4 className="font-bold text-sm text-surface uppercase tracking-wider">
               Contact & Social
             </h4>
             {phone && phone !== '[PHONE]' && (
               <div className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-pink-500 shrink-0" />
-                <a href={`tel:${cleanPhone}`} className="hover:text-white transition-colors">
+                <a href={`tel:${cleanPhone}`} className="hover:text-surface transition-colors">
                   {phone}
                 </a>
               </div>
@@ -113,7 +113,7 @@ export const Footer = () => {
                   href={`https://wa.me/${cleanWhatsapp}`} 
                   target="_blank" 
                   rel="noreferrer"
-                  className="hover:text-white transition-colors"
+                  className="hover:text-surface transition-colors"
                 >
                   WhatsApp Ordering
                 </a>
@@ -122,7 +122,7 @@ export const Footer = () => {
             {email && email !== '[EMAIL]' && (
               <div className="flex items-center gap-2.5">
                 <Mail className="w-4 h-4 text-pink-500 shrink-0" />
-                <a href={`mailto:${email}`} className="hover:text-white transition-colors truncate">
+                <a href={`mailto:${email}`} className="hover:text-surface transition-colors truncate">
                   {email}
                 </a>
               </div>
@@ -134,7 +134,7 @@ export const Footer = () => {
                   href={instagramUrl.startsWith('http') ? instagramUrl : `https://instagram.com/${instagramUrl.replace('@', '')}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="hover:text-white transition-colors"
+                  className="hover:text-surface transition-colors"
                 >
                   Follow on Instagram
                 </a>
@@ -144,7 +144,7 @@ export const Footer = () => {
 
           {/* Col 4: Quick Navigation & Legal */}
           <div className="space-y-3">
-            <h4 className="font-bold text-sm text-white uppercase tracking-wider">
+            <h4 className="font-bold text-sm text-surface uppercase tracking-wider">
               Explore & Policies
             </h4>
             <ul className="space-y-1.5">
@@ -174,7 +174,7 @@ export const Footer = () => {
         </div>
 
         {/* Bottom Bar: Copyright & Note */}
-        <div className="border-t border-slate-800/80 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-slate-500 text-[11px]">
+        <div className="border-t border-surface pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-surface-subtle text-[11px]">
           <p>
             © {currentYear} Smaakenzzoo Warangal. All Rights Reserved.
           </p>

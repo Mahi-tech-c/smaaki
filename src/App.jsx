@@ -72,7 +72,7 @@ const AppContent = () => {
   }, [location.pathname, settings]);
 
   return (
-    <div className="min-h-[100dvh] selection:bg-pink-500 selection:text-white flex flex-col relative bg-[#0f1117] text-slate-100">
+    <div className="min-h-[100dvh] selection:bg-pink-500 selection:text-white flex flex-col relative bg-surface text-surface transition-colors duration-300">
       {/* Skip to Main Content Link for Screen Readers & Keyboard Navigation */}
       <a 
         href="#main-content" 

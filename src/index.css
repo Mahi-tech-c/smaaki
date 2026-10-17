@@ -242,6 +242,17 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
+  /* ── Theme-aware surface utilities (respond to [data-theme] on <html>) ── */
+  .bg-surface        { background-color: var(--color-surface); }
+  .bg-surface-raised { background-color: var(--color-surface-raised); }
+  .bg-surface-overlay{ background-color: var(--color-surface-overlay); }
+  .bg-surface-subtle { background-color: var(--color-surface-subtle); }
+  .text-surface      { color: var(--color-text); }
+  .text-surface-muted{ color: var(--color-text-muted); }
+  .text-surface-subtle{ color: var(--color-text-subtle); }
+  .border-surface    { border-color: var(--color-border); }
+  .border-surface-subtle { border-color: var(--color-border-subtle); }
 }
 
 /* Custom Scrollbar */
