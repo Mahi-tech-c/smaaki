@@ -1,4 +1,4 @@
-import { LayoutGrid, Gift, Settings, LogOut, X, ChevronRight, QrCode, Sparkles, Shield, Home, Globe, Bell, ChefHat } from 'lucide-react';
+import { LayoutGrid, Gift, Settings, LogOut, X, ChevronRight, QrCode, Sparkles, Shield, Home, Globe, Bell, ChefHat, BarChart2, History, Tag, Package } from 'lucide-react';
 
 const AdminSidebar = ({ 
   activeTab, 
@@ -14,9 +14,15 @@ const AdminSidebar = ({
   userRole 
 }) => {
   const menuItems = [
+    { id: 'analytics', label: 'Analytics', icon: BarChart2, color: 'text-pink-600', bg: 'bg-pink-50' },
     { id: 'kds', label: 'Live Orders (KDS)', icon: ChefHat, color: 'text-pink-600', bg: 'bg-pink-50', count: activeOrdersCount },
+    { id: 'order_history', label: 'Order History', icon: History, color: 'text-blue-600', bg: 'bg-blue-50' },
+    { id: 'inventory', label: 'Inventory', icon: Package, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+    { id: 'tables', label: 'Table Floor Plan', icon: LayoutGrid, color: 'text-pink-600', bg: 'bg-pink-50' },
+    { id: 'coupons', label: 'Coupons & Promos', icon: Tag, color: 'text-purple-600', bg: 'bg-purple-50' },
     { id: 'menu', label: 'Menu Items', icon: LayoutGrid, color: 'text-pink-600', bg: 'bg-pink-50' },
     { id: 'calls', label: 'Waiter Calls', icon: Bell, color: 'text-amber-600', bg: 'bg-amber-50', isAction: true, count: waiterCallsCount },
+    { id: 'notifications', label: 'Notifications & Hours', icon: Bell, color: 'text-amber-600', bg: 'bg-amber-50' },
     { id: 'home_editor', label: 'Home Page', icon: Home, color: 'text-pink-600', bg: 'bg-pink-50' },
     { id: 'menu_editor', label: 'Menu Page', icon: Sparkles, color: 'text-pink-600', bg: 'bg-pink-50' },
     { id: 'featured', label: 'Featured Items', icon: Sparkles, color: 'text-amber-600', bg: 'bg-amber-50' },

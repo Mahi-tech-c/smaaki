@@ -35,6 +35,12 @@ import AdminMenuEditor from './AdminMenuEditor';
 import AdminHomeEditor from './AdminHomeEditor';
 import AdminDomainManager from './AdminDomainManager';
 import AdminUsersPanel from './AdminUsersPanel';
+import AdminAnalytics from './AdminAnalytics';
+import AdminOrderHistory from './AdminOrderHistory';
+import AdminCoupons from './AdminCoupons';
+import AdminInventory from './AdminInventory';
+import AdminTables from './AdminTables';
+import AdminNotifications from './AdminNotifications';
 
 import { auth, db, COLLECTIONS } from '../../firebase';
 import { signOut } from 'firebase/auth';
@@ -42,7 +48,7 @@ import { doc, getDoc, collection, query, onSnapshot, updateDoc, serverTimestamp 
 
 const AdminDashboard = () => {
   const { deleteItem, settings } = useContext(AppContext);
-  const [activeTab, setActiveTab] = useState('menu');
+  const [activeTab, setActiveTab] = useState('analytics');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [userRole, setUserRole] = useState(null);
 
@@ -606,7 +612,15 @@ const AdminDashboard = () => {
               <p className="text-pink-500 font-medium">Only the Master Administrator can manage the team.</p>
             </div>
           )}
+
+          {activeTab === 'analytics' && <AdminAnalytics />}
+          {activeTab === 'order_history' && <AdminOrderHistory />}
+          {activeTab === 'coupons' && <AdminCoupons />}
+          {activeTab === 'inventory' && <AdminInventory />}
+          {activeTab === 'tables' && <AdminTables />}
+          {activeTab === 'notifications' && <AdminNotifications />}
         </main>
+
       </div>
 
       {/* Shared Modals */}

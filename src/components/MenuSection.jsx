@@ -50,7 +50,7 @@ export const MenuSection = () => {
   const [under200Only, setUnder200Only] = useState(false);
   const [bestsellersOnly, setBestsellersOnly] = useState(false);
   const [sortBy, setSortBy] = useState('recommended'); // 'recommended' | 'price-asc' | 'price-desc' | 'name'
-  const [viewMode, setViewMode] = useState('list'); // 'list' (default) | 'grid'
+  const [viewMode, setViewMode] = useState('grid'); // 'grid' (default Instamart-style) | 'list'
 
   // Scroll spy & Category navigation
   const [activeCategory, setActiveCategory] = useState('');
@@ -546,7 +546,7 @@ export const MenuSection = () => {
                   <div className={
                     viewMode === 'list'
                       ? 'grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4'
-                      : 'grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4'
+                      : 'grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5 sm:gap-3'
                   }>
                     {catItems.map((item) => (
                       <ProductCard

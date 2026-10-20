@@ -202,100 +202,75 @@ export const ProductCard = ({
   }
 
   // ─────────────────────────────────────────────────────────────
-  // 2. GRID LAYOUT (Desktop & Grid View toggle)
+  // 2. GRID LAYOUT — Instamart / Blinkit style (tall image + compact strip)
   // ─────────────────────────────────────────────────────────────
   return (
-    <div 
+    <div
       onClick={() => onOpenQuickView?.(item)}
       className={`
-        flex flex-col justify-between rounded-2xl bg-slate-900/95
-        border border-slate-800/80 hover:border-slate-700 shadow-sm hover:shadow-xl
-        transition-all duration-300 overflow-hidden group relative cursor-pointer select-none
-        ${!isAvailable ? 'opacity-65' : ''}
+        flex flex-col rounded-2xl bg-slate-900
+        border border-slate-800/80 hover:border-pink-500/40
+        transition-all duration-300 overflow-visible group relative cursor-pointer select-none
+        ${!isAvailable ? 'opacity-60' : ''}
       `}
     >
-      {/* Top Image Area */}
-      <div className="relative aspect-[4/3] w-full bg-slate-800 overflow-hidden">
-        <img 
+      {/* ══ TALL IMAGE — ~70% of card ══ */}
+      <div
+        className="relative w-full overflow-hidden rounded-2xl bg-slate-800"
+        style={{ aspectRatio: '3 / 4' }}
+      >
+        <img
           src={item.image || FALLBACK_FOOD_IMAGE}
           alt={item.name}
           loading="lazy"
           decoding="async"
-          width="400"
-          height="300"
-          onError={(e) => {
-            e.currentTarget.src = FALLBACK_FOOD_IMAGE;
-          }}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          onError={(e) => { e.currentTarget.src = FALLBACK_FOOD_IMAGE; }}
+          className={`absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.07] ${
+            !isAvailable ? 'grayscale opacity-70' : ''
+          }`}
         />
 
-        {/* Dietary Symbol (Top Left) */}
-        <div className="absolute top-3 left-3 p-1 rounded-md bg-slate-900/90 backdrop-blur-sm border border-slate-800 shadow-sm">
-          <DietaryMarker type={dietaryType} size={18} />
-        </div>
-
-        {/* Reference Image Tag */}
-        <span className="absolute bottom-2 left-2 text-[9px] bg-black/60 text-slate-300 px-1.5 py-0.5 rounded backdrop-blur-xs pointer-events-none">
-          Image for reference
-        </span>
-
-        {/* Quick View Hover Cue */}
-        <div className="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
-          <span className="bg-white/95 text-slate-900 px-3 py-1.5 rounded-full text-xs font-bold shadow-md flex items-center gap-1.5 transform translate-y-2 group-hover:translate-y-0 transition-all">
-            <Eye className="w-3.5 h-3.5" /> Customize
-          </span>
-        </div>
-      </div>
-
-      {/* Content Area */}
-      <div className="p-4 flex flex-col flex-1 justify-between gap-3">
-        <div>
-          {/* Badges */}
-          <div className="flex items-center flex-wrap gap-1.5 mb-1.5">
-            {badges.map((badge, idx) => (
-              <span
-                key={idx}
-                className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-pink-500/15 text-pink-400 border border-pink-500/25"
-              >
-                {badge}
-              </span>
-            ))}
-          </div>
-
-          {/* Title */}
-          <h3 className="font-bold text-sm sm:text-base text-white group-hover:text-pink-400 transition-colors line-clamp-1 mb-1">
-            <HighlightMatch text={item.name} query={searchQuery} />
-          </h3>
-
-          {/* Description */}
-          {cleanDescription && (
-            <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed font-normal">
-              <HighlightMatch text={cleanDescription} query={searchQuery} />
-            </p>
-          )}
-        </div>
-
-        {/* Bottom Bar: Price & Action */}
-        <div className="flex items-center justify-between pt-3 border-t border-slate-800/80 mt-auto">
-          <div>
-            <span className="text-[10px] uppercase font-semibold text-slate-400 tracking-wider block">Price</span>
-            <span className="text-base font-extrabold text-white">
-              {formatCurrency(basePrice, settings?.currencySymbol || '₹')}
+        {/* Sold-out ribbon */}
+        {!isAvailable && (
+          <div className="absolute inset-0 flex items-center justify-center z-10">
+            <span className="bg-black/70 text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full backdrop-blur-sm">
+              Sold Out
             </span>
           </div>
+        )}
 
+        {/* Bestseller / badge — top left */}
+        {badges.length > 0 && (
+          <span className="absolute top-2 left-2 z-10 inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-400 text-amber-950 shadow-sm">
+            {badges[0] === 'Bestseller' && <Star className="w-2.5 h-2.5 fill-current" />}
+            {badges[0] === 'Spicy' && <Flame className="w-2.5 h-2.5 fill-current" />}
+            {badges[0] === 'New' && <Sparkles className="w-2.5 h-2.5" />}
+            {badges[0]}
+          </span>
+        )}
+
+        {/* Dietary dot — top right */}
+        <div className="absolute top-2 right-2 z-10 p-0.5 bg-slate-900/80 rounded-sm backdrop-blur-sm">
+          <DietaryMarker type={dietaryType} size={14} />
+        </div>
+
+        {/* Bottom gradient scrim */}
+        <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-slate-900/80 to-transparent pointer-events-none rounded-b-2xl" />
+
+        {/* ── Overlapping ADD / Stepper button at bottom-center ── */}
+        <div className="absolute -bottom-3.5 left-1/2 -translate-x-1/2 z-20 w-[80%] flex justify-center">
           <div onClick={(e) => e.stopPropagation()}>
             {!isAvailable ? (
               <button
                 type="button"
                 onClick={handleNotifyMe}
-                className="px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-400 hover:text-white text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-sm active:scale-95"
+                className="w-full px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-400 text-[10px] font-black uppercase tracking-wider flex items-center justify-center gap-1 shadow-lg"
               >
-                <Bell className="w-3.5 h-3.5" /> Sold Out
+                <Bell className="w-3 h-3" /> Notify
               </button>
             ) : inCartQty > 0 ? (
-              <Stepper 
-                value={inCartQty} 
+              <Stepper
+                value={inCartQty}
                 size="sm"
                 onChange={(newQty) => {
                   soundManager.playTapSound();
@@ -307,12 +282,32 @@ export const ProductCard = ({
               <button
                 type="button"
                 onClick={handleAddClick}
-                className="px-4 py-2 rounded-xl bg-pink-600 hover:bg-pink-700 active:scale-95 text-white font-black text-xs uppercase tracking-wider flex items-center gap-1.5 shadow-md shadow-pink-600/30 transition-all cursor-pointer"
+                className="w-full px-4 py-1.5 rounded-xl bg-pink-600 hover:bg-pink-500 active:scale-95 text-white font-black text-[11px] uppercase tracking-wider flex items-center justify-center gap-1 shadow-lg shadow-pink-600/40 transition-all border border-pink-500/50"
               >
                 <Plus className="w-3.5 h-3.5 stroke-[3]" /> ADD
               </button>
             )}
           </div>
+        </div>
+      </div>
+
+      {/* ══ COMPACT CONTENT STRIP — ~30% of card ══ */}
+      <div className="flex flex-col px-2.5 pt-5 pb-2.5 gap-0.5">
+        {/* Item name — 1 line, truncated */}
+        <p className="text-[11px] sm:text-xs font-bold text-white leading-tight truncate" title={item.name}>
+          <HighlightMatch text={item.name} query={searchQuery} />
+        </p>
+
+        {/* Price row */}
+        <div className="flex items-center gap-1.5 mt-0.5">
+          <span className="text-sm font-extrabold text-white tracking-tight">
+            {formatCurrency(basePrice, settings?.currencySymbol || '₹')}
+          </span>
+          {hasVariants && (
+            <span className="text-[9px] text-slate-500 font-bold bg-slate-800 px-1.5 py-0.5 rounded-full">
+              +{item.options.length - 1}
+            </span>
+          )}
         </div>
       </div>
     </div>

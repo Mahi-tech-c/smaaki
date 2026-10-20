@@ -435,7 +435,7 @@ const EditableField = ({ label, field, formData, handleChange, activeStyleField,
   );
 };
 
-const ImageUploadField = ({ label, field, value, setFormData, setUploadTarget, fileInputRef, formData }) => (
+const ImageUploadField = ({ label, field, value, handleChange, setUploadTarget, fileInputRef }) => (
   <div className="space-y-2">
     <label className="text-xs font-black text-pink-900 uppercase tracking-wider flex items-center gap-2">
       <ImageIcon size={14} /> {label}
@@ -451,7 +451,7 @@ const ImageUploadField = ({ label, field, value, setFormData, setUploadTarget, f
         >Upload</button>
         {value && (
           <button type="button"
-            onClick={() => setFormData({ ...formData, [field]: '' })}
+            onClick={() => handleChange(field, '')}
             className="px-4 py-3 bg-red-50 text-red-500 rounded-xl font-bold text-xs hover:bg-red-100 transition-all"
           >Clear</button>
         )}
@@ -471,35 +471,72 @@ const AdminSettings = ({ userRole }) => {
   const [uploadTarget, setUploadTarget] = useState(null);
   const [activeStyleField, setActiveStyleField] = useState(null);
 
-  useEffect(() => { 
-    setFormData(settings); 
-  }, [settings]);
+  // ── Track exactly which fields the user has touched ───────────────────
+  // This is the only approach that is BOTH correct and fast:
+  //   • Text saves  → instant (2–3 fields, few bytes)
+  //   • Image saves → only the changed image is sent, not all images
+  //   • Firestore sync still works correctly (useEffect below)
+  const [dirtyFields, setDirtyFields] = useState(new Set());
+
+  // Sync formData from Firestore — always keep base values fresh,
+  // but preserve any fields the user has already edited (dirty)
+  useEffect(() => {
+    setFormData(prev => {
+      const merged = { ...settings };
+      // Keep the user's unsaved edits on top
+      for (const key of dirtyFields) {
+        if (key in prev) merged[key] = prev[key];
+      }
+      return merged;
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [settings]); // intentionally omit dirtyFields — we only want settings to trigger this
 
   const handleChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+    setDirtyFields(prev => new Set([...prev, field]));
   };
 
   const handleSave = async (e) => {
     e.preventDefault();
     setIsSaving(true);
     try {
-      await updateSettings(formData);
+      if (dirtyFields.size === 0) {
+        // Nothing was touched — no write needed
+        setSaveStatus('success');
+        setTimeout(() => setSaveStatus(null), 2000);
+        return;
+      }
+
+      // Only send the fields the user explicitly changed
+      const changedFields = {};
+      for (const key of dirtyFields) {
+        changedFields[key] = formData[key];
+      }
+
+      await updateSettings(changedFields);
+
+      // Clear dirty tracking so next save is a clean slate
+      setDirtyFields(new Set());
       setSaveStatus('success');
       setTimeout(() => setSaveStatus(null), 3000);
     } catch (error) {
-      console.error(error);
+      console.error('[AdminSettings] save failed:', error);
       setSaveStatus('error');
     } finally {
       setIsSaving(false);
     }
   };
 
+  // Image upload — mark the target field dirty so it's included in the next save
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (!file || !uploadTarget) return;
     const reader = new FileReader();
     reader.onloadend = () => {
-      setFormData(prev => ({ ...prev, [uploadTarget]: reader.result }));
+      const field = uploadTarget;
+      setFormData(prev => ({ ...prev, [field]: reader.result }));
+      setDirtyFields(prev => new Set([...prev, field]));
       setUploadTarget(null);
     };
     reader.readAsDataURL(file);
@@ -579,10 +616,10 @@ const AdminSettings = ({ userRole }) => {
                       <EditableField label="Tagline / Slogan" field="tagline" icon={Globe} formData={formData} handleChange={handleChange} activeStyleField={activeStyleField} setActiveStyleField={setActiveStyleField} />
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <ImageUploadField label="Restaurant Logo" field="logo" value={formData.logo} setFormData={setFormData} setUploadTarget={setUploadTarget} fileInputRef={fileInputRef} formData={formData} />
-                      <ImageUploadField label="Browser Favicon" field="favicon" value={formData.favicon} setFormData={setFormData} setUploadTarget={setUploadTarget} fileInputRef={fileInputRef} formData={formData} />
+                      <ImageUploadField label="Restaurant Logo" field="logo" value={formData.logo} handleChange={handleChange} setUploadTarget={setUploadTarget} fileInputRef={fileInputRef} />
+                      <ImageUploadField label="Browser Favicon" field="favicon" value={formData.favicon} handleChange={handleChange} setUploadTarget={setUploadTarget} fileInputRef={fileInputRef} />
                     </div>
-                    <ImageUploadField label="Homepage Banner Image" field="homepageBanner" value={formData.homepageBanner} setFormData={setFormData} setUploadTarget={setUploadTarget} fileInputRef={fileInputRef} formData={formData} />
+                    <ImageUploadField label="Homepage Banner Image" field="homepageBanner" value={formData.homepageBanner} handleChange={handleChange} setUploadTarget={setUploadTarget} fileInputRef={fileInputRef} />
                     <div className="space-y-2">
                       <label className="text-xs font-black text-pink-900 uppercase tracking-wider flex items-center gap-2"><Palette size={14} /> Brand Primary Color</label>
                       <div className="flex gap-4 items-center p-4 bg-gray-50 rounded-2xl border border-gray-100">
@@ -730,7 +767,7 @@ const AdminSettings = ({ userRole }) => {
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-black text-pink-900 uppercase tracking-wider flex items-center gap-2"><Shield size={14} /> Google Site Verification (Code)</label>
-                      <input value={formData.siteVerification || ''} onChange={e => setFormData({ ...formData, siteVerification: e.target.value })}
+                      <input value={formData.siteVerification || ''} onChange={e => handleChange('siteVerification', e.target.value)}
                         placeholder="e.g. your-verification-code"
                         className="w-full p-4 bg-gray-50 border border-gray-100 rounded-2xl font-bold" />
                     </div>
@@ -757,7 +794,7 @@ const AdminSettings = ({ userRole }) => {
                         <input 
                           type="password"
                           value={formData.vercelToken || ''} 
-                          onChange={e => setFormData({ ...formData, vercelToken: e.target.value })}
+                          onChange={e => handleChange('vercelToken', e.target.value)}
                           placeholder="vct_..."
                           className="w-full p-4 bg-gray-50 border border-gray-100 rounded-2xl font-bold"
                         />
@@ -767,7 +804,7 @@ const AdminSettings = ({ userRole }) => {
                         <label className="text-xs font-black text-pink-900 uppercase tracking-wider">Vercel Project ID</label>
                         <input 
                           value={formData.vercelProjectId || ''} 
-                          onChange={e => setFormData({ ...formData, vercelProjectId: e.target.value })}
+                          onChange={e => handleChange('vercelProjectId', e.target.value)}
                           placeholder="prj_..."
                           className="w-full p-4 bg-gray-50 border border-gray-100 rounded-2xl font-bold"
                         />
