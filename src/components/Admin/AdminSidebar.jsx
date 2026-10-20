@@ -48,9 +48,9 @@ const AdminSidebar = ({
 
       {/* Sidebar Container */}
       <aside className={`fixed lg:static inset-y-0 left-0 w-72 bg-white border-r border-pink-100 z-50 transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
-        <div className="h-full flex flex-col p-6">
+        <div className="h-full flex flex-col p-4 overflow-hidden">
           {/* Logo Section */}
-          <div className="flex items-center justify-between mb-10">
+          <div className="flex items-center justify-between mb-4 shrink-0">
             <div className="flex items-center gap-3">
               <div className="bg-pink-600 p-2 rounded-xl text-white shadow-lg shadow-pink-100">
                 <LayoutGrid size={20} />
@@ -66,7 +66,7 @@ const AdminSidebar = ({
           </div>
 
           {/* Navigation Links */}
-          <nav className="flex-1 space-y-2">
+          <nav className="flex-1 overflow-y-auto space-y-1 pr-1 -mr-1 custom-scrollbar">
             {menuItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
@@ -84,7 +84,7 @@ const AdminSidebar = ({
                     }
                     if (window.innerWidth < 1024) setIsOpen(false);
                   }}
-                  className={`w-full flex items-center justify-between p-4 rounded-2xl transition-all group ${
+                  className={`w-full flex items-center justify-between p-3 rounded-2xl transition-all group ${
                     isActive 
                       ? `${item.bg} ${item.color} shadow-sm border border-pink-100/50` 
                       : 'text-gray-500 hover:bg-gray-50'
@@ -108,7 +108,7 @@ const AdminSidebar = ({
           </nav>
 
           {/* Logout Section */}
-          <div className="mt-auto pt-6 border-t border-pink-50 space-y-2">
+          <div className="shrink-0 pt-4 border-t border-pink-50 space-y-2">
             {user && (
               <div className="px-4 py-3 bg-pink-50 rounded-2xl flex items-center gap-3">
                 <div className="w-8 h-8 rounded-full bg-pink-200 flex items-center justify-center text-pink-600 font-bold uppercase">
