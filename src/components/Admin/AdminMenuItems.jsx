@@ -2,9 +2,8 @@ import React, { useContext, useState, useMemo, useCallback } from 'react';
 import { AppContext } from '../../context/AppContext';
 import {
   Plus, Search, Edit2, Trash2, List, ChevronDown, ChevronRight,
-  CheckCircle2, XCircle, Filter, SlidersHorizontal, LayoutGrid,
-  LayoutList, Tag, Star, Flame, Leaf, TrendingUp, Package,
-  AlertTriangle, Eye, EyeOff, GripVertical, ArrowUpDown,
+  CheckCircle2, XCircle, SlidersHorizontal,
+  Leaf, Package, AlertTriangle, GripVertical, ArrowUpDown,
 } from 'lucide-react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import AdminCategories from './AdminCategories';
@@ -234,7 +233,6 @@ const AdminMenuItems = ({ onAdd, onEdit, onDelete }) => {
   const [collapsedCats,  setCollapsedCats]  = useState({});
   const [sortBy,         setSortBy]         = useState('default');
   const [showFilters,    setShowFilters]     = useState(false);
-  const [viewMode,       setViewMode]       = useState('grid'); // 'grid' | 'list'
   const [filterVeg,      setFilterVeg]      = useState('all'); // 'all' | 'veg' | 'nonveg'
   const [filterStock,    setFilterStock]    = useState('all'); // 'all' | 'in' | 'out'
 
@@ -350,7 +348,7 @@ const AdminMenuItems = ({ onAdd, onEdit, onDelete }) => {
 
       {/* ── Top bar ── */}
       <div className="bg-white rounded-2xl border border-pink-100 shadow-sm p-4 space-y-3">
-        {/* Row 1: search + view toggle + add */}
+        {/* Row 1: search + actions */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
           {/* Search */}
           <div className="relative flex-1">
@@ -365,24 +363,6 @@ const AdminMenuItems = ({ onAdd, onEdit, onDelete }) => {
           </div>
 
           <div className="flex items-center gap-2 flex-shrink-0">
-            {/* View toggle */}
-            <div className="flex bg-gray-100 rounded-xl p-1 gap-1">
-              <button
-                type="button"
-                onClick={() => setViewMode('grid')}
-                className={`p-1.5 rounded-lg transition-all cursor-pointer ${viewMode === 'grid' ? 'bg-white text-pink-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
-              >
-                <LayoutGrid size={16} />
-              </button>
-              <button
-                type="button"
-                onClick={() => setViewMode('list')}
-                className={`p-1.5 rounded-lg transition-all cursor-pointer ${viewMode === 'list' ? 'bg-white text-pink-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
-              >
-                <LayoutList size={16} />
-              </button>
-            </div>
-
             {/* Filters toggle */}
             <button
               type="button"
@@ -527,9 +507,9 @@ const AdminMenuItems = ({ onAdd, onEdit, onDelete }) => {
                           isDragging={snapshot.isDragging}
                         />
 
-                        {/* Items grid / list */}
+                        {/* Items grid */}
                         {!collapsedCats[category.name] && (
-                          <Droppable droppableId={`items-${category.name}`} type="ITEM" direction={viewMode === 'grid' ? 'horizontal' : 'vertical'}>
+                          <Droppable droppableId={`items-${category.name}`} type="ITEM" direction="horizontal">
                             {(provided, dropSnapshot) => (
                               <div
                                 {...provided.droppableProps}
@@ -537,10 +517,7 @@ const AdminMenuItems = ({ onAdd, onEdit, onDelete }) => {
                                 className={`
                                   min-h-[80px] rounded-2xl transition-colors duration-150
                                   ${dropSnapshot.isDraggingOver ? 'bg-pink-50/60 ring-2 ring-pink-300 ring-dashed' : ''}
-                                  ${viewMode === 'grid'
-                                    ? 'grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3'
-                                    : 'flex flex-col gap-2'
-                                  }
+                                  grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3
                                 `}
                               >
                                 {itemsInCategory.map((item, itemIndex) => (
@@ -555,84 +532,14 @@ const AdminMenuItems = ({ onAdd, onEdit, onDelete }) => {
                                         ref={provided.innerRef}
                                         {...provided.draggableProps}
                                       >
-                                        {viewMode === 'grid' ? (
-                                          <ProductCard
-                                            item={item}
-                                            onEdit={onEdit}
-                                            onDelete={onDelete}
-                                            updateItem={updateItem}
-                                            dragHandle={provided.dragHandleProps}
-                                            isDragging={snap.isDragging}
-                                          />
-                                        ) : (
-                                          /* ── List row (Flipkart PLP row style) ── */
-                                          <div className={`flex items-center gap-3 p-3 bg-white rounded-xl border transition-all group
-                                            ${snap.isDragging ? 'shadow-lg ring-2 ring-pink-300 scale-[1.01]' : 'border-gray-100 shadow-sm hover:shadow-md hover:border-pink-100'}
-                                          `}>
-                                            {/* Drag handle */}
-                                            <div {...provided.dragHandleProps}
-                                              className="text-gray-200 hover:text-pink-400 cursor-grab active:cursor-grabbing p-1 flex-shrink-0">
-                                              <GripVertical size={15} />
-                                            </div>
-
-                                            {/* Thumbnail */}
-                                            <div className="relative w-14 h-14 rounded-xl overflow-hidden flex-shrink-0 bg-gray-50">
-                                              {(item.isAvailable === false || item.inStock === false) && (
-                                                <div className="absolute inset-0 bg-black/30 flex items-center justify-center z-10">
-                                                  <span className="text-[8px] text-white font-black">OUT</span>
-                                                </div>
-                                              )}
-                                              {item.image
-                                                ? <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
-                                                : <div className="w-full h-full flex items-center justify-center"><Package size={22} className="text-pink-200" /></div>
-                                              }
-                                            </div>
-
-                                            {/* Info */}
-                                            <div className="flex-1 min-w-0">
-                                              <div className="flex items-center gap-1.5">
-                                                <VegDot veg={item.veg} />
-                                                <p className="font-bold text-sm text-gray-900 truncate">{item.name}</p>
-                                              </div>
-                                              <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-                                                <span className="text-[10px] text-pink-500 font-bold bg-pink-50 px-2 py-0.5 rounded-full border border-pink-100">
-                                                  {item.category}
-                                                </span>
-                                                <span className="text-sm font-black text-gray-900">{formatCurrency(getItemPrice(item))}</span>
-                                                {Array.isArray(item.options) && item.options.length > 1 && (
-                                                  <span className="text-[10px] text-gray-400">+{item.options.length - 1} sizes</span>
-                                                )}
-                                              </div>
-                                            </div>
-
-                                            {/* Actions */}
-                                            <div className="flex items-center gap-2 flex-shrink-0">
-                                              {/* Stock toggle */}
-                                              {(() => {
-                                                const out = item.isAvailable === false || item.inStock === false;
-                                                return (
-                                                  <button type="button"
-                                                    onClick={() => { soundManager.playTapSound(); updateItem(item.id, { isAvailable: out, inStock: out }); }}
-                                                    className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] font-black border transition-all cursor-pointer ${
-                                                      out ? 'bg-red-50 text-red-600 border-red-100 hover:bg-red-100' : 'bg-green-50 text-green-700 border-green-100 hover:bg-green-100'
-                                                    }`}
-                                                  >
-                                                    {out ? <XCircle size={11} /> : <CheckCircle2 size={11} />}
-                                                    <span className="hidden sm:inline">{out ? 'Sold Out' : 'In Stock'}</span>
-                                                  </button>
-                                                );
-                                              })()}
-                                              <button type="button" onClick={() => onEdit(item)}
-                                                className="p-2 text-pink-600 hover:bg-pink-50 rounded-lg transition-all cursor-pointer" title="Edit">
-                                                <Edit2 size={15} />
-                                              </button>
-                                              <button type="button" onClick={() => onDelete(item)}
-                                                className="p-2 text-red-400 hover:bg-red-50 rounded-lg transition-all cursor-pointer" title="Delete">
-                                                <Trash2 size={15} />
-                                              </button>
-                                            </div>
-                                          </div>
-                                        )}
+                                        <ProductCard
+                                          item={item}
+                                          onEdit={onEdit}
+                                          onDelete={onDelete}
+                                          updateItem={updateItem}
+                                          dragHandle={provided.dragHandleProps}
+                                          isDragging={snap.isDragging}
+                                        />
                                       </div>
                                     )}
                                   </Draggable>
