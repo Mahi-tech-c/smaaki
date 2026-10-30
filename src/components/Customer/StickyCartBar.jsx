@@ -10,7 +10,7 @@ export const StickyCartBar = () => {
 
   return (
     <div 
-      className="fixed bottom-0 left-0 right-0 z-40 p-3 sm:p-4 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none animate-in slide-in-from-bottom duration-250"
+      className="fixed bottom-0 left-0 right-0 z-40 p-3 sm:p-4 bg-gradient-to-t from-white via-white/80 to-transparent pointer-events-none animate-in slide-in-from-bottom duration-250"
     >
       <div className="max-w-xl mx-auto pointer-events-auto">
         <button

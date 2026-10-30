@@ -227,22 +227,22 @@ export const CheckoutModal = ({
       }}
     >
       <div 
-        className="w-full sm:max-w-lg rounded-t-3xl sm:rounded-3xl bg-slate-900 border border-slate-800 shadow-2xl p-5 sm:p-6 text-white max-h-[92vh] flex flex-col animate-in slide-in-from-bottom duration-250 text-left"
+        className="w-full sm:max-w-lg rounded-t-3xl sm:rounded-3xl bg-white border border-gray-200 shadow-2xl p-5 sm:p-6 text-gray-900 max-h-[92vh] flex flex-col animate-in slide-in-from-bottom duration-250 text-left"
       >
         {/* Header */}
-        <div className="flex items-center justify-between pb-3 border-b border-slate-800 shrink-0">
+        <div className="flex items-center justify-between pb-3 border-b border-gray-200 shrink-0">
           <div>
-            <h3 id="checkout-modal-title" className="text-lg font-bold">
+            <h3 id="checkout-modal-title" className="text-lg font-bold text-gray-900">
               {completedOrder ? 'Order Confirmed! 🌸' : 'Checkout & Payment'}
             </h3>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-gray-500">
               {completedOrder ? `Order #${completedOrder.orderId}` : `${bill.itemCount} delicious items in bag`}
             </p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-full text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-1.5 rounded-full text-gray-400 hover:text-gray-900 hover:bg-gray-100 transition-colors"
             aria-label="Close"
           >
             <X className="w-5 h-5" />
@@ -250,48 +250,48 @@ export const CheckoutModal = ({
         </div>
 
         {/* Content */}
-        <div className="overflow-y-auto space-y-5 custom-scrollbar py-3 flex-1">
+        <div className="overflow-y-auto space-y-5 custom-scrollbar py-3 flex-1 bg-white">
           {completedOrder ? (
             /* Order Success View */
             <div className="text-center py-6 space-y-4 animate-in zoom-in-95 duration-200">
-              <div className="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto border border-emerald-500/30">
+              <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto border border-emerald-200">
                 <CheckCircle2 className="w-10 h-10" />
               </div>
               <div>
-                <h4 className="text-xl font-black text-white font-heading">
+                <h4 className="text-xl font-black text-gray-900 font-heading">
                   Thank You, {completedOrder.customerName}!
                 </h4>
-                <p className="text-xs text-slate-400 mt-1">
+                <p className="text-xs text-gray-500 mt-1">
                   Your artisanal treats are being freshly prepared in our kitchen.
                 </p>
               </div>
 
-              <div className="p-4 rounded-2xl bg-slate-800/80 border border-slate-700 text-xs text-left space-y-2">
+              <div className="p-4 rounded-2xl bg-gray-50 border border-gray-200 text-xs text-left space-y-2">
                 <div className="flex justify-between">
-                  <span className="text-slate-400">Order ID:</span>
-                  <span className="font-bold text-pink-400">#{completedOrder.orderId}</span>
+                  <span className="text-gray-500">Order ID:</span>
+                  <span className="font-bold text-pink-600">#{completedOrder.orderId}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-400">Order Type:</span>
-                  <span className="font-bold text-white uppercase">{completedOrder.orderType}</span>
+                  <span className="text-gray-500">Order Type:</span>
+                  <span className="font-bold text-gray-900 uppercase">{completedOrder.orderType}</span>
                 </div>
                 {completedOrder.tableNumber && (
                   <div className="flex justify-between">
-                    <span className="text-slate-400">Table Number:</span>
-                    <span className="font-bold text-emerald-400">Table {completedOrder.tableNumber}</span>
+                    <span className="text-gray-500">Table Number:</span>
+                    <span className="font-bold text-emerald-600">Table {completedOrder.tableNumber}</span>
                   </div>
                 )}
                 <div className="flex justify-between">
-                  <span className="text-slate-400">Payment Status:</span>
-                  <span className="font-bold text-white">{completedOrder.paymentStatus}</span>
+                  <span className="text-gray-500">Payment Status:</span>
+                  <span className="font-bold text-gray-900">{completedOrder.paymentStatus}</span>
                 </div>
-                <div className="flex justify-between pt-1 border-t border-slate-700 font-bold text-sm">
+                <div className="flex justify-between pt-1 border-t border-gray-200 font-bold text-sm">
                   <span>Grand Total:</span>
-                  <span className="text-emerald-400">{formatCurrency(completedOrder.grandTotal, settings?.currencySymbol || '₹')}</span>
+                  <span className="text-emerald-600">{formatCurrency(completedOrder.grandTotal, settings?.currencySymbol || '₹')}</span>
                 </div>
               </div>
 
-              <p className="text-xs text-slate-400 italic">
+              <p className="text-xs text-gray-500 italic">
                 Average wait time is 15-20 minutes. You can track this order anytime from the top bar!
               </p>
 
@@ -315,7 +315,7 @@ export const CheckoutModal = ({
                 <button
                   type="button"
                   onClick={onClose}
-                  className="w-full py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold text-xs uppercase tracking-wider transition-all"
+                  className="w-full py-3 rounded-2xl bg-gray-100 hover:bg-gray-200 text-gray-700 hover:text-gray-900 font-bold text-xs uppercase tracking-wider transition-all"
                 >
                   Back to Cafe Menu
                 </button>
@@ -325,7 +325,7 @@ export const CheckoutModal = ({
             /* Checkout Form */
             <form onSubmit={handleSubmitOrder} className="space-y-5">
               {formError && (
-                <div className="p-3 rounded-xl bg-red-950/60 border border-red-800 text-red-300 text-xs flex items-center gap-2">
+                <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-600 text-xs flex items-center gap-2">
                   <AlertCircle className="w-4 h-4 shrink-0" />
                   <span>{formError}</span>
                 </div>
@@ -333,7 +333,7 @@ export const CheckoutModal = ({
 
               {/* 1. Order Type Selection */}
               <div>
-                <label className="text-xs font-bold uppercase tracking-wider text-slate-300 block mb-2">
+                <label className="text-xs font-bold uppercase tracking-wider text-gray-700 block mb-2">
                   Service Type
                 </label>
                 <div className="grid grid-cols-3 gap-2">
@@ -348,8 +348,8 @@ export const CheckoutModal = ({
                       onClick={() => setOrderType(type.id)}
                       className={`p-2.5 rounded-xl border text-xs font-bold transition-all flex flex-col items-center gap-1 ${
                         orderType === type.id
-                          ? 'border-pink-500 bg-pink-500/15 text-white'
-                          : 'border-slate-800 bg-slate-850 text-slate-400 hover:text-white'
+                          ? 'border-pink-500 bg-pink-50 text-pink-900 ring-1 ring-pink-500/50'
+                          : 'border-gray-200 bg-gray-50/70 text-gray-600 hover:bg-gray-100'
                       }`}
                     >
                       <span className="text-base">{type.icon}</span>
@@ -361,18 +361,18 @@ export const CheckoutModal = ({
 
               {/* Active Table Order Banner / Re-order indicator */}
               {orderType === 'dine-in' && activeTableOrder && (
-                <div className="p-3.5 rounded-2xl bg-emerald-950/40 border border-emerald-800/40 text-xs space-y-1.5 animate-in fade-in">
+                <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs space-y-1.5 animate-in fade-in">
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-emerald-400 flex items-center gap-1.5">
+                    <span className="font-bold text-emerald-700 flex items-center gap-1.5">
                       <Utensils className="w-3.5 h-3.5" />
                       <span>Adding to Table {tableNumber || currentTable}'s Order</span>
                     </span>
-                    <span className="text-[10px] bg-emerald-900/60 text-emerald-300 font-mono px-2 py-0.5 rounded-full font-bold">
+                    <span className="text-[10px] bg-emerald-100 text-emerald-800 font-mono px-2 py-0.5 rounded-full font-bold">
                       Order #{activeTableOrder.orderId}
                     </span>
                   </div>
-                  <p className="text-[11px] text-slate-300 leading-relaxed">
-                    Current running bill on this table: <strong className="text-white font-bold">{formatCurrency(activeTableOrder.grandTotal, settings?.currencySymbol || '₹')}</strong>. These new items will be served right to your table.
+                  <p className="text-[11px] text-gray-600 leading-relaxed">
+                    Current running bill on this table: <strong className="text-gray-900 font-bold">{formatCurrency(activeTableOrder.grandTotal, settings?.currencySymbol || '₹')}</strong>. These new items will be served right to your table.
                   </p>
                 </div>
               )}
@@ -380,17 +380,17 @@ export const CheckoutModal = ({
               {/* Table Number (if Dine-in) */}
               {orderType === 'dine-in' && (
                 <div className="space-y-1">
-                  <label className="text-xs font-bold uppercase tracking-wider text-slate-300 block">
-                    Table Number <span className="text-pink-400">*</span>
+                  <label className="text-xs font-bold uppercase tracking-wider text-gray-700 block">
+                    Table Number <span className="text-pink-600">*</span>
                   </label>
                   <input
                     type="text"
                     value={tableNumber}
                     onChange={(e) => setTableNumber(e.target.value)}
                     placeholder="e.g. 4 or Table 4"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-xs font-semibold focus:outline-none focus:border-pink-500"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 text-xs font-semibold focus:outline-none focus:border-pink-500"
                   />
-                  <p className="text-[10px] text-slate-400">
+                  <p className="text-[10px] text-gray-500">
                     Your food will be served warm directly to this table.
                   </p>
                 </div>
@@ -399,15 +399,15 @@ export const CheckoutModal = ({
               {/* Delivery Address (if Delivery) */}
               {orderType === 'delivery' && (
                 <div className="space-y-1">
-                  <label className="text-xs font-bold uppercase tracking-wider text-slate-300 block">
-                    Delivery Address <span className="text-pink-400">*</span>
+                  <label className="text-xs font-bold uppercase tracking-wider text-gray-700 block">
+                    Delivery Address <span className="text-pink-600">*</span>
                   </label>
                   <textarea
                     rows={2}
                     value={deliveryAddress}
                     onChange={(e) => setDeliveryAddress(e.target.value)}
                     placeholder="House/Flat number, Street, Landmark, Warangal"
-                    className="w-full px-3.5 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white text-xs focus:outline-none focus:border-pink-500 resize-none"
+                    className="w-full px-3.5 py-2 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 text-xs focus:outline-none focus:border-pink-500 resize-none"
                   />
                 </div>
               )}
@@ -415,24 +415,24 @@ export const CheckoutModal = ({
               {/* 2. Customer Contact */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="text-xs font-bold uppercase tracking-wider text-slate-300 block">
-                    Your Name <span className="text-pink-400">*</span>
+                  <label className="text-xs font-bold uppercase tracking-wider text-gray-700 block">
+                    Your Name <span className="text-pink-600">*</span>
                   </label>
                   <input
                     type="text"
                     value={customerName}
                     onChange={(e) => setCustomerName(e.target.value)}
                     placeholder="Full Name"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-xs focus:outline-none focus:border-pink-500"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 text-xs focus:outline-none focus:border-pink-500"
                   />
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-xs font-bold uppercase tracking-wider text-slate-300 block">
-                    Phone (10 Digits) <span className="text-pink-400">*</span>
+                  <label className="text-xs font-bold uppercase tracking-wider text-gray-700 block">
+                    Phone (10 Digits) <span className="text-pink-600">*</span>
                   </label>
                   <div className="flex items-center">
-                    <span className="px-3 py-2.5 bg-slate-800 border border-r-0 border-slate-700 rounded-l-xl text-xs text-slate-400 font-bold">
+                    <span className="px-3 py-2.5 bg-gray-100 border border-r-0 border-gray-200 rounded-l-xl text-xs text-gray-500 font-bold">
                       +91
                     </span>
                     <input
@@ -441,7 +441,7 @@ export const CheckoutModal = ({
                       value={customerPhone}
                       onChange={(e) => setCustomerPhone(e.target.value.replace(/\D/g, ''))}
                       placeholder="9876543210"
-                      className="w-full px-3.5 py-2.5 rounded-r-xl bg-slate-800 border border-slate-700 text-white text-xs focus:outline-none focus:border-pink-500"
+                      className="w-full px-3.5 py-2.5 rounded-r-xl bg-gray-50 border border-gray-200 text-gray-900 text-xs focus:outline-none focus:border-pink-500"
                     />
                   </div>
                 </div>
@@ -449,7 +449,7 @@ export const CheckoutModal = ({
 
               {/* Special Dining Notes */}
               <div className="space-y-1">
-                <label className="text-xs font-bold uppercase tracking-wider text-slate-300 block">
+                <label className="text-xs font-bold uppercase tracking-wider text-gray-700 block">
                   Cooking / Dining Note
                 </label>
                 <input
@@ -458,75 +458,75 @@ export const CheckoutModal = ({
                   value={orderNotes}
                   onChange={(e) => setOrderNotes(e.target.value)}
                   placeholder="e.g. Less spicy, serve drinks first..."
-                  className="w-full px-3.5 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white text-xs focus:outline-none focus:border-pink-500"
+                  className="w-full px-3.5 py-2 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 text-xs focus:outline-none focus:border-pink-500"
                 />
               </div>
 
               {/* Schedule for Later */}
-              <div className="p-3 rounded-xl bg-slate-800/60 border border-slate-700/60 space-y-2">
-                <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-slate-300">
+              <div className="p-3 rounded-xl bg-gray-50 border border-gray-200 space-y-2">
+                <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-gray-700">
                   <input
                     type="checkbox"
                     checked={isScheduled}
                     onChange={(e) => setIsScheduled(e.target.checked)}
-                    className="w-4 h-4 rounded text-pink-600 focus:ring-pink-500 bg-slate-900 border-slate-700"
+                    className="w-4 h-4 rounded text-pink-600 focus:ring-pink-500 bg-white border-gray-300"
                   />
-                  <Clock className="w-3.5 h-3.5 text-pink-400" />
+                  <Clock className="w-3.5 h-3.5 text-pink-600" />
                   <span>Schedule for Later Today</span>
                 </label>
                 {isScheduled && (
                   <div className="pt-1 flex items-center gap-2">
-                    <span className="text-[11px] text-slate-400">Target Time:</span>
+                    <span className="text-[11px] text-gray-500">Target Time:</span>
                     <input
                       type="time"
                       value={scheduledTime}
                       onChange={(e) => setScheduledTime(e.target.value)}
-                      className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white focus:outline-none focus:border-pink-500"
+                      className="px-2.5 py-1 rounded-lg bg-white border border-gray-200 text-xs text-gray-900 focus:outline-none focus:border-pink-500"
                     />
                   </div>
                 )}
               </div>
 
               {/* 3. Verified Bill Breakdown */}
-              <div className="p-3.5 rounded-2xl bg-slate-800/80 border border-slate-700 space-y-2 text-xs">
-                <span className="font-bold text-slate-300 uppercase tracking-wider text-[11px] block border-b border-slate-700/80 pb-1.5">
+              <div className="p-3.5 rounded-2xl bg-gray-50 border border-gray-200 space-y-2 text-xs">
+                <span className="font-bold text-gray-700 uppercase tracking-wider text-[11px] block border-b border-gray-200 pb-1.5">
                   Verified Bill Breakdown
                 </span>
-                <div className="flex justify-between text-slate-300">
+                <div className="flex justify-between text-gray-600">
                   <span>Item Total ({bill.itemCount} items):</span>
                   <span>{formatCurrency(bill.itemTotal, settings?.currencySymbol || '₹')}</span>
                 </div>
                 {bill.discount > 0 && (
-                  <div className="flex justify-between text-emerald-400 font-bold">
+                  <div className="flex justify-between text-emerald-600 font-bold">
                     <span>Coupon Discount ({bill.discountCode}):</span>
                     <span>-{formatCurrency(bill.discount, settings?.currencySymbol || '₹')}</span>
                   </div>
                 )}
                 {bill.packingCharge > 0 && (
-                  <div className="flex justify-between text-slate-300">
+                  <div className="flex justify-between text-gray-600">
                     <span>Packaging Charge:</span>
                     <span>+{formatCurrency(bill.packingCharge, settings?.currencySymbol || '₹')}</span>
                   </div>
                 )}
                 {bill.deliveryFee > 0 && (
-                  <div className="flex justify-between text-slate-300">
+                  <div className="flex justify-between text-gray-600">
                     <span>Delivery Fee:</span>
                     <span>+{formatCurrency(bill.deliveryFee, settings?.currencySymbol || '₹')}</span>
                   </div>
                 )}
-                <div className="flex justify-between text-slate-400 text-[11px]">
+                <div className="flex justify-between text-gray-500 text-[11px]">
                   <span>GST ({bill.gstRate}% {bill.isTaxInclusive ? 'included' : 'added'}):</span>
                   <span>{formatCurrency(bill.gst, settings?.currencySymbol || '₹')}</span>
                 </div>
-                <div className="flex justify-between pt-2 border-t border-slate-700 font-extrabold text-sm text-white">
+                <div className="flex justify-between pt-2 border-t border-gray-200 font-extrabold text-sm text-gray-900">
                   <span>Grand Total:</span>
-                  <span className="text-emerald-400">{formatCurrency(bill.grandTotal, settings?.currencySymbol || '₹')}</span>
+                  <span className="text-emerald-600">{formatCurrency(bill.grandTotal, settings?.currencySymbol || '₹')}</span>
                 </div>
               </div>
 
               {/* 4. Payment Method Selection */}
               <div>
-                <label className="text-xs font-bold uppercase tracking-wider text-slate-300 block mb-2">
+                <label className="text-xs font-bold uppercase tracking-wider text-gray-700 block mb-2">
                   Choose Payment Method
                 </label>
                 <div className="grid grid-cols-3 gap-2">
@@ -535,11 +535,11 @@ export const CheckoutModal = ({
                     onClick={() => setPaymentMethod('upi')}
                     className={`p-2.5 rounded-xl border text-xs font-bold transition-all flex flex-col items-center gap-1 ${
                       paymentMethod === 'upi'
-                        ? 'border-pink-500 bg-pink-500/15 text-white'
-                        : 'border-slate-800 bg-slate-850 text-slate-400'
+                        ? 'border-pink-500 bg-pink-50 text-pink-900 ring-1 ring-pink-500/50'
+                        : 'border-gray-200 bg-gray-50/70 text-gray-600 hover:bg-gray-100'
                     }`}
                   >
-                    <QrCode className="w-4 h-4 text-pink-400" />
+                    <QrCode className="w-4 h-4 text-pink-600" />
                     <span>UPI (Instant)</span>
                   </button>
 
@@ -548,11 +548,11 @@ export const CheckoutModal = ({
                     onClick={() => setPaymentMethod('cash')}
                     className={`p-2.5 rounded-xl border text-xs font-bold transition-all flex flex-col items-center gap-1 ${
                       paymentMethod === 'cash'
-                        ? 'border-pink-500 bg-pink-500/15 text-white'
-                        : 'border-slate-800 bg-slate-850 text-slate-400'
+                        ? 'border-pink-500 bg-pink-50 text-pink-900 ring-1 ring-pink-500/50'
+                        : 'border-gray-200 bg-gray-50/70 text-gray-600 hover:bg-gray-100'
                     }`}
                   >
-                    <Banknote className="w-4 h-4 text-emerald-400" />
+                    <Banknote className="w-4 h-4 text-emerald-600" />
                     <span>Pay at Counter</span>
                   </button>
 
@@ -561,11 +561,11 @@ export const CheckoutModal = ({
                     onClick={() => setPaymentMethod('card')}
                     className={`p-2.5 rounded-xl border text-xs font-bold transition-all flex flex-col items-center gap-1 ${
                       paymentMethod === 'card'
-                        ? 'border-pink-500 bg-pink-500/15 text-white'
-                        : 'border-slate-800 bg-slate-850 text-slate-400'
+                        ? 'border-pink-500 bg-pink-50 text-pink-900 ring-1 ring-pink-500/50'
+                        : 'border-gray-200 bg-gray-50/70 text-gray-600 hover:bg-gray-100'
                     }`}
                   >
-                    <CreditCard className="w-4 h-4 text-sky-400" />
+                    <CreditCard className="w-4 h-4 text-sky-600" />
                     <span>Card / POS</span>
                   </button>
                 </div>
@@ -573,10 +573,10 @@ export const CheckoutModal = ({
 
               {/* Mobile UPI Direct Apps (if UPI selected) */}
               {paymentMethod === 'upi' && (
-                <div className="p-3.5 rounded-2xl bg-slate-800/80 border border-slate-700 text-xs space-y-3">
+                <div className="p-3.5 rounded-2xl bg-gray-50 border border-gray-200 text-xs space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-slate-200">Pay via UPI Apps (Mobile)</span>
-                    <span className="text-[10px] text-pink-400 font-bold tabular-nums">
+                    <span className="font-bold text-gray-700">Pay via UPI Apps (Mobile)</span>
+                    <span className="text-[10px] text-pink-600 font-bold tabular-nums">
                       QR Expires in {formatTimer(qrTimer)}
                     </span>
                   </div>
@@ -587,15 +587,15 @@ export const CheckoutModal = ({
                       <a
                         key={i}
                         href={app.scheme}
-                        className={`p-2 rounded-xl text-center text-[11px] font-black uppercase tracking-wider transition-transform active:scale-95 shadow-sm block ${app.color}`}
+                        className={`p-2 rounded-xl text-center text-[11px] font-black uppercase tracking-wider transition-transform active:scale-95 shadow-xs block ${app.color}`}
                       >
                         {app.name}
                       </a>
                     ))}
                   </div>
 
-                  <p className="text-[10px] text-slate-400">
-                    UPI ID: <strong className="text-slate-300">{upiId}</strong>
+                  <p className="text-[10px] text-gray-500">
+                    UPI ID: <strong className="text-gray-700">{upiId}</strong>
                   </p>
                 </div>
               )}

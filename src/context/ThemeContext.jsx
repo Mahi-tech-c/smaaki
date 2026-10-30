@@ -1,29 +1,26 @@
 import React, { createContext, useContext } from 'react';
 
-// Theme is permanently locked to 'dark' — professional dark look only.
-// No user-facing toggle; no system preference detection.
-
+// Theme is permanently locked to 'light' — clean professional light look.
 export const ThemeContext = createContext({
-  theme: 'dark',
-  isDark: true,
+  theme: 'light',
+  isDark: false,
   toggleTheme: () => {},
   setTheme: () => {},
 });
 
 export const ThemeProvider = ({ children }) => {
-  // Always ensure the dark class is applied on mount via a simple side-effect
   React.useEffect(() => {
     const root = document.documentElement;
-    root.setAttribute('data-theme', 'dark');
-    root.classList.add('dark');
-    root.classList.remove('light');
+    root.setAttribute('data-theme', 'light');
+    root.classList.remove('dark');
+    root.classList.add('light');
   }, []);
 
   const value = {
-    theme: 'dark',
-    isDark: true,
-    toggleTheme: () => {}, // no-op
-    setTheme: () => {},    // no-op
+    theme: 'light',
+    isDark: false,
+    toggleTheme: () => {},
+    setTheme: () => {},
   };
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;

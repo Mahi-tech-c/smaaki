@@ -97,7 +97,7 @@ export const ProductCard = ({
         onClick={() => onOpenQuickView?.(item)}
         className={`
           flex items-start justify-between gap-3 sm:gap-4 p-4 rounded-2xl
-          bg-slate-900/95 border border-slate-800/80 hover:border-slate-700
+          bg-white border border-gray-200 hover:border-gray-300 hover:shadow-sm
           transition-all duration-200 select-none group relative cursor-pointer
           ${!isAvailable ? 'opacity-65' : ''}
         `}
@@ -122,17 +122,17 @@ export const ProductCard = ({
           </div>
 
           {/* Name */}
-          <h3 className="font-bold text-sm sm:text-base text-white group-hover:text-pink-400 transition-colors leading-tight mb-1">
+          <h3 className="font-bold text-sm sm:text-base text-gray-900 group-hover:text-pink-600 transition-colors leading-tight mb-1">
             <HighlightMatch text={item.name} query={searchQuery} />
           </h3>
 
           {/* Price (Strictly ₹259, never ₹259.00) */}
           <div className="flex items-baseline gap-2 mb-1.5">
-            <span className="text-sm sm:text-base font-extrabold text-white">
+            <span className="text-sm sm:text-base font-extrabold text-gray-900">
               {formatCurrency(basePrice, settings?.currencySymbol || '₹')}
             </span>
             {hasVariants && (
-              <span className="text-[10px] text-slate-400 font-medium">
+              <span className="text-[10px] text-gray-500 font-medium">
                 ({item.options.length} options)
               </span>
             )}
@@ -140,7 +140,7 @@ export const ProductCard = ({
 
           {/* Appetizing 2-Line Truncated Description */}
           {cleanDescription && (
-            <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed font-normal">
+            <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed font-normal">
               <HighlightMatch text={cleanDescription} query={searchQuery} />
             </p>
           )}
@@ -148,7 +148,7 @@ export const ProductCard = ({
 
         {/* Right: 96px Image with Overlapping Add Button */}
         <div className="relative shrink-0 flex flex-col items-center">
-          <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden bg-slate-800 shadow-sm relative">
+          <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden bg-gray-100 shadow-sm relative">
             <img 
               src={item.image || FALLBACK_FOOD_IMAGE}
               alt={item.name}
@@ -162,7 +162,7 @@ export const ProductCard = ({
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             />
             {/* Reference image watermark indicator */}
-            <span className="absolute bottom-1 right-1 text-[8px] bg-black/60 text-slate-300 px-1 rounded backdrop-blur-xs pointer-events-none">
+            <span className="absolute bottom-1 right-1 text-[8px] bg-black/60 text-white px-1 rounded backdrop-blur-xs pointer-events-none">
               Ref image
             </span>
           </div>
@@ -173,7 +173,7 @@ export const ProductCard = ({
               <button
                 type="button"
                 onClick={handleNotifyMe}
-                className="w-full py-1 rounded-xl bg-slate-800 border border-slate-700 text-slate-400 hover:text-white text-[11px] font-bold uppercase tracking-wider flex items-center justify-center gap-1 shadow-md transition-all active:scale-95"
+                className="w-full py-1 rounded-xl bg-gray-100 border border-gray-200 text-gray-500 hover:text-gray-900 text-[11px] font-bold uppercase tracking-wider flex items-center justify-center gap-1 shadow-md transition-all active:scale-95"
               >
                 <Bell className="w-3 h-3" /> Notify
               </button>
@@ -208,15 +208,15 @@ export const ProductCard = ({
     <div
       onClick={() => onOpenQuickView?.(item)}
       className={`
-        flex flex-col rounded-2xl bg-slate-900
-        border border-slate-800/80 hover:border-pink-500/40
+        flex flex-col rounded-2xl bg-white
+        border border-gray-200 hover:border-pink-500/40 hover:shadow-md
         transition-all duration-300 overflow-hidden group relative cursor-pointer select-none
         ${!isAvailable ? 'opacity-60' : ''}
       `}
     >
       {/* ══ TALL IMAGE — ~70% of card ══ */}
       <div
-        className="relative w-full overflow-hidden bg-slate-800"
+        className="relative w-full overflow-hidden bg-gray-100"
         style={{ aspectRatio: '3 / 4' }}
       >
         <img
@@ -250,29 +250,29 @@ export const ProductCard = ({
         )}
 
         {/* Dietary dot — top right */}
-        <div className="absolute top-2 right-2 z-10 p-0.5 bg-slate-900/80 rounded-sm backdrop-blur-sm">
+        <div className="absolute top-2 right-2 z-10 p-0.5 bg-white/90 rounded-sm shadow-xs backdrop-blur-sm">
           <DietaryMarker type={dietaryType} size={14} />
         </div>
 
         {/* Bottom gradient scrim */}
-        <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-slate-900/80 to-transparent pointer-events-none" />
+        <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
       </div>
 
       {/* ══ COMPACT CONTENT STRIP — ~30% of card ══ */}
       <div className="flex flex-col px-2.5 pt-2.5 pb-2.5 gap-1.5 flex-1">
         {/* Item name — 2 lines max */}
-        <p className="text-xs font-bold text-white leading-tight line-clamp-2" title={item.name}>
+        <p className="text-xs font-bold text-gray-900 leading-tight line-clamp-2" title={item.name}>
           <HighlightMatch text={item.name} query={searchQuery} />
         </p>
 
         {/* Price + ADD button row */}
         <div className="flex items-center justify-between mt-auto">
           <div className="flex items-center gap-1.5">
-            <span className="text-sm font-extrabold text-white tracking-tight">
+            <span className="text-sm font-extrabold text-gray-900 tracking-tight">
               {formatCurrency(basePrice, settings?.currencySymbol || '₹')}
             </span>
             {hasVariants && (
-              <span className="text-[9px] text-slate-500 font-bold bg-slate-800 px-1.5 py-0.5 rounded-full">
+              <span className="text-[9px] text-gray-500 font-bold bg-gray-100 px-1.5 py-0.5 rounded-full">
                 +{item.options.length - 1}
               </span>
             )}
@@ -284,7 +284,7 @@ export const ProductCard = ({
               <button
                 type="button"
                 onClick={handleNotifyMe}
-                className="px-2 py-1 rounded-xl bg-slate-800 border border-slate-700 text-slate-400 text-[10px] font-black uppercase tracking-wider flex items-center gap-0.5 shadow-md transition-all active:scale-95"
+                className="px-2 py-1 rounded-xl bg-gray-100 border border-gray-200 text-gray-500 text-[10px] font-black uppercase tracking-wider flex items-center gap-0.5 shadow-xs transition-all active:scale-95"
               >
                 <Bell className="w-3 h-3" /> Notify
               </button>

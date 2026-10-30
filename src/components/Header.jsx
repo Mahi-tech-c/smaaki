@@ -176,7 +176,7 @@ export const Header = () => {
 
         {/* Mobile Sub-Navigation Bar (Auto-hiding on scroll-down, returning on scroll-up) */}
         <div 
-          className={`lg:hidden border-t border-slate-800 bg-[#0f1117] shrink-0 transition-all duration-200 overflow-hidden ${
+          className={`lg:hidden border-t border-gray-200 bg-white shrink-0 transition-all duration-200 overflow-hidden ${
             scrollDirection === 'down' ? 'max-h-0 py-0 opacity-0' : 'max-h-12 py-2 opacity-100'
           }`}
         >
@@ -189,7 +189,7 @@ export const Header = () => {
                     key={link.to}
                     to={link.to}
                     className={`px-3 py-1 rounded-lg transition-colors ${
-                      isActive ? 'bg-pink-600 text-white font-bold' : 'text-slate-300 hover:text-white'
+                      isActive ? 'bg-pink-600 text-white font-bold' : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
                     {link.label}
@@ -199,7 +199,7 @@ export const Header = () => {
             </div>
 
             {/* Mobile Open/Closed Status pill */}
-            <div className="sm:hidden flex items-center gap-1.5 text-[11px] font-medium text-slate-400 shrink-0">
+            <div className="sm:hidden flex items-center gap-1.5 text-[11px] font-medium text-gray-500 shrink-0">
               <span className={`inline-block w-2 h-2 rounded-full ${liveStatus.isOpen ? 'bg-emerald-500' : 'bg-rose-500'}`} />
               <span>{liveStatus.statusText}</span>
             </div>

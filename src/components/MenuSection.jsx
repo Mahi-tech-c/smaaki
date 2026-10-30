@@ -206,7 +206,7 @@ export const MenuSection = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0f1117] text-white pt-2 pb-32">
+    <div className="min-h-screen bg-gray-50 text-gray-900 pt-2 pb-32">
       {/* Quick View Customization Sheet */}
       <QuickViewModal 
         item={quickViewItem}
@@ -229,7 +229,7 @@ export const MenuSection = () => {
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
               placeholder="Search for churros, waffles, burgers, pizza..."
-              className="w-full pl-10 pr-10 py-3 rounded-2xl bg-slate-900 border border-slate-800 text-white placeholder:text-slate-500 text-sm focus:outline-none focus:border-pink-500 transition-colors shadow-sm"
+              className="w-full pl-10 pr-10 py-3 rounded-2xl bg-white border border-gray-300 text-gray-900 placeholder:text-gray-400 text-sm focus:outline-none focus:border-pink-500 transition-colors shadow-sm"
             />
             {searchInput && (
               <button
@@ -238,7 +238,7 @@ export const MenuSection = () => {
                   setSearchInput('');
                   setDebouncedSearch('');
                 }}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-white"
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-700"
                 aria-label="Clear search"
               >
                 <X className="w-4 h-4" />
@@ -255,7 +255,7 @@ export const MenuSection = () => {
               className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer ${
                 dietFilter === 'veg'
                   ? 'bg-emerald-600 text-white shadow-sm shadow-emerald-600/30'
-                  : 'bg-slate-900 border border-slate-800 text-emerald-400 hover:bg-slate-850'
+                  : 'bg-white border border-gray-200 text-emerald-600 hover:bg-gray-50'
               }`}
             >
               <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
@@ -269,7 +269,7 @@ export const MenuSection = () => {
               className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all shrink-0 whitespace-nowrap cursor-pointer ${
                 dietFilter === 'nonveg'
                   ? 'bg-red-600 text-white shadow-sm shadow-red-600/30'
-                  : 'bg-slate-900 border border-slate-800 text-red-400 hover:bg-slate-850'
+                  : 'bg-white border border-gray-200 text-red-500 hover:bg-gray-50'
               }`}
             >
               <span className="w-2 h-2 rounded-full bg-red-400 shrink-0" />
@@ -283,7 +283,7 @@ export const MenuSection = () => {
               className={`px-3 py-2 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer ${
                 under200Only
                   ? 'bg-pink-600 text-white shadow-sm'
-                  : 'bg-slate-900 border border-slate-800 text-slate-300 hover:bg-slate-850'
+                  : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
               }`}
             >
               Under ₹200
@@ -295,25 +295,25 @@ export const MenuSection = () => {
               onClick={() => setInStockOnly(!inStockOnly)}
               className={`px-3 py-2 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer ${
                 inStockOnly
-                  ? 'bg-slate-100 text-slate-950 font-black'
-                  : 'bg-slate-900 border border-slate-800 text-slate-300 hover:bg-slate-850'
+                  ? 'bg-gray-800 text-white font-black'
+                  : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
               }`}
             >
               In Stock
             </button>
 
             {/* Price Sort Dropdown */}
-            <div className="flex items-center gap-1.5 bg-slate-900 border border-slate-800 px-3 py-2 rounded-xl text-xs font-semibold text-slate-300 shrink-0">
-              <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
+            <div className="flex items-center gap-1.5 bg-white border border-gray-200 px-3 py-2 rounded-xl text-xs font-semibold text-gray-600 shrink-0">
+              <ArrowUpDown className="w-3.5 h-3.5 text-gray-400" />
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="bg-transparent font-bold text-white focus:outline-none cursor-pointer pr-1 text-xs"
+                className="bg-transparent font-bold text-gray-900 focus:outline-none cursor-pointer pr-1 text-xs"
               >
-                <option value="recommended" className="bg-slate-900">Curated</option>
-                <option value="price-asc" className="bg-slate-900">Price: Low to High</option>
-                <option value="price-desc" className="bg-slate-900">Price: High to Low</option>
-                <option value="name" className="bg-slate-900">Name (A-Z)</option>
+                <option value="recommended">Curated</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+                <option value="name">Name (A-Z)</option>
               </select>
             </div>
           </div>
@@ -327,7 +327,7 @@ export const MenuSection = () => {
             <span className="p-1 rounded-lg bg-amber-500/15 text-amber-400">
               <Star className="w-4 h-4 fill-current" />
             </span>
-            <h3 className="font-extrabold text-base tracking-tight text-white font-heading">
+            <h3 className="font-extrabold text-base tracking-tight text-gray-900 font-heading">
               Bestsellers in Warangal
             </h3>
           </div>
@@ -336,22 +336,22 @@ export const MenuSection = () => {
               <div 
                 key={item.id}
                 onClick={() => setQuickViewItem(item)}
-                className="w-40 sm:w-48 shrink-0 rounded-2xl bg-slate-900 border border-slate-800 p-2.5 hover:border-pink-500/40 transition-all cursor-pointer flex flex-col justify-between"
+                className="w-40 sm:w-48 shrink-0 rounded-2xl bg-white border border-gray-200 p-2.5 hover:border-pink-400/60 hover:shadow-md transition-all cursor-pointer flex flex-col justify-between shadow-sm"
               >
-                <div className="relative aspect-square w-full rounded-xl overflow-hidden bg-slate-800 mb-2">
+                <div className="relative aspect-square w-full rounded-xl overflow-hidden bg-gray-100 mb-2">
                   <img 
                     src={item.image} 
                     alt={item.name} 
                     className="w-full h-full object-cover" 
                     loading="lazy" 
                   />
-                  <div className="absolute top-1.5 left-1.5 p-0.5 rounded bg-black/60">
+                  <div className="absolute top-1.5 left-1.5 p-0.5 rounded bg-black/50">
                     <span className="w-2 h-2 rounded-full bg-emerald-400 block" />
                   </div>
-                  <div className="absolute bottom-0 inset-x-0 h-8 bg-gradient-to-t from-slate-900/80 to-transparent rounded-b-xl pointer-events-none" />
+                  <div className="absolute bottom-0 inset-x-0 h-8 bg-gradient-to-t from-black/40 to-transparent rounded-b-xl pointer-events-none" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-xs text-white truncate">{item.name}</h4>
+                  <h4 className="font-bold text-xs text-gray-900 truncate">{item.name}</h4>
                   <div className="flex items-center justify-between mt-1">
                     <span className="font-extrabold text-xs text-pink-400">
                       {formatCurrency(item.price, settings?.currencySymbol || '₹')}
@@ -381,7 +381,7 @@ export const MenuSection = () => {
             <span className="p-1 rounded-lg bg-sky-500/15 text-sky-400">
               <Sparkles className="w-4 h-4" />
             </span>
-            <h3 className="font-extrabold text-base tracking-tight text-white font-heading">
+            <h3 className="font-extrabold text-base tracking-tight text-gray-900 font-heading">
               New Creations
             </h3>
           </div>
@@ -390,22 +390,22 @@ export const MenuSection = () => {
               <div 
                 key={item.id}
                 onClick={() => setQuickViewItem(item)}
-                className="w-40 sm:w-48 shrink-0 rounded-2xl bg-slate-900 border border-slate-800 p-2.5 hover:border-pink-500/40 transition-all cursor-pointer flex flex-col justify-between"
+                className="w-40 sm:w-48 shrink-0 rounded-2xl bg-white border border-gray-200 p-2.5 hover:border-pink-400/60 hover:shadow-md transition-all cursor-pointer flex flex-col justify-between shadow-sm"
               >
-                <div className="relative aspect-square w-full rounded-xl overflow-hidden bg-slate-800 mb-2">
+                <div className="relative aspect-square w-full rounded-xl overflow-hidden bg-gray-100 mb-2">
                   <img 
                     src={item.image} 
                     alt={item.name} 
                     className="w-full h-full object-cover" 
                     loading="lazy" 
                   />
-                  <div className="absolute top-1.5 left-1.5 p-0.5 rounded bg-black/60">
+                  <div className="absolute top-1.5 left-1.5 p-0.5 rounded bg-black/50">
                     <span className="w-2 h-2 rounded-full bg-sky-400 block" />
                   </div>
-                  <div className="absolute bottom-0 inset-x-0 h-8 bg-gradient-to-t from-slate-900/80 to-transparent rounded-b-xl pointer-events-none" />
+                  <div className="absolute bottom-0 inset-x-0 h-8 bg-gradient-to-t from-black/40 to-transparent rounded-b-xl pointer-events-none" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-xs text-white truncate">{item.name}</h4>
+                  <h4 className="font-bold text-xs text-gray-900 truncate">{item.name}</h4>
                   <div className="flex items-center justify-between mt-1">
                     <span className="font-extrabold text-xs text-pink-400">
                       {formatCurrency(item.price, settings?.currencySymbol || '₹')}
@@ -431,7 +431,7 @@ export const MenuSection = () => {
       {/* Sticky Category Scroll-Spy Chips Bar */}
       <nav 
         aria-label="Menu categories"
-        className="sticky top-16 z-30 w-full bg-[#0f1117] border-y border-slate-800 shadow-md py-2 transition-all"
+        className="sticky top-16 z-30 w-full bg-white border-y border-gray-200 shadow-sm py-2 transition-all"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div
@@ -456,14 +456,14 @@ export const MenuSection = () => {
                     transition-all select-none outline-none cursor-pointer
                     ${isActive
                       ? 'bg-pink-600 text-white shadow-md shadow-pink-600/30 scale-[1.02]'
-                      : 'bg-slate-900 border border-slate-800 text-slate-300 hover:bg-slate-850 hover:text-white'
+                      : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                     }
                   `}
                 >
                   <span aria-hidden="true" className="shrink-0 text-sm">{emoji}</span>
                   <span>{cat}</span>
                   <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
-                    isActive ? 'bg-white/20 text-white' : 'bg-slate-800 text-slate-400'
+                    isActive ? 'bg-white/20 text-white' : 'bg-gray-100 text-gray-500'
                   }`}>
                     {count}
                   </span>
@@ -474,7 +474,7 @@ export const MenuSection = () => {
 
           {/* Right edge fade gradient so cut-off tabs are visually scrollable */}
           <div 
-            className="pointer-events-none absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-[#0f1117] to-transparent" 
+            className="pointer-events-none absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-white to-transparent" 
             aria-hidden="true"
           />
         </div>
@@ -485,11 +485,11 @@ export const MenuSection = () => {
         {activeDisplayCategories.length === 0 ? (
           /* Empty search/filter results */
           <div className="py-20 text-center flex flex-col items-center justify-center max-w-sm mx-auto">
-            <div className="w-16 h-16 rounded-3xl bg-slate-900 border border-slate-800 text-slate-400 flex items-center justify-center mb-4">
+            <div className="w-16 h-16 rounded-3xl bg-gray-100 border border-gray-200 text-gray-400 flex items-center justify-center mb-4">
               <Utensils className="w-8 h-8" />
             </div>
-            <h3 className="text-lg font-bold text-white mb-1">No items found</h3>
-            <p className="text-xs text-slate-400 mb-6 leading-relaxed">
+            <h3 className="text-lg font-bold text-gray-900 mb-1">No items found</h3>
+            <p className="text-xs text-gray-500 mb-6 leading-relaxed">
               We couldn&apos;t find any recipes matching your current search or filters. Try searching for something else or clear filters!
             </p>
             <button
@@ -518,13 +518,13 @@ export const MenuSection = () => {
               return (
                 <section key={cat} id={sectionId} className="scroll-mt-36">
                   {/* Category Shelf Header */}
-                  <div className="flex items-center justify-between pb-3 mb-4 border-b border-slate-800">
+                  <div className="flex items-center justify-between pb-3 mb-4 border-b border-gray-200">
                     <div className="flex items-center gap-2.5">
                       <span aria-hidden="true" className="text-2xl">{emoji}</span>
-                      <h2 className="text-lg sm:text-xl font-black text-white font-heading">
+                      <h2 className="text-lg sm:text-xl font-black text-gray-900 font-heading">
                         {cat}
                       </h2>
-                      <span className="ml-2 text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-800 text-slate-400">{catItems.length}</span>
+                      <span className="ml-2 text-[10px] font-bold px-2 py-0.5 rounded-full bg-gray-100 text-gray-500">{catItems.length}</span>
                     </div>
                   </div>
 
@@ -560,7 +560,7 @@ export const MenuSection = () => {
         <button
           type="button"
           onClick={() => setIsCategoryIndexOpen(true)}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-slate-900/95 hover:bg-black text-white font-black text-xs uppercase tracking-wider shadow-2xl border border-slate-700 ring-1 ring-white/10 backdrop-blur-md active:scale-95 transition-all cursor-pointer hover:shadow-pink-600/30"
+          className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white hover:bg-gray-50 text-gray-900 font-black text-xs uppercase tracking-wider shadow-xl border border-gray-200 ring-1 ring-black/5 backdrop-blur-md active:scale-95 transition-all cursor-pointer"
         >
           <BookOpen className="w-4 h-4 text-pink-500" />
           <span>MENU</span>
@@ -580,17 +580,16 @@ export const MenuSection = () => {
             if (e.target === e.currentTarget) setIsCategoryIndexOpen(false);
           }}
         >
-          <div className="w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl bg-slate-900 border border-slate-800 shadow-2xl p-5 text-white max-h-[80vh] flex flex-col animate-in slide-in-from-bottom duration-250">
-            {/* Header */}
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-2">
+          <div className="w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl bg-white border border-gray-200 shadow-2xl p-5 text-gray-900 max-h-[80vh] flex flex-col animate-in slide-in-from-bottom duration-250">
+            <div className="flex items-center justify-between pb-3 border-b border-gray-200 mb-2">
               <div className="flex items-center gap-2">
                 <BookOpen className="w-5 h-5 text-pink-500" />
-                <h3 className="font-bold text-base">Menu Categories</h3>
+                <h3 className="font-bold text-base text-gray-900">Menu Categories</h3>
               </div>
               <button
                 type="button"
                 onClick={() => setIsCategoryIndexOpen(false)}
-                className="p-1 rounded-full text-slate-400 hover:text-white"
+                className="p-1 rounded-full text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors"
                 aria-label="Close"
               >
                 <X className="w-5 h-5" />
@@ -615,14 +614,14 @@ export const MenuSection = () => {
                     className={`w-full flex items-center justify-between p-3 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                       isActive 
                         ? 'bg-pink-600 text-white font-bold' 
-                        : 'bg-slate-850 hover:bg-slate-800 text-slate-200'
+                        : 'bg-gray-50 hover:bg-gray-100 text-gray-700'
                     }`}
                   >
                     <div className="flex items-center gap-2.5">
                       <span aria-hidden="true" className="text-base">{emoji}</span>
                       <span>{cat}</span>
                     </div>
-                    <div className="flex items-center gap-2 text-slate-400">
+                    <div className={`flex items-center gap-2 ${isActive ? 'text-pink-200' : 'text-gray-400'}`}>
                       <span className="text-[11px] font-bold">{count}</span>
                       <ChevronRight className="w-3.5 h-3.5" />
                     </div>

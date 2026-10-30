@@ -162,28 +162,28 @@ const QuickViewModalContent = ({
       }}
     >
       <div 
-        className="w-full md:max-w-xl md:rounded-3xl rounded-t-3xl bg-slate-900 border border-slate-800 shadow-2xl flex flex-col max-h-[92vh] text-white animate-in slide-in-from-bottom duration-250 md:zoom-in-95 overflow-hidden"
+        className="w-full md:max-w-xl md:rounded-3xl rounded-t-3xl bg-white border border-gray-200 shadow-2xl flex flex-col max-h-[92vh] text-gray-900 animate-in slide-in-from-bottom duration-250 md:zoom-in-95 overflow-hidden"
       >
         {/* Mobile Pull Handle */}
-        <div className="w-full flex justify-center pt-2.5 pb-1 md:hidden bg-slate-900">
-          <div className="w-12 h-1 rounded-full bg-slate-700" />
+        <div className="w-full flex justify-center pt-2.5 pb-1 md:hidden bg-white">
+          <div className="w-12 h-1 rounded-full bg-gray-300" />
         </div>
 
         {/* Header Bar */}
-        <div className="relative aspect-[16/9] w-full max-h-52 bg-slate-800 shrink-0 overflow-hidden">
+        <div className="relative aspect-[16/9] w-full max-h-52 bg-gray-100 shrink-0 overflow-hidden">
           <img 
             src={item.image || FALLBACK_FOOD_IMAGE}
             alt={item.name}
             className="w-full h-full object-cover"
             onError={(e) => { e.currentTarget.src = FALLBACK_FOOD_IMAGE; }}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/30 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
           {/* Close button */}
           <button
             type="button"
             onClick={onClose}
-            className="absolute top-3 right-3 p-2.5 rounded-full bg-slate-900/80 text-white hover:bg-black transition-colors z-10"
+            className="absolute top-3 right-3 p-2.5 rounded-full bg-black/50 text-white hover:bg-black transition-colors z-10"
             aria-label="Close dialog"
           >
             <X className="w-5 h-5" />
@@ -191,31 +191,31 @@ const QuickViewModalContent = ({
 
           {/* Category & Reference badge */}
           <div className="absolute bottom-3 left-4 flex items-center gap-2">
-            <span className="px-2.5 py-1 rounded-full bg-slate-900/90 text-[10px] font-bold uppercase tracking-wider text-slate-300 border border-slate-700">
+            <span className="px-2.5 py-1 rounded-full bg-white/90 text-[10px] font-bold uppercase tracking-wider text-gray-800 border border-gray-200 shadow-xs">
               {item.category}
             </span>
-            <span className="text-[9px] text-slate-400 bg-black/60 px-2 py-0.5 rounded backdrop-blur-xs">
+            <span className="text-[9px] text-white/90 bg-black/60 px-2 py-0.5 rounded backdrop-blur-xs">
               Image for reference
             </span>
           </div>
         </div>
 
         {/* Scrollable Customization Body */}
-        <div className="p-4 sm:p-6 overflow-y-auto space-y-6 flex-1 custom-scrollbar text-left">
+        <div className="p-4 sm:p-6 overflow-y-auto space-y-6 flex-1 custom-scrollbar text-left bg-white">
           
           {/* Title & Dietary marker */}
           <div>
             <div className="flex items-center gap-2 mb-1.5">
               <DietaryMarker type={dietaryType} size={20} />
-              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+              <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">
                 {dietaryType === 'veg' ? 'Vegetarian' : dietaryType === 'egg' ? 'Contains Egg' : 'Non-Vegetarian'}
               </span>
             </div>
-            <h2 id="quickview-title" className="text-xl sm:text-2xl font-black text-white font-heading">
+            <h2 id="quickview-title" className="text-xl sm:text-2xl font-black text-gray-900 font-heading">
               {item.name}
             </h2>
             {cleanDescription && (
-              <p className="text-xs sm:text-sm text-slate-300 mt-1 leading-relaxed">
+              <p className="text-xs sm:text-sm text-gray-600 mt-1 leading-relaxed">
                 {cleanDescription}
               </p>
             )}
@@ -225,7 +225,7 @@ const QuickViewModalContent = ({
           {allergens.length > 0 && (
             <div className="flex items-center flex-wrap gap-1.5 pt-1">
               {allergens.map((alg, i) => (
-                <span key={i} className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                <span key={i} className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-amber-50 text-amber-700 border border-amber-200">
                   {alg}
                 </span>
               ))}
@@ -234,12 +234,12 @@ const QuickViewModalContent = ({
 
           {/* 1. Size / Variant Selector (Radio) */}
           {hasVariants && (
-            <div className="space-y-2.5 pt-2 border-t border-slate-800">
+            <div className="space-y-2.5 pt-2 border-t border-gray-100">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-300">
-                  Choose Portion / Size <span className="text-pink-400">*</span>
+                <span className="text-xs font-bold uppercase tracking-wider text-gray-700">
+                  Choose Portion / Size <span className="text-pink-600">*</span>
                 </span>
-                <span className="text-[10px] text-pink-400 font-bold uppercase">Required</span>
+                <span className="text-[10px] text-pink-600 font-bold uppercase">Required</span>
               </div>
               <div className="grid grid-cols-1 gap-2">
                 {item.options.map((opt, idx) => {
@@ -251,19 +251,19 @@ const QuickViewModalContent = ({
                       onClick={() => setSelectedVariantIndex(idx)}
                       className={`flex items-center justify-between p-3 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
                         isSelected 
-                          ? 'border-pink-500 bg-pink-600/20 ring-1 ring-pink-500/60 text-white' 
-                          : 'border-slate-800 bg-slate-850 hover:bg-slate-800 text-slate-300'
+                          ? 'border-pink-500 bg-pink-50 text-pink-900 ring-1 ring-pink-500/50' 
+                          : 'border-gray-200 bg-gray-50/70 hover:bg-gray-100 text-gray-700'
                       }`}
                     >
                       <div className="flex items-center gap-2.5">
                         <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 ${
-                          isSelected ? 'border-pink-500 bg-pink-500' : 'border-slate-600'
+                          isSelected ? 'border-pink-600 bg-pink-600' : 'border-gray-300'
                         }`}>
                           {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-white" />}
                         </div>
                         <span>{opt.title}</span>
                       </div>
-                      <span className="font-extrabold text-white">
+                      <span className="font-extrabold text-gray-900">
                         {formatCurrency(opt.price, settings?.currencySymbol || '₹')}
                       </span>
                     </button>
@@ -277,18 +277,18 @@ const QuickViewModalContent = ({
           {optionGroups.map((group) => {
             const chosen = selectedAddOns[group.id] || [];
             return (
-              <div key={group.id} className="space-y-2.5 pt-2 border-t border-slate-800">
+              <div key={group.id} className="space-y-2.5 pt-2 border-t border-gray-100">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-gray-700">
                       {group.name}
                     </h4>
-                    <p className="text-[11px] text-slate-400">
+                    <p className="text-[11px] text-gray-500">
                       Optional • Select up to {group.max || 3}
                     </p>
                   </div>
                   {chosen.length > 0 && (
-                    <span className="text-[10px] font-bold text-emerald-400">
+                    <span className="text-[10px] font-bold text-emerald-600">
                       {chosen.length} selected
                     </span>
                   )}
@@ -303,19 +303,19 @@ const QuickViewModalContent = ({
                         onClick={() => handleToggleAddOn(group, opt.id)}
                         className={`flex items-center justify-between p-3 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
                           isChecked
-                            ? 'border-pink-500 bg-pink-600/15 ring-1 ring-pink-500/50 text-white'
-                            : 'border-slate-800 bg-slate-850 hover:bg-slate-800 text-slate-300'
+                            ? 'border-pink-500 bg-pink-50 text-pink-900 ring-1 ring-pink-500/50'
+                            : 'border-gray-200 bg-gray-50/70 hover:bg-gray-100 text-gray-700'
                         }`}
                       >
                         <div className="flex items-center gap-2.5">
                           <div className={`w-4 h-4 rounded-md border flex items-center justify-center shrink-0 ${
-                            isChecked ? 'border-pink-500 bg-pink-500' : 'border-slate-600'
+                            isChecked ? 'border-pink-600 bg-pink-600' : 'border-gray-300'
                           }`}>
                             {isChecked && <Check className="w-3 h-3 text-white stroke-[3]" />}
                           </div>
                           <span>{opt.name}</span>
                         </div>
-                        <span className="font-bold text-pink-400">
+                        <span className="font-bold text-pink-600">
                           +{formatCurrency(opt.price, settings?.currencySymbol || '₹')}
                         </span>
                       </div>
@@ -328,8 +328,8 @@ const QuickViewModalContent = ({
 
           {/* 3. Spice Level (For Savory items) */}
           {isSavory && (
-            <div className="space-y-2 pt-2 border-t border-slate-800">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-300 block">
+            <div className="space-y-2 pt-2 border-t border-gray-100">
+              <span className="text-xs font-bold uppercase tracking-wider text-gray-700 block">
                 Spice Preference
               </span>
               <div className="grid grid-cols-3 gap-2">
@@ -342,8 +342,8 @@ const QuickViewModalContent = ({
                       onClick={() => setSpiceLevel(level)}
                       className={`py-2 rounded-xl border text-xs font-bold transition-all ${
                         isSelected 
-                          ? 'border-pink-500 bg-pink-500 text-white' 
-                          : 'border-slate-800 bg-slate-850 hover:bg-slate-800 text-slate-300'
+                          ? 'border-pink-600 bg-pink-600 text-white' 
+                          : 'border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-700'
                       }`}
                     >
                       {level}
@@ -355,12 +355,12 @@ const QuickViewModalContent = ({
           )}
 
           {/* 4. Special Cooking Instructions */}
-          <div className="space-y-1.5 pt-2 border-t border-slate-800">
+          <div className="space-y-1.5 pt-2 border-t border-gray-100">
             <div className="flex justify-between items-center">
-              <label htmlFor="special-inst" className="text-xs font-bold uppercase tracking-wider text-slate-300">
+              <label htmlFor="special-inst" className="text-xs font-bold uppercase tracking-wider text-gray-700">
                 Special Instructions
               </label>
-              <span className={`text-[10px] ${specialInstructions.length >= 150 ? 'text-red-400 font-bold' : 'text-slate-500'}`}>
+              <span className={`text-[10px] ${specialInstructions.length >= 150 ? 'text-red-500 font-bold' : 'text-gray-400'}`}>
                 {specialInstructions.length}/150
               </span>
             </div>
@@ -371,27 +371,27 @@ const QuickViewModalContent = ({
               value={specialInstructions}
               onChange={(e) => setSpecialInstructions(e.target.value)}
               placeholder="e.g. Less ice, extra dip warm, crispier crust..."
-              className="w-full rounded-xl bg-slate-800 border border-slate-700 text-white placeholder:text-slate-500 p-3 text-xs outline-none focus:border-pink-500 transition-colors resize-none"
+              className="w-full rounded-xl bg-gray-50 border border-gray-200 text-gray-900 placeholder:text-gray-400 p-3 text-xs outline-none focus:border-pink-500 transition-colors resize-none"
             />
           </div>
 
           {/* 5. Collapsed Nutrition Accordion */}
           {hasNutrition && (
-            <div className="border border-slate-800 rounded-xl overflow-hidden pt-1">
+            <div className="border border-gray-200 rounded-xl overflow-hidden pt-1">
               <button
                 type="button"
                 onClick={() => setIsNutritionOpen(!isNutritionOpen)}
-                className="w-full flex items-center justify-between p-3 bg-slate-850 hover:bg-slate-800 text-xs font-semibold text-slate-300"
+                className="w-full flex items-center justify-between p-3 bg-gray-50 hover:bg-gray-100 text-xs font-semibold text-gray-700"
               >
                 <span>Nutrition (approx.)</span>
-                <ChevronDown className={`w-4 h-4 transition-transform ${isNutritionOpen ? 'rotate-180 text-pink-500' : ''}`} />
+                <ChevronDown className={`w-4 h-4 transition-transform ${isNutritionOpen ? 'rotate-180 text-pink-600' : ''}`} />
               </button>
               {isNutritionOpen && (
-                <div className="p-3 bg-slate-900 grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
-                  {item.calories && <div className="p-2 bg-slate-800 rounded-lg"><strong>{item.calories}</strong> <span className="text-[10px] text-slate-400 block">Kcal</span></div>}
-                  {item.protein && <div className="p-2 bg-slate-800 rounded-lg"><strong>{item.protein}</strong> <span className="text-[10px] text-slate-400 block">Protein</span></div>}
-                  {item.carbs && <div className="p-2 bg-slate-800 rounded-lg"><strong>{item.carbs}</strong> <span className="text-[10px] text-slate-400 block">Carbs</span></div>}
-                  {item.fats && <div className="p-2 bg-slate-800 rounded-lg"><strong>{item.fats}</strong> <span className="text-[10px] text-slate-400 block">Fats</span></div>}
+                <div className="p-3 bg-white grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
+                  {item.calories && <div className="p-2 bg-gray-50 rounded-lg"><strong>{item.calories}</strong> <span className="text-[10px] text-gray-500 block">Kcal</span></div>}
+                  {item.protein && <div className="p-2 bg-gray-50 rounded-lg"><strong>{item.protein}</strong> <span className="text-[10px] text-gray-500 block">Protein</span></div>}
+                  {item.carbs && <div className="p-2 bg-gray-50 rounded-lg"><strong>{item.carbs}</strong> <span className="text-[10px] text-gray-500 block">Carbs</span></div>}
+                  {item.fats && <div className="p-2 bg-gray-50 rounded-lg"><strong>{item.fats}</strong> <span className="text-[10px] text-gray-500 block">Fats</span></div>}
                 </div>
               )}
             </div>
@@ -399,16 +399,16 @@ const QuickViewModalContent = ({
 
           {/* 6. Goes Well With Upsell Suggestions */}
           {companionItems.length > 0 && (
-            <div className="space-y-2.5 pt-2 border-t border-slate-800">
-              <span className="text-xs font-bold uppercase tracking-wider text-pink-400 block">
+            <div className="space-y-2.5 pt-2 border-t border-gray-100">
+              <span className="text-xs font-bold uppercase tracking-wider text-pink-600 block">
                 Goes Well With 🌟
               </span>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 {companionItems.map((comp) => (
-                  <div key={comp.id} className="p-2.5 rounded-xl bg-slate-850 border border-slate-800 flex items-center justify-between gap-2">
+                  <div key={comp.id} className="p-2.5 rounded-xl bg-gray-50 border border-gray-200 flex items-center justify-between gap-2 shadow-xs">
                     <div className="min-w-0">
-                      <p className="text-xs font-bold text-white truncate">{comp.name}</p>
-                      <p className="text-[11px] font-extrabold text-pink-400">
+                      <p className="text-xs font-bold text-gray-900 truncate">{comp.name}</p>
+                      <p className="text-[11px] font-extrabold text-pink-600">
                         {formatCurrency(comp.price, settings?.currencySymbol || '₹')}
                       </p>
                     </div>
@@ -418,7 +418,7 @@ const QuickViewModalContent = ({
                         onAddToCart?.(comp);
                         showToast?.({ message: `Added ${comp.name} to bag`, type: 'success' });
                       }}
-                      className="px-2 py-1 rounded-lg bg-slate-800 hover:bg-pink-600 text-white text-[10px] font-black uppercase transition-colors shrink-0"
+                      className="px-2 py-1 rounded-lg bg-pink-50 hover:bg-pink-600 text-pink-600 hover:text-white border border-pink-200 hover:border-transparent text-[10px] font-black uppercase transition-colors shrink-0"
                     >
                       + ADD
                     </button>
@@ -430,7 +430,7 @@ const QuickViewModalContent = ({
         </div>
 
         {/* Sticky Footer: Quantity Stepper + Live Calculated Add-to-Cart Button */}
-        <div className="p-4 sm:p-5 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 flex items-center justify-between gap-3 shrink-0">
+        <div className="p-4 sm:p-5 bg-white/95 backdrop-blur-md border-t border-gray-200 flex items-center justify-between gap-3 shrink-0">
           <Stepper 
             value={quantity}
             size="md"
