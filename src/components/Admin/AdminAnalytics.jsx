@@ -88,17 +88,58 @@ const BarChart = ({ data }) => {
 
 // ── Main Component ────────────────────────────────────────────────────────────
 
+const parseDate = (val) => {
+  if (!val) return new Date(0);
+  if (val.toDate && typeof val.toDate === 'function') return val.toDate();
+  if (val.seconds) return new Date(val.seconds * 1000);
+  const d = new Date(val);
+  return isNaN(d.getTime()) ? new Date(0) : d;
+};
+
 const AdminAnalytics = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setLoading(true);
+
+    // Read local backup orders first to ensure instant display
+    const getLocalOrders = () => {
+      try {
+        return JSON.parse(localStorage.getItem('smaakenzzoo_recent_orders') || '[]');
+      } catch {
+        return [];
+      }
+    };
+
+    const initialLocal = getLocalOrders();
+    if (initialLocal.length > 0) {
+      setOrders(initialLocal);
+    }
+
     const q = query(collection(db, COLLECTIONS?.orders || 'orders'));
     const unsub = onSnapshot(q, (snap) => {
-      setOrders(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+      const liveOrders = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      
+      // Combine Firestore orders with any local orders that haven't synced yet
+      const combinedMap = new Map();
+      liveOrders.forEach(o => combinedMap.set(String(o.id || o.orderNumber), o));
+      initialLocal.forEach(o => {
+        const key = String(o.id || o.orderNumber);
+        if (!combinedMap.has(key)) {
+          combinedMap.set(key, o);
+        }
+      });
+
+      const finalOrders = Array.from(combinedMap.values());
+      setOrders(finalOrders.length > 0 ? finalOrders : liveOrders);
       setLoading(false);
-    }, () => setLoading(false));
+    }, (err) => {
+      console.warn('[AdminAnalytics] Firestore snapshot listener error, using local orders:', err);
+      setOrders(getLocalOrders());
+      setLoading(false);
+    });
+
     return () => unsub();
   }, []);
 
@@ -112,7 +153,7 @@ const AdminAnalytics = () => {
     let tRev = 0, tOrd = 0, wRev = 0, wOrd = 0, mRev = 0, mOrd = 0;
     orders.forEach(o => {
       if (o.status === 'Cancelled') return;
-      const d = new Date(o.createdAt || 0);
+      const d = parseDate(o.createdAt);
       const amt = Number(o.grandTotal) || 0;
       if (d >= today)       { tRev += amt; tOrd++; }
       if (d >= weekAgo)     { wRev += amt; wOrd++; }
@@ -130,7 +171,7 @@ const AdminAnalytics = () => {
     });
     orders.forEach(o => {
       if (o.status === 'Cancelled') return;
-      const d = startOfDay(new Date(o.createdAt || 0));
+      const d = startOfDay(parseDate(o.createdAt));
       const slot = days.find(s => s.date.getTime() === d.getTime());
       if (slot) { slot.revenue += Number(o.grandTotal) || 0; slot.count++; }
     });
@@ -142,10 +183,12 @@ const AdminAnalytics = () => {
     const map = {};
     orders.forEach(o => {
       if (o.status === 'Cancelled') return;
-      (o.verifiedItems || []).forEach(item => {
+      const orderItems = o.items || o.verifiedItems || [];
+      orderItems.forEach(item => {
+        if (!item || !item.name) return;
         if (!map[item.name]) map[item.name] = { name: item.name, qty: 0, revenue: 0 };
         map[item.name].qty += Number(item.quantity) || 1;
-        map[item.name].revenue += Number(item.lineTotal) || 0;
+        map[item.name].revenue += Number(item.lineTotal || (item.price * (item.quantity || 1))) || 0;
       });
     });
     return Object.values(map).sort((a, b) => b.qty - a.qty).slice(0, 5);
@@ -176,7 +219,7 @@ const AdminAnalytics = () => {
     HOURS.forEach(h => { counts[h] = 0; });
     orders.forEach(o => {
       if (o.status === 'Cancelled') return;
-      const d = new Date(o.createdAt || 0);
+      const d = parseDate(o.createdAt);
       if (d < thirtyAgo) return;
       const h = d.getHours();
       if (counts[h] !== undefined) counts[h]++;
@@ -187,7 +230,7 @@ const AdminAnalytics = () => {
 
   // Recent activity — last 10 orders
   const recentOrders = useMemo(() =>
-    [...orders].sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0)).slice(0, 10),
+    [...orders].sort((a, b) => parseDate(b.createdAt) - parseDate(a.createdAt)).slice(0, 10),
     [orders]
   );
 

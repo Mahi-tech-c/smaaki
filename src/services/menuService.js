@@ -212,5 +212,19 @@ export const reorderFeaturedApi = async (id, newOrderIndex) => {
 // SETTINGS
 // ========================
 export const updateSettingsApi = async (newSettings) => {
-  await setDoc(doc(db, COLLECTIONS.settings, 'restaurant'), newSettings, { merge: true });
+  // Always update local cache immediately so offline or refreshed tabs load latest changes without delay
+  try {
+    const cached = JSON.parse(localStorage.getItem('smaakenzzoo_settings_cache') || '{}');
+    localStorage.setItem('smaakenzzoo_settings_cache', JSON.stringify({ ...cached, ...newSettings }));
+  } catch (e) {
+    console.warn('[updateSettingsApi] Cache error:', e);
+  }
+
+  // Safety promise race to prevent hanging indefinitely on slow or intermittent network
+  const firestorePromise = setDoc(doc(db, COLLECTIONS.settings, 'restaurant'), newSettings, { merge: true });
+  const timeoutPromise = new Promise((_, reject) =>
+    setTimeout(() => reject(new Error('Settings save timed out - local state preserved')), 6000)
+  );
+
+  return Promise.race([firestorePromise, timeoutPromise]);
 };
