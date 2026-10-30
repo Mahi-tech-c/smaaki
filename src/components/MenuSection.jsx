@@ -259,7 +259,7 @@ export const MenuSection = () => {
               }`}
             >
               <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
-              <span>Veg Only</span>
+              <span>{dietFilter === 'veg' ? '✓ ' : ''}Veg Only</span>
             </button>
 
             {/* Non-Veg Toggle (Label NEVER wraps!) */}
@@ -273,7 +273,7 @@ export const MenuSection = () => {
               }`}
             >
               <span className="w-2 h-2 rounded-full bg-red-400 shrink-0" />
-              <span className="whitespace-nowrap">Non-Veg</span>
+              <span className="whitespace-nowrap">{dietFilter === 'nonveg' ? '✓ ' : ''}Non-Veg</span>
             </button>
 
             {/* Under ₹200 Toggle */}
@@ -348,6 +348,7 @@ export const MenuSection = () => {
                   <div className="absolute top-1.5 left-1.5 p-0.5 rounded bg-black/60">
                     <span className="w-2 h-2 rounded-full bg-emerald-400 block" />
                   </div>
+                  <div className="absolute bottom-0 inset-x-0 h-8 bg-gradient-to-t from-slate-900/80 to-transparent rounded-b-xl pointer-events-none" />
                 </div>
                 <div>
                   <h4 className="font-bold text-xs text-white truncate">{item.name}</h4>
@@ -401,6 +402,7 @@ export const MenuSection = () => {
                   <div className="absolute top-1.5 left-1.5 p-0.5 rounded bg-black/60">
                     <span className="w-2 h-2 rounded-full bg-sky-400 block" />
                   </div>
+                  <div className="absolute bottom-0 inset-x-0 h-8 bg-gradient-to-t from-slate-900/80 to-transparent rounded-b-xl pointer-events-none" />
                 </div>
                 <div>
                   <h4 className="font-bold text-xs text-white truncate">{item.name}</h4>
@@ -522,9 +524,7 @@ export const MenuSection = () => {
                       <h2 className="text-lg sm:text-xl font-black text-white font-heading">
                         {cat}
                       </h2>
-                      <span className="text-xs text-slate-500 font-bold">
-                        ({catItems.length})
-                      </span>
+                      <span className="ml-2 text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-800 text-slate-400">{catItems.length}</span>
                     </div>
                   </div>
 
@@ -560,7 +560,7 @@ export const MenuSection = () => {
         <button
           type="button"
           onClick={() => setIsCategoryIndexOpen(true)}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-slate-900/95 hover:bg-black text-white font-black text-xs uppercase tracking-wider shadow-2xl border border-slate-700 backdrop-blur-md active:scale-95 transition-all cursor-pointer"
+          className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-slate-900/95 hover:bg-black text-white font-black text-xs uppercase tracking-wider shadow-2xl border border-slate-700 ring-1 ring-white/10 backdrop-blur-md active:scale-95 transition-all cursor-pointer hover:shadow-pink-600/30"
         >
           <BookOpen className="w-4 h-4 text-pink-500" />
           <span>MENU</span>

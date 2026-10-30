@@ -170,7 +170,7 @@ const QuickViewModalContent = ({
         </div>
 
         {/* Header Bar */}
-        <div className="relative aspect-[16/9] w-full bg-slate-800 shrink-0 overflow-hidden">
+        <div className="relative aspect-[16/9] w-full max-h-52 bg-slate-800 shrink-0 overflow-hidden">
           <img 
             src={item.image || FALLBACK_FOOD_IMAGE}
             alt={item.name}
@@ -183,7 +183,7 @@ const QuickViewModalContent = ({
           <button
             type="button"
             onClick={onClose}
-            className="absolute top-3 right-3 p-2 rounded-full bg-slate-900/80 text-white hover:bg-black transition-colors z-10"
+            className="absolute top-3 right-3 p-2.5 rounded-full bg-slate-900/80 text-white hover:bg-black transition-colors z-10"
             aria-label="Close dialog"
           >
             <X className="w-5 h-5" />
@@ -251,7 +251,7 @@ const QuickViewModalContent = ({
                       onClick={() => setSelectedVariantIndex(idx)}
                       className={`flex items-center justify-between p-3 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
                         isSelected 
-                          ? 'border-pink-500 bg-pink-500/10 text-white' 
+                          ? 'border-pink-500 bg-pink-600/20 ring-1 ring-pink-500/60 text-white' 
                           : 'border-slate-800 bg-slate-850 hover:bg-slate-800 text-slate-300'
                       }`}
                     >
@@ -303,7 +303,7 @@ const QuickViewModalContent = ({
                         onClick={() => handleToggleAddOn(group, opt.id)}
                         className={`flex items-center justify-between p-3 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
                           isChecked
-                            ? 'border-pink-500 bg-pink-500/10 text-white'
+                            ? 'border-pink-500 bg-pink-600/15 ring-1 ring-pink-500/50 text-white'
                             : 'border-slate-800 bg-slate-850 hover:bg-slate-800 text-slate-300'
                         }`}
                       >
@@ -430,7 +430,7 @@ const QuickViewModalContent = ({
         </div>
 
         {/* Sticky Footer: Quantity Stepper + Live Calculated Add-to-Cart Button */}
-        <div className="p-4 sm:p-5 bg-slate-950 border-t border-slate-800 flex items-center justify-between gap-3 shrink-0">
+        <div className="p-4 sm:p-5 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 flex items-center justify-between gap-3 shrink-0">
           <Stepper 
             value={quantity}
             size="md"

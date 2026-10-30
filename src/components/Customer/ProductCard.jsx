@@ -210,13 +210,13 @@ export const ProductCard = ({
       className={`
         flex flex-col rounded-2xl bg-slate-900
         border border-slate-800/80 hover:border-pink-500/40
-        transition-all duration-300 overflow-visible group relative cursor-pointer select-none
+        transition-all duration-300 overflow-hidden group relative cursor-pointer select-none
         ${!isAvailable ? 'opacity-60' : ''}
       `}
     >
       {/* ══ TALL IMAGE — ~70% of card ══ */}
       <div
-        className="relative w-full overflow-hidden rounded-2xl bg-slate-800"
+        className="relative w-full overflow-hidden bg-slate-800"
         style={{ aspectRatio: '3 / 4' }}
       >
         <img
@@ -255,16 +255,36 @@ export const ProductCard = ({
         </div>
 
         {/* Bottom gradient scrim */}
-        <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-slate-900/80 to-transparent pointer-events-none rounded-b-2xl" />
+        <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-slate-900/80 to-transparent pointer-events-none" />
+      </div>
 
-        {/* ── Overlapping ADD / Stepper button at bottom-center ── */}
-        <div className="absolute -bottom-3.5 left-1/2 -translate-x-1/2 z-20 w-[80%] flex justify-center">
+      {/* ══ COMPACT CONTENT STRIP — ~30% of card ══ */}
+      <div className="flex flex-col px-2.5 pt-2.5 pb-2.5 gap-1.5 flex-1">
+        {/* Item name — 2 lines max */}
+        <p className="text-xs font-bold text-white leading-tight line-clamp-2" title={item.name}>
+          <HighlightMatch text={item.name} query={searchQuery} />
+        </p>
+
+        {/* Price + ADD button row */}
+        <div className="flex items-center justify-between mt-auto">
+          <div className="flex items-center gap-1.5">
+            <span className="text-sm font-extrabold text-white tracking-tight">
+              {formatCurrency(basePrice, settings?.currencySymbol || '₹')}
+            </span>
+            {hasVariants && (
+              <span className="text-[9px] text-slate-500 font-bold bg-slate-800 px-1.5 py-0.5 rounded-full">
+                +{item.options.length - 1}
+              </span>
+            )}
+          </div>
+
+          {/* ADD / Stepper / Notify — inside content strip */}
           <div onClick={(e) => e.stopPropagation()}>
             {!isAvailable ? (
               <button
                 type="button"
                 onClick={handleNotifyMe}
-                className="w-full px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-400 text-[10px] font-black uppercase tracking-wider flex items-center justify-center gap-1 shadow-lg"
+                className="px-2 py-1 rounded-xl bg-slate-800 border border-slate-700 text-slate-400 text-[10px] font-black uppercase tracking-wider flex items-center gap-0.5 shadow-md transition-all active:scale-95"
               >
                 <Bell className="w-3 h-3" /> Notify
               </button>
@@ -282,32 +302,12 @@ export const ProductCard = ({
               <button
                 type="button"
                 onClick={handleAddClick}
-                className="w-full px-4 py-1.5 rounded-xl bg-pink-600 hover:bg-pink-500 active:scale-95 text-white font-black text-[11px] uppercase tracking-wider flex items-center justify-center gap-1 shadow-lg shadow-pink-600/40 transition-all border border-pink-500/50"
+                className="px-3 py-1.5 rounded-xl bg-pink-600 hover:bg-pink-500 active:scale-95 text-white font-black text-[10px] uppercase tracking-wider flex items-center gap-0.5 shadow-md shadow-pink-600/30 transition-all border border-pink-500/40"
               >
-                <Plus className="w-3.5 h-3.5 stroke-[3]" /> ADD
+                <Plus className="w-3 h-3 stroke-[3]" /> ADD
               </button>
             )}
           </div>
-        </div>
-      </div>
-
-      {/* ══ COMPACT CONTENT STRIP — ~30% of card ══ */}
-      <div className="flex flex-col px-2.5 pt-5 pb-2.5 gap-0.5">
-        {/* Item name — 1 line, truncated */}
-        <p className="text-[11px] sm:text-xs font-bold text-white leading-tight truncate" title={item.name}>
-          <HighlightMatch text={item.name} query={searchQuery} />
-        </p>
-
-        {/* Price row */}
-        <div className="flex items-center gap-1.5 mt-0.5">
-          <span className="text-sm font-extrabold text-white tracking-tight">
-            {formatCurrency(basePrice, settings?.currencySymbol || '₹')}
-          </span>
-          {hasVariants && (
-            <span className="text-[9px] text-slate-500 font-bold bg-slate-800 px-1.5 py-0.5 rounded-full">
-              +{item.options.length - 1}
-            </span>
-          )}
         </div>
       </div>
     </div>

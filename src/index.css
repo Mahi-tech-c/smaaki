@@ -243,6 +243,16 @@
     scrollbar-width: none;
   }
 
+  .bg-slate-850 {
+    background-color: #1a2035;
+  }
+
+  .glass-dark {
+    background-color: rgba(15, 17, 23, 0.85);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+  }
+
   /* ── Theme-aware surface utilities (respond to [data-theme] on <html>) ── */
   .bg-surface        { background-color: var(--color-surface); }
   .bg-surface-raised { background-color: var(--color-surface-raised); }

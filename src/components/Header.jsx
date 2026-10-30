@@ -55,13 +55,13 @@ export const Header = () => {
   return (
     <>
       {/* Sticky, 100% OPAQUE Header (Zero text bleed-through) */}
-      <header className="sticky top-0 z-40 w-full bg-surface text-surface border-b border-surface shadow-md select-none transition-colors duration-300">
+      <header className="sticky top-0 z-40 w-full bg-surface text-surface border-b border-slate-800 shadow-md select-none transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 sm:h-18 gap-3">
             
             {/* Brand Logo & Title */}
             <Link to="/" className="flex items-center gap-3 shrink-0 group focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-500 rounded-xl p-1">
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-pink-600 to-pink-800 text-white flex items-center justify-center shadow-md shadow-pink-600/30 group-hover:scale-105 transition-transform">
+              <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-pink-500 to-rose-700 text-white flex items-center justify-center shadow-md shadow-pink-600/30 group-hover:scale-105 transition-transform">
                 {settings.logo ? (
                   <img src={settings.logo} alt="Smaakenzzoo Logo" width="24" height="24" loading="eager" className="w-6 h-6 object-contain" />
                 ) : (
@@ -80,7 +80,7 @@ export const Header = () => {
 
             {/* Live Open / Closed Status Badge (Asia/Kolkata Time) */}
             <div 
-              className={`hidden sm:inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold border ${
+              className={`hidden sm:inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold border ${
                 liveStatus.isOpen
                   ? 'bg-emerald-950/60 text-emerald-400 border-emerald-800/80'
                   : 'bg-rose-950/60 text-rose-400 border-rose-800/80'
@@ -165,7 +165,7 @@ export const Header = () => {
                 <ShoppingBag className="w-4 h-4 text-white" />
                 <span className="hidden sm:inline">Bag</span>
                 {cartItemCount > 0 && (
-                  <span className="bg-white text-pink-600 text-[10px] font-black rounded-full px-1.5 py-0.2 shadow-sm">
+                  <span className="bg-white text-pink-600 text-[10px] font-black rounded-full min-w-[20px] text-center leading-tight px-1.5 py-0.5 shadow-sm">
                     {cartItemCount}
                   </span>
                 )}
@@ -176,7 +176,7 @@ export const Header = () => {
 
         {/* Mobile Sub-Navigation Bar (Auto-hiding on scroll-down, returning on scroll-up) */}
         <div 
-          className={`lg:hidden border-t border-slate-800 bg-[#0f1117] transition-all duration-200 overflow-hidden ${
+          className={`lg:hidden border-t border-slate-800 bg-[#0f1117] shrink-0 transition-all duration-200 overflow-hidden ${
             scrollDirection === 'down' ? 'max-h-0 py-0 opacity-0' : 'max-h-12 py-2 opacity-100'
           }`}
         >
