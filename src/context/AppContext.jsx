@@ -36,15 +36,44 @@ const defaultCategories = CANONICAL_CATEGORIES.length > 0
       orderIndex: idx + 1
     }));
 
+// Local Storage Persistence Keys
+const LS_KEYS = {
+  settings: 'smaakii_custom_settings',
+  categories: 'smaakii_custom_categories',
+  menuItems: 'smaakii_custom_menu_items',
+  offers: 'smaakii_custom_offers',
+  featured: 'smaakii_custom_featured',
+};
+
+const getStoredItem = (key, fallback) => {
+  try {
+    const val = localStorage.getItem(key);
+    return val ? JSON.parse(val) : fallback;
+  } catch {
+    return fallback;
+  }
+};
+
+const setStoredItem = (key, value) => {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (e) {
+    console.warn(`[LocalStorage] Failed to cache ${key}:`, e);
+  }
+};
+
 export { DEFAULT_SETTINGS };
 export const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
-  const [menuItems, setMenuItems] = useState(defaultMenuItems);
-  const [offers, setOffers] = useState([]);
-  const [categories, setCategories] = useState(defaultCategories);
-  const [settings, setSettings] = useState(DEFAULT_SETTINGS);
-  const [featured, setFeatured] = useState([]);
+  const [menuItems, setMenuItems] = useState(() => getStoredItem(LS_KEYS.menuItems, defaultMenuItems));
+  const [offers, setOffers] = useState(() => getStoredItem(LS_KEYS.offers, []));
+  const [categories, setCategories] = useState(() => getStoredItem(LS_KEYS.categories, defaultCategories));
+  const [settings, setSettings] = useState(() => {
+    const cached = getStoredItem(LS_KEYS.settings, null);
+    return cached ? { ...DEFAULT_SETTINGS, ...cached } : DEFAULT_SETTINGS;
+  });
+  const [featured, setFeatured] = useState(() => getStoredItem(LS_KEYS.featured, []));
   const [isLoaded, setIsLoaded] = useState(false);
 
   // Table State for QR Dine-in Experience
@@ -371,22 +400,34 @@ export const AppProvider = ({ children }) => {
     };
   }, []);
 
-  // CRUD with Instant Optimistic UI Updates
+  // CRUD with Instant Optimistic UI Updates & Offline-Resilient Local Storage Sync
   const addItem = useCallback(async (item) => {
     const tempId = Date.now();
     const optimisticItem = { ...item, id: tempId, orderIndex: tempId };
-    setMenuItems(prev => [...prev, optimisticItem]);
-    return await addMenuItemApi(item);
+    setMenuItems(prev => {
+      const updated = [...prev, optimisticItem];
+      setStoredItem(LS_KEYS.menuItems, updated);
+      return updated;
+    });
+    return await addMenuItemApi(item).catch(err => console.warn('[addItem] Firestore offline:', err));
   }, []);
 
   const updateItem = useCallback(async (id, fields) => {
-    setMenuItems(prev => prev.map(it => String(it.id) === String(id) ? { ...it, ...fields } : it));
-    await updateMenuItemApi(id, fields);
+    setMenuItems(prev => {
+      const updated = prev.map(it => String(it.id) === String(id) ? { ...it, ...fields } : it);
+      setStoredItem(LS_KEYS.menuItems, updated);
+      return updated;
+    });
+    await updateMenuItemApi(id, fields).catch(err => console.warn('[updateItem] Firestore offline:', err));
   }, []);
 
   const deleteItem = useCallback(async (id) => {
-    setMenuItems(prev => prev.filter(it => String(it.id) !== String(id)));
-    await deleteMenuItemApi(id);
+    setMenuItems(prev => {
+      const updated = prev.filter(it => String(it.id) !== String(id));
+      setStoredItem(LS_KEYS.menuItems, updated);
+      return updated;
+    });
+    await deleteMenuItemApi(id).catch(err => console.warn('[deleteItem] Firestore offline:', err));
   }, []);
 
   const reorderItem = useCallback(async (id, newIndex) => {
@@ -396,74 +437,148 @@ export const AppProvider = ({ children }) => {
       if (index === -1) return prev;
       const [moved] = items.splice(index, 1);
       items.splice(newIndex, 0, moved);
+      setStoredItem(LS_KEYS.menuItems, items);
       return items;
     });
-    await reorderMenuItemApi(id, newIndex);
+    await reorderMenuItemApi(id, newIndex).catch(err => console.warn('[reorderItem] Firestore offline:', err));
   }, []);
 
-  const swapItems = useCallback(async (i1, i2) => swapMenuItemsApi(i1, i2), []);
-  const cleanupMenuPrices = useCallback(async () => cleanupMenuPricesApi(menuItems), [menuItems]);
+  const swapItems = useCallback(async (i1, i2) => swapMenuItemsApi(i1, i2).catch(() => {}), []);
+  const cleanupMenuPrices = useCallback(async () => cleanupMenuPricesApi(menuItems).catch(() => {}), [menuItems]);
 
   const addCategory = useCallback(async (name) => {
     const tempId = Date.now();
-    const optimisticCat = { id: tempId, name, orderIndex: tempId };
-    setCategories(prev => [...prev, optimisticCat]);
-    return await addCategoryApi(name);
+    const optimisticCat = { id: tempId, name, orderIndex: tempId, emoji: getCategoryEmoji(name) };
+    setCategories(prev => {
+      const updated = [...prev, optimisticCat];
+      setStoredItem(LS_KEYS.categories, updated);
+      return updated;
+    });
+    return await addCategoryApi(name).catch(err => console.warn('[addCategory] Firestore offline:', err));
   }, []);
 
   const updateCategory = useCallback(async (id, fields) => {
-    setCategories(prev => prev.map(c => String(c.id) === String(id) ? { ...c, ...fields } : c));
-    await updateCategoryCascadeApi(id, fields, categories, menuItems, offers);
+    setCategories(prev => {
+      const updated = prev.map(c => String(c.id) === String(id) ? { ...c, ...fields } : c);
+      setStoredItem(LS_KEYS.categories, updated);
+      return updated;
+    });
+    await updateCategoryCascadeApi(id, fields, categories, menuItems, offers).catch(err => console.warn('[updateCategory] Firestore offline:', err));
   }, [categories, menuItems, offers]);
 
   const deleteCategory = useCallback(async (id) => {
-    setCategories(prev => prev.filter(c => String(c.id) !== String(id)));
-    await deleteCategoryApi(id);
+    setCategories(prev => {
+      const updated = prev.filter(c => String(c.id) !== String(id));
+      setStoredItem(LS_KEYS.categories, updated);
+      return updated;
+    });
+    await deleteCategoryApi(id).catch(err => console.warn('[deleteCategory] Firestore offline:', err));
   }, []);
 
-  const reorderCategory = useCallback(async (id, newIndex, name) => reorderCategoryApi(id, newIndex, name), []);
+  const reorderCategory = useCallback(async (id, newIndex, name) => {
+    setCategories(prev => {
+      const items = [...prev];
+      const index = items.findIndex(c => String(c.id) === String(id));
+      if (index === -1) return prev;
+      const [moved] = items.splice(index, 1);
+      items.splice(newIndex, 0, moved);
+      setStoredItem(LS_KEYS.categories, items);
+      return items;
+    });
+    return reorderCategoryApi(id, newIndex, name).catch(err => console.warn('[reorderCategory] Firestore offline:', err));
+  }, []);
 
   const addOffer = useCallback(async (offer) => {
     const tempId = Date.now();
     const optimisticOffer = { ...offer, id: tempId, orderIndex: tempId };
-    setOffers(prev => [...prev, optimisticOffer]);
-    return await addOfferApi(offer);
+    setOffers(prev => {
+      const updated = [...prev, optimisticOffer];
+      setStoredItem(LS_KEYS.offers, updated);
+      return updated;
+    });
+    return await addOfferApi(offer).catch(err => console.warn('[addOffer] Firestore offline:', err));
   }, []);
 
   const updateOffer = useCallback(async (id, fields) => {
-    setOffers(prev => prev.map(o => String(o.id) === String(id) ? { ...o, ...fields } : o));
-    await updateOfferApi(id, fields);
+    setOffers(prev => {
+      const updated = prev.map(o => String(o.id) === String(id) ? { ...o, ...fields } : o);
+      setStoredItem(LS_KEYS.offers, updated);
+      return updated;
+    });
+    await updateOfferApi(id, fields).catch(err => console.warn('[updateOffer] Firestore offline:', err));
   }, []);
 
   const deleteOffer = useCallback(async (id) => {
-    setOffers(prev => prev.filter(o => String(o.id) !== String(id)));
-    await deleteOfferApi(id);
+    setOffers(prev => {
+      const updated = prev.filter(o => String(o.id) !== String(id));
+      setStoredItem(LS_KEYS.offers, updated);
+      return updated;
+    });
+    await deleteOfferApi(id).catch(err => console.warn('[deleteOffer] Firestore offline:', err));
   }, []);
 
-  const reorderOffer = useCallback(async (id, newIndex) => reorderOfferApi(id, newIndex), []);
+  const reorderOffer = useCallback(async (id, newIndex) => {
+    setOffers(prev => {
+      const items = [...prev];
+      const index = items.findIndex(o => String(o.id) === String(id));
+      if (index === -1) return prev;
+      const [moved] = items.splice(index, 1);
+      items.splice(newIndex, 0, moved);
+      setStoredItem(LS_KEYS.offers, items);
+      return items;
+    });
+    return reorderOfferApi(id, newIndex).catch(err => console.warn('[reorderOffer] Firestore offline:', err));
+  }, []);
 
   const addFeatured = useCallback(async (item) => {
     const tempId = Date.now().toString();
     const optimisticFeatured = { ...item, id: tempId, orderIndex: Date.now() };
-    setFeatured(prev => [...prev, optimisticFeatured]);
-    return await addFeaturedApi(item);
+    setFeatured(prev => {
+      const updated = [...prev, optimisticFeatured];
+      setStoredItem(LS_KEYS.featured, updated);
+      return updated;
+    });
+    return await addFeaturedApi(item).catch(err => console.warn('[addFeatured] Firestore offline:', err));
   }, []);
 
   const updateFeatured = useCallback(async (id, data) => {
-    setFeatured(prev => prev.map(f => String(f.id) === String(id) ? { ...f, ...data } : f));
-    await updateFeaturedApi(id, data);
+    setFeatured(prev => {
+      const updated = prev.map(f => String(f.id) === String(id) ? { ...f, ...data } : f);
+      setStoredItem(LS_KEYS.featured, updated);
+      return updated;
+    });
+    await updateFeaturedApi(id, data).catch(err => console.warn('[updateFeatured] Firestore offline:', err));
   }, []);
 
   const deleteFeatured = useCallback(async (id) => {
-    setFeatured(prev => prev.filter(f => String(f.id) !== String(id)));
-    await deleteFeaturedApi(id);
+    setFeatured(prev => {
+      const updated = prev.filter(f => String(f.id) !== String(id));
+      setStoredItem(LS_KEYS.featured, updated);
+      return updated;
+    });
+    await deleteFeaturedApi(id).catch(err => console.warn('[deleteFeatured] Firestore offline:', err));
   }, []);
 
-  const reorderFeatured = useCallback(async (id, newIndex) => reorderFeaturedApi(id, newIndex), []);
+  const reorderFeatured = useCallback(async (id, newIndex) => {
+    setFeatured(prev => {
+      const items = [...prev];
+      const index = items.findIndex(f => String(f.id) === String(id));
+      if (index === -1) return prev;
+      const [moved] = items.splice(index, 1);
+      items.splice(newIndex, 0, moved);
+      setStoredItem(LS_KEYS.featured, items);
+      return items;
+    });
+    return reorderFeaturedApi(id, newIndex).catch(err => console.warn('[reorderFeatured] Firestore offline:', err));
+  }, []);
 
   const updateSettings = useCallback(async (newSettings) => {
-    setSettings(prev => ({ ...prev, ...newSettings }));
-    await updateSettingsApi(newSettings);
+    setSettings(prev => {
+      const updated = { ...prev, ...newSettings };
+      setStoredItem(LS_KEYS.settings, updated);
+      return updated;
+    });
+    await updateSettingsApi(newSettings).catch(err => console.warn('[updateSettings] Firestore offline:', err));
   }, []);
 
   const resetMenu = useCallback(() => console.warn("Reset skipped in database mode."), []);
