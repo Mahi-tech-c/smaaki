@@ -5,8 +5,6 @@ import {
   ShoppingBag, 
   User, 
   Clock, 
-  Sun, 
-  Moon, 
   Search, 
   MapPin, 
   Phone, 
@@ -14,13 +12,11 @@ import {
   Compass
 } from 'lucide-react';
 import { AppContext } from '../context/AppContext';
-import { useTheme } from '../context/ThemeContext';
 import { getKolkataStatus } from '../utils/operatingHours';
 import { useScrollDirection } from '../hooks/useScrollDirection';
 
 export const Header = () => {
   const { settings, cartItemCount, setIsCartOpen, offers } = useContext(AppContext);
-  const { toggleTheme, isDark } = useTheme();
   const location = useLocation();
   const navigate = useNavigate();
   const { scrollDirection } = useScrollDirection();
@@ -147,21 +143,6 @@ export const Header = () => {
               >
                 <Compass className="w-5 h-5" />
               </Link>
-
-              {/* Theme Toggle (Dark / Light) */}
-              <button
-                type="button"
-                onClick={toggleTheme}
-                aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
-                title={`Switch to ${isDark ? 'light' : 'dark'} mode`}
-                className="p-2 rounded-xl text-surface-muted hover:text-surface hover:bg-surface-raised transition-colors"
-              >
-                {isDark ? (
-                  <Sun className="w-4 h-4 text-amber-400" />
-                ) : (
-                  <Moon className="w-4 h-4 text-slate-600" />
-                )}
-              </button>
 
               {/* Account / Login Icon */}
               <Link

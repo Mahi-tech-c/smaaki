@@ -2,10 +2,7 @@ import React, { useContext, useState, useMemo, useEffect, useRef } from 'react';
 import { 
   Search, 
   X, 
-  SlidersHorizontal, 
   ArrowUpDown, 
-  LayoutList, 
-  LayoutGrid, 
   Sparkles, 
   Utensils, 
   BookOpen, 
@@ -50,7 +47,7 @@ export const MenuSection = () => {
   const [under200Only, setUnder200Only] = useState(false);
   const [bestsellersOnly, setBestsellersOnly] = useState(false);
   const [sortBy, setSortBy] = useState('recommended'); // 'recommended' | 'price-asc' | 'price-desc' | 'name'
-  const [viewMode, setViewMode] = useState('grid'); // 'grid' (default Instamart-style) | 'list'
+  const viewMode = 'grid'; // Locked to grid view — professional Instamart-style layout
 
   // Scroll spy & Category navigation
   const [activeCategory, setActiveCategory] = useState('');
@@ -319,17 +316,6 @@ export const MenuSection = () => {
                 <option value="name" className="bg-slate-900">Name (A-Z)</option>
               </select>
             </div>
-
-            {/* View Mode Toggle (List vs Grid) */}
-            <button
-              type="button"
-              onClick={() => setViewMode(viewMode === 'list' ? 'grid' : 'list')}
-              className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white shrink-0 cursor-pointer"
-              aria-label={`Switch to ${viewMode === 'list' ? 'grid' : 'list'} view`}
-              title={`Switch to ${viewMode === 'list' ? 'grid' : 'list'} view`}
-            >
-              {viewMode === 'list' ? <LayoutGrid className="w-4 h-4" /> : <LayoutList className="w-4 h-4" />}
-            </button>
           </div>
         </div>
       </div>
